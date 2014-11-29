@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+
+<style>
+  html {
+    height: 100%;
+  }
+  body {
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    background: rgb(32, 32, 32);
+
+    display: -webkit-flex;
+    display: flex;
+  }
+  #canvas {
+    width: 944px;
+    height: 575px;
+    margin: auto;
+
+    background: black;
+
+    -webkit-perspective: 500px;
+    -moz-perspective: 500px;
+  }
+
+  #area {
+    transform: translateX(420px) translateY(130px) translateZ(50px) rotateY(20deg);
+
+    position: relative;
+  }
+  #screen {
+    z-index: 2000;
+  }
+  #border {
+    position: absolute;
+    left: -30px;
+    top: -30px;
+    padding: 15px;
+  }
+
+  #gun-line {
+    position: absolute;
+    background: white;
+    height: 2px;
+    transform-origin: 0 0;
+    opacity: 1;
+
+    -webkit-mask: -webkit-linear-gradient(0deg, black, rgba(0, 0, 0, .5));
+  }
+  #gun {
+    z-index: 1000;
+    transform: rotateZ(0);
+    width: 4px;
+    height: 2px;
+    padding: 5px;
+    margin-top: -7px;
+    margin-left: -10px;
+    border-radius: 999px;
+    position: absolute;
+
+    border: 1px solid white;
+  }
+
+  #explanation {
+    text-align: center;
+    color: rgb(100, 100, 100);
+    font-family: sans-serif;
+    margin-top: -30px;
+  }
+  #explanation a {
+    color: inherit;
+  }
+</style>
+
+<div id='canvas' onclick='increaseSpeed()'>
+
+  <div id='explanation'>
+    CRT explanation · <a href='https://medium.com/the-rectangle-behind-you/build-two-awesome-slides-9ba63ecd938d'>Context</a> · Click to increase speed
+  </div>
+  
+  <div id='area'>
+    <div id='gun'></div>
+    <div id='gun-line'></div>
+  </div>
+
+</div>
+
+<script>
+  var screenX = 0;
+  var screenY = 0;
+
+  var screenTick = 0;
+
+  var newOffscreen = false;
+
+  var gunX = 0;
+  var gunY = 0;
+
+  var destX = 0;
+  var destY = 0;
+
+  var fragX, fragY;
+  var fragGunTime;
+
+  var WIDTH = 160;
+  var REAL_HEIGHT = 192;
+  var HEIGHT = REAL_HEIGHT + 30;
+
+  var centerX = -70;
+  var centerY = 192 / 2;
+
+  var sync;
+
+  var STAGE_VBLANK = 0;
+  var STAGE_HBLANK = 1;
+  var STAGE_NORMAL = 2;
+
+  var stage = STAGE_NORMAL;
+
+  var TIME_INTERVAL = 1;
+  var fragSpeed = 0;
+  var fragSpeedTime = 0;
+
+  var speed = 3;
+  var SPEEDS = [3, 30, 300, 30000];
+
+  var FADE_THRESHOLD = 500;
+  var fadeCount = 0;
+
+  var TIME_MOVE = 1;
+  var TIME_HBLANK = 68;
+  var TIME_VBLANK = 37 * 228;
+
+  var HOR_MULTIPLIER = 3;
+  var VERT_MULTIPLIER = 1.5;
+
+  var time = 0;
+  var physicalTime = 0;
+
+  function increaseSpeed() {
+    var speedIndex = SPEEDS.indexOf(Math.round(speed));
+
+    if (speedIndex == (SPEEDS.length - 1)) {
+      speedIndex = 0;
+    } else {
+      speedIndex++;
+    }
+
+    var destSpeed = SPEEDS[speedIndex];
+
+    fragSpeed = (destSpeed - speed) / 100;
+    fragSpeedTime = physicalTime + 100;
+  }
+
+  function moveGun() {
+    document.querySelector('#gun').style.left = (gunX * HOR_MULTIPLIER) + 'px';
+    document.querySelector('#gun').style.top = (gunY * VERT_MULTIPLIER) + 'px';
+
+    var dx = centerX * HOR_MULTIPLIER - gunX * HOR_MULTIPLIER;
+    var dy = centerY * VERT_MULTIPLIER - gunY * VERT_MULTIPLIER;
+    var length = Math.sqrt(dx * dx + dy * dy);
+    var angle = Math.atan2(dy, dx) * 180 / Math.PI;
+
+    gunLineEl.style.left = (gunX * HOR_MULTIPLIER) + 'px';
+    gunLineEl.style.top = (gunY * VERT_MULTIPLIER) + 'px';
+    gunLineEl.style.width = length + 'px';
+    gunLineEl.style.transform = 'rotate(' + angle + 'deg)';
+
+    var x = Math.round(gunX);
+    var y = Math.round(gunY);
+
+    if (sync) {
+      var r = 64;
+      var g = 64;
+      var b = 64;
+    } else {
+      var r = pixels.data[(y * WIDTH + x) * 4];
+      var g = pixels.data[(y * WIDTH + x) * 4 + 1];
+      var b = pixels.data[(y * WIDTH + x) * 4 + 2];
+    }
+
+    gunEl.style.marginBottom = (Math.random() * 2) + 'px'; // to update colour
+    gunEl.style.background = 'rgb(' + r + ',' + g + ',' + b + ')';
+    gunLineEl.style.background = 'rgb(' + r + ',' + g + ',' + b + ')';
+  }
+
+  function newDestination(newX, newY, moveTime) {
+    destX = Math.round(newX);
+    destY = Math.round(newY);
+
+    fragX = (newX - gunX) / (moveTime / TIME_INTERVAL);
+    fragY = (newY - gunY) / (moveTime / TIME_INTERVAL);
+
+    fragGunTime = time + moveTime;
+  }
+
+  var tickRequested = false;
+
+  function physicalTick() {
+    tickRequested = false;
+
+    for (var i = 0; i < Math.floor(speed); i++) {
+      logicalTick(i == Math.floor(speed) - 1);
+    }
+
+    fadeCount++;
+
+    if (fadeCount >= (FADE_THRESHOLD / speed)) {
+      fadeCount = 0;
+      var count = 0;
+
+      for (var y = 0; y < HEIGHT; y++) {
+        for (var x = 0; x < WIDTH; x++) {
+          pixels.data[count + 3] -= 1;
+
+          count += 4;
+        }
+      }
+    }
+
+    screenContext.putImageData(pixels, 0, 0);
+
+    physicalTime++;
+    speed += fragSpeed;
+    if (physicalTime >= fragSpeedTime) {
+      fragSpeed = 0;
+    }
+    
+    window.requestAnimationFrame(physicalTick);
+  }
+
+  function logicalTick(update) {
+    time += TIME_INTERVAL;
+
+    gunX += fragX;
+    gunY += fragY;
+
+    if (update) {
+      moveGun();
+    }
+
+    if (time >= fragGunTime) {
+      var x = Math.round(gunX);
+      var y = Math.round(gunY);
+
+      // decay
+
+      if ((y < HEIGHT) && (x < WIDTH)) {
+        if (newOffscreen) {
+          pixels.data[(y * WIDTH + x) * 4] = newPixels.data[(y * WIDTH + x) * 4];
+          pixels.data[(y * WIDTH + x) * 4 + 1] = newPixels.data[(y * WIDTH + x) * 4 + 1];
+          pixels.data[(y * WIDTH + x) * 4 + 2] = newPixels.data[(y * WIDTH + x) * 4 + 2];
+        }
+
+        pixels.data[(y * WIDTH + x) * 4 + 3] = 255;
+      }
+
+      nextMove();
+    }    
+  }
+
+  function nextMove() {
+    if ((!sync) && (Math.floor(gunX) >= WIDTH)) {
+
+      // vblank
+      if (Math.floor(gunY) == HEIGHT) {
+        sync = true;
+        newDestination(0, 0, TIME_VBLANK);
+
+        prepareNewOffscreen();
+      } else {
+        // hblank
+        sync = true;
+        newDestination(0, gunY + 1, TIME_HBLANK);
+      }
+    } else {
+      // regular
+      sync = false;
+      newDestination(gunX + 1, gunY, TIME_MOVE);
+    }
+  }
+
+  function main() {
+    document.querySelector('#area').style.width = (WIDTH * HOR_MULTIPLIER) + 'px';
+    document.querySelector('#area').style.height = (HEIGHT * VERT_MULTIPLIER) + 'px';
+
+    borderEl = document.createElement('div');
+    borderEl.id = 'border';
+    borderEl.style.width = WIDTH + 'px';// * HOR_MULTIPLIER;
+    borderEl.style.height = HEIGHT + 'px';// * VERT_MULTIPLIER;
+    borderEl.style.transformOrigin = '0 0';
+    borderEl.style.transform = 'scaleX(' + HOR_MULTIPLIER + ') scaleY(' + VERT_MULTIPLIER + ')';
+
+    screenEl = document.createElement('canvas');
+    screenEl.id = 'screen';
+    screenEl.width = WIDTH;
+    screenEl.height = HEIGHT;
+
+    offscreenCanvasEl = document.createElement('canvas');
+    offscreenCanvasEl.width = WIDTH;
+    offscreenCanvasEl.height = HEIGHT;
+    offscreenContext = screenEl.getContext('2d');
+
+    screenEl.style.transformOrigin = '0 0';
+    screenEl.style.transform = 'scaleX(' + HOR_MULTIPLIER + ') scaleY(' + VERT_MULTIPLIER + ')';
+
+    screenContext = screenEl.getContext('2d');
+
+    imagesToLoad = 3;
+
+    imgLayer3 = new Image();
+    imgLayer3.addEventListener('load', imageLoaded, false);
+    imgLayer3.src = 'timepilot-layer-3.png';
+
+    imgLayer2 = new Image();
+    imgLayer2.addEventListener('load', imageLoaded, false);
+    imgLayer2.src = 'timepilot-layer-2.png';
+
+    imgLayer1 = new Image();
+    imgLayer1.addEventListener('load', imageLoaded, false);
+    imgLayer1.src = 'timepilot-layer-1.png';
+  }
+
+  function imageLoaded() {
+    imagesToLoad--;
+
+    if (imagesToLoad == 0) {
+      mainPart2();
+    }
+  }
+
+  function prepareNewOffscreen() {
+    screenTick++;
+
+    if (screenTick == 1) {
+      screenTick = 0;
+
+      screenX += 3;
+      if (screenX >= 160) {
+        screenX -= 160;
+      } else if (screenX < 0) {
+        screenX += 160;
+      }
+
+      screenY += 2;
+      if (screenY >= 80) {
+        screenY -= 80;
+      } else if (screenY < 0) {
+        screenY += 80;
+      }
+
+      newOffscreen = true;
+
+      offscreenContext.drawImage(imgLayer1, 0, 0, WIDTH, REAL_HEIGHT);
+      offscreenContext.drawImage(imgLayer2, screenX, screenY + 20, 160, 160);
+      offscreenContext.drawImage(imgLayer2, screenX - 160, screenY + 20, 160, 160);
+      offscreenContext.drawImage(imgLayer3, 0, 0, WIDTH, HEIGHT);
+    } else {
+      newOffscreen = false;
+    }
+
+    if (typeof pixels != 'undefined') {
+      newPixels = offscreenContext.getImageData(0, 0, WIDTH, HEIGHT);
+    } else {
+      pixels = offscreenContext.getImageData(0, 0, WIDTH, HEIGHT);
+      newPixels = offscreenContext.getImageData(0, 0, WIDTH, HEIGHT);
+
+      var count = 0;
+      for (var y = 0; y < HEIGHT; y++) {
+        for (var x = 0; x < WIDTH; x++) {
+          pixels.data[count + 3] = 0;
+
+          count += 4;
+        }
+      }
+    }
+  }
+
+  function mainPart2() {
+    prepareNewOffscreen();
+
+    document.querySelector('#area').appendChild(screenEl);
+    document.querySelector('#area').appendChild(borderEl);
+
+    gunEl = document.querySelector('#gun');
+    gunLineEl = document.querySelector('#gun-line');
+
+    nextMove();
+    physicalTick();
+  }
+
+  main();
+</script>

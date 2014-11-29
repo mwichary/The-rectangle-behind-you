@@ -35,8 +35,6 @@ presentation {
   width: 1280px;
   height: 720px;
 
-  /*outline: 1px solid rgba(255, 255, 255, .25);*/
-  
   position: relative;
 }
 
@@ -105,8 +103,6 @@ slide {
   
   width: 1200px;
   height: 620px;
-
-  /*background: -webkit-linear-gradient(rgb(10, 10, 10), rgb(30, 30, 30));              */
 
   border-radius: 60px;  
   
@@ -416,7 +412,6 @@ code.smaller1 {
 .bordered {
   padding: 30px;
   background: black;
-  /*outline: 1px solid rgba(255, 255, 0, .25);*/
   border-radius: 30px;
   border: 1px solid rgb(64, 64, 0);
 }
@@ -644,6 +639,7 @@ h1 {
   margin: 0 -150px;
   
   color: rgb(255, 255, 0);
+  /*text-shadow: none;*/ /* DEBUG */
   text-shadow: 0 0 2px rgb(255, 255, 0),
                0 0 5px rgb(255, 255, 0);        
 }
@@ -671,6 +667,8 @@ table.main-menu th {
   letter-spacing: -1px;
   
   text-align: left;
+
+  white-space: nowrap;
   
   color: white;
   text-shadow: 0 0 2px white,
@@ -733,6 +731,9 @@ body.slide-class-final-score #score1 {
 body.slide-class-intro-score header,
 body.slide-class-intro header {
   opacity: 0 !important;
+}
+header {
+  display: none !important;
 }
 
 .link {
@@ -869,22 +870,11 @@ input#big-score {
   font-family: 'ArcadeI';
   z-index: 99999;
   outline: 0;
-
-  /*-webkit-animation-name: flicker;
-  -webkit-animation-duration: 2s;
-  -webkit-animation-iteration-count: infinite;
-  -webkit-animation-timing-function: linear;    */
 }
 
 video {
   cursor: pointer;
 }
-
-/*table.main-menu th,
-table.main-menu td {
-  border: 1px solid rgb(255, 255, 0);
-}*/
-
 
 /* Slide afterimages */
 
@@ -908,18 +898,16 @@ slide.afterimage.play {
 }
 
 slide.afterimage1.play {
-  -webkit-transform: scaleY(1.1) /*translateY(-250px)*/;
+  -webkit-transform: scaleY(1.1);
 }
 
 slide.afterimage2.play {
-  -webkit-transform: scaleY(1.12) /*translateY(-270px)*/;
+  -webkit-transform: scaleY(1.12);
 }
 
 slide.afterimage3.play {
-  -webkit-transform: scaleY(1.08) /*translateY(-230px)*/;
+  -webkit-transform: scaleY(1.08);
 }  
-
-
 
 slide.afterimage video,
 slide.afterimage iframe {
@@ -982,8 +970,8 @@ slide:not(.prev-up):not(.prev-down):not(.current):not(.fade-in):not(.fade-out):n
   100% { -webkit-transform: translate(0, 768px); }
 }
 @-webkit-keyframes fade-in {
-  0% { opacity: 0; -webkit-transform: scaleY(1.1); }
-  100% { opacity: 1; -webkit-transform: scaleY(1); }
+  0% { opacity: 0; -AAAwebkit-transform: scaleY(1.1); }
+  100% { opacity: 1; -AAAwebkit-transform: scaleY(1); }
 }
 @-webkit-keyframes fade-out {
   0% { opacity: 1; }
@@ -1092,6 +1080,23 @@ slide.next-down {
   90% { opacity: .92; }
   100% { opacity: .9; background-position: 0 0, 0 0; }
 }
+
+/* exaggerated for the sake of recording */
+
+/*
+@-webkit-keyframes flicker {
+  0% { opacity: .90; background-position: 0 0, 0 620px; }
+  10% { opacity: .8; }
+  20% { opacity: .5; }
+  30% { opacity: .8; }
+  40% { opacity: .5; }
+  50% { opacity: .8; }
+  60% { opacity: .9; }
+  70% { opacity: .84; }
+  80% { opacity: .4; }
+  90% { opacity: .84; }
+  100% { opacity: .8; background-position: 0 0, 0 0; }
+}*/
 
 /* Debug */
 

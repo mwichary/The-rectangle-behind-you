@@ -424,6 +424,8 @@ function moveSlide(directionUp, moveType) {
 }
 
 function createAfterimageElements() {
+  return // debug
+
   if (slideEls[curSlide].afterimageEls && slideEls[curSlide].afterimageEls.length) {
     return;
   }
