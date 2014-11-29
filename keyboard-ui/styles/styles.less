@@ -1,0 +1,225 @@
+@PRESENTATION_WIDTH: 1024px;
+@PRESENTATION_HEIGHT: 768px;
+
+@PRESENTATION_PANORAMIC_HEIGHT: 1024px / 16 * 9;
+
+@MEDIUM_BLACK: rgb(51, 51, 50);
+@GRAY: rgb(182, 182, 181);
+
+@HIGHLIGHT_COLOUR: rgb(160, 20, 40); 
+@DIALOGUE_COLOUR: @MEDIUM_BLACK;
+@HEADING_COLOUR: @HIGHLIGHT_COLOUR;
+
+@SLIDE_H_PADDING: 80px;
+@SLIDE_V_PADDING: 60px;
+
+body {
+  background: black;
+
+  overflow: hidden;
+
+  color: @MEDIUM_BLACK;
+}
+* {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -webkit-font-feature-settings: "kern";
+}
+a {
+  color: inherit;
+}
+
+.presentation {  
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-left: -@PRESENTATION_WIDTH / 2;
+  margin-top: -@PRESENTATION_HEIGHT / 2;
+  width: @PRESENTATION_WIDTH;
+  height: @PRESENTATION_HEIGHT;
+
+  background: black;
+  overflow: hidden;
+}
+
+.presentation > div {
+  position: absolute;
+  left: 0;
+  top: (@PRESENTATION_HEIGHT - @PRESENTATION_PANORAMIC_HEIGHT) / 2;
+  width: 100%;
+  height: @PRESENTATION_PANORAMIC_HEIGHT;
+  background: white;
+
+  color: @MEDIUM_BLACK;
+  box-sizing: border-box;
+  padding: 0 @SLIDE_H_PADDING;
+  padding-top: @SLIDE_V_PADDING;
+
+  display: none;
+
+  overflow: hidden;
+  &.uncropped {
+    overflow: visible;
+  }
+  &.black {
+    background: black;
+  }
+
+  .crop {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
+  }
+
+  &.visible {
+    display: block;
+  }
+
+  &.title {
+    background: @HEADING_COLOUR;
+    color: white;
+
+    font-family: TorontoSubway;
+    font-size: 100px;
+    font-weight: 700;
+    line-height: .9;
+    letter-spacing: -0.04em;
+    text-transform: uppercase;
+
+    .subtitle {
+      font-size: 60px;
+      margin-top: 5px;
+      line-height: .95;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+
+      margin-left: -@SLIDE_H_PADDING;
+      padding-left: @SLIDE_H_PADDING;
+      margin-right: -@SLIDE_H_PADDING;
+      padding-right: @SLIDE_H_PADDING;
+      padding-bottom: 200px;
+
+      padding-top: @SLIDE_V_PADDING / 2 - 10px;
+
+      background: white;
+      color: @HEADING_COLOUR;
+    }
+
+    .content {
+      margin-top: 0;
+
+      padding-bottom: @SLIDE_V_PADDING / 2;
+    }
+  }
+}
+
+.red {
+  color: @HIGHLIGHT_COLOUR;
+}
+
+// Specific: Typography details
+// ------------------------------------------------------------------------
+
+.typography-details-loupe-trace {
+  position: absolute;
+  z-index: 5000 - 3;
+
+  width: 50px;
+  height: 50px;
+  margin-left: -50px / 2 - 3px;
+  margin-top: -50px / 2;
+  left: 0;
+  top: 0;
+
+  border: 2px solid fadeout(@HIGHLIGHT_COLOUR, 25%);
+  border-radius: 9999px;
+}
+
+.typography-details-loupe {
+  position: absolute;
+  z-index: 5000;
+  width: 150px;
+  height: 150px;
+  margin-left: -150px / 2;
+  margin-top: -150px / 2;
+  left: 0;
+  top: 0;
+
+  transition: -webkit-transform 1000ms;
+
+  -webkit-transform: translate(@PRESENTATION_WIDTH / 2, @PRESENTATION_HEIGHT);
+
+  border: 4px solid @HIGHLIGHT_COLOUR;
+  border-radius: 9999px;
+
+  overflow: hidden;
+
+  &:after {
+    content: '';
+    position: absolute;
+    margin-left: -4px;
+    margin-top: -4px;
+    width: 150px - 8px;
+    height: 150px - 8px;
+    border: 8px solid white;
+    border-radius: 9999px;
+
+  }
+
+  img {
+    transition: margin 1000ms;
+  }
+}
+.typography-details-loupe-caption,
+.typography-details-loupe-caption-shadow {
+  position: absolute;
+  z-index: 5000;
+  width: 200px;
+  //height: 150px;
+  margin-left: -200px / 2;
+  margin-top: 150px / 2 + 13px;
+  left: 0;
+  top: 0;
+
+  transition: -webkit-transform 1000ms;
+
+  -webkit-transform: translate(@PRESENTATION_WIDTH / 2, @PRESENTATION_HEIGHT);
+
+  text-align: center;
+  color: @HIGHLIGHT_COLOUR;
+  font-family: TorontoSubway;
+  font-size: 25px;
+  font-weight: 700;
+  line-height: 1.12;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+
+  &.typography-details-loupe-caption-shadow {
+    z-index: 4999;
+    color: transparent;
+    text-shadow: -3px -3px 0 white,
+                 3px -3px 0 white,
+                 -3px 3px 0 white,
+                 3px 3px 0 white;
+  }
+}
+
+
+// Fonts
+// ------------------------------------------------------------------------
+
+@font-face {
+  font-family: TorontoSubway;
+  src: url("../fonts/toronto-subway.otf");
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: TorontoSubway;
+  src: url("../fonts/toronto-subway-bold.otf");
+  font-weight: 700;
+  font-style: normal;
+}
