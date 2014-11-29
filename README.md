@@ -1,4 +1,4 @@
-The-rectangle-behind-you
+The rectangle behind you
 ========================
 
-Companion code for the The Rectangle Behind You site
+Companion code for [The Rectangle Behind You site](https://medium.com/the-rectangle-behind-you/the-rectangle-behind-you-5e11af9e2c26).
