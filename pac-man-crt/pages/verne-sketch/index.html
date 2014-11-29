@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+
+<style>
+  body {
+    width: 1024px;
+    height: 768px;
+    overflow: hidden;
+    background: black;
+  }
+  #doodle {
+    position: absolute;
+    left: 0;
+    top: -50px;
+    width: 1882px;
+    height: 768px;
+    
+    background: url(verne-sketch.png) top left no-repeat;
+
+    /*-webkit-transition: -webkit-transform 500ms ease-out;*/
+  }
+  
+  #pos {
+    margin: 0;
+    position: absolute;
+    bottom: 40px;
+    left: 470px;
+    width: 320px;
+    height: 40px;
+    opacity: .5;
+    -webkit-transition: opacity 500ms;
+    cursor: -webkit-grab;
+    z-index: 9999;
+  }
+  #pos:active {
+    cursor: -webkit-grabbing;
+  }
+  #pos:hover {
+    opacity: 1;
+    -webkit-transition: opacity 200ms;
+  }
+</style>
+
+<input id='pos' type='range' min='0' max='100' value='0' onchange='move()'>
+
+<div id='doodle'></div>
+
+<script>
+  var MARGIN = 10;
+  
+  function moveSlider(val) {
+    document.getElementById('pos').value = val * 100;
+    move();
+  }
+
+  function move() {
+    var val = document.getElementById('pos').value;
+    
+    //document.getElementById('doodle').style.left = ((- val / 100) * (1882 - 1024)) + 'px';
+    document.getElementById('doodle').style.webkitTransform = 'translateX(' + ((- val / 100) * (1882 - 1280)) + 'px)';
+  }
+  
+  move();
+</script>

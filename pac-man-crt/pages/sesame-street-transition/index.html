@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+
+<style>
+  body {
+    width: 1280px;
+    height: 768px;
+    overflow: hidden;
+    background: white;
+  }
+  div {
+    position: absolute;
+    left: 80px;
+    top: -80px;
+    width: 1024px;
+    height: 768px;
+  }
+  #layer-0 {
+    background: url(ss_sketch.jpg);
+    z-index: 40;
+  }
+  #layer-1 {
+    background: url(ss_final.jpg);
+    z-index: 30;
+  }
+
+  
+  #pos {
+    margin: 0;
+    position: absolute;
+    bottom: 40px;
+    left: 470px;
+    width: 320px;
+    height: 40px;
+    opacity: .5;
+    -webkit-transition: opacity 500ms;
+    cursor: -webkit-grab;
+    z-index: 9999;
+  }
+  #pos:active {
+    cursor: -webkit-grabbing;
+  }
+  #pos:hover {
+    opacity: 1;
+    -webkit-transition: opacity 200ms;
+  }
+</style>
+
+<input id='pos' type='range' min='0' max='100' value='0' onchange='move()'>
+
+<div id='layer-0'></div>
+<div id='layer-1'></div>
+
+<script>
+  var MARGIN = 10;
+  
+  function moveSlider(val) {
+    document.getElementById('pos').value = val * 100;
+    move();
+  }
+
+  function move() {
+    var val = document.getElementById('pos').value;
+    
+    var opacity = [0, 0, 0, 0];
+    
+    if (val < 25) {
+      opacity = [1, 0, 0, 0];
+    } else if (val < 75) {
+      opacity = [1 - ((val - 25) / 50), 1, 0, 0];
+    } else {
+      opacity = [0, 1, 0, 0];
+    }
+    
+    //document.title = opacity;
+    
+    for (var i = 0; i < 2; i++) {
+      document.getElementById('layer-' + i).style.opacity = opacity[i];
+    }
+    
+    // if (val < 33 - MARGIN)
+    
+    // 33%
+    // 66%
+  }
+  
+  move();
+</script>

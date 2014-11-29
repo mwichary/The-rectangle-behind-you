@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+
+<transmogrifier style='display: none'>
+  <label>Doodle:</label><br>
+  <input type='radio' checked name='doodle' value='png-24'><label>PNG-24 (29.603 bytes)</label><br>
+  <input type='radio' name='doodle' value='png-8'><label>PNG-8, 256 colors (13.055 bytes)</label><br>
+  <input type='radio' name='doodle' value='png-8-32-colors'><label>PNG-8, 32 colors (9.171 bytes)</label><br>
+  <input type='radio' name='doodle' value='png-8-8-colors'><label>PNG-8, 8 colors (6.785 bytes)</label><br>
+  <hr>
+  <label>Sprite:</label><br>
+  <input type='radio' checked name='sprite' value='png-24'><label>PNG-24 (222.323 bytes)</label><br>
+  <input type='radio' name='sprite' value='png-8'><label>PNG-8, 256 colors (77.781 bytes)</label><br>
+  <input type='radio' name='sprite' value='png-8-32-colors'><label>PNG-8, 32 colors (59.478 bytes)</label><br>
+  <input type='radio' name='sprite' value='png-8-8-colors'><label>PNG-8, 8 colors (44.104 bytes)</label><br>
+  <hr>
+  <input type='checkbox' name='debug-rectangles' value='yes'><label>Debug rectangles</label>
+</transmogrifier>
+
+<style>
+  html,
+  body {
+    padding: 0;
+    margin: 0;
+    height: 100%;
+  }
+  #canvas {
+    display: inline-block;
+    width: 530px;
+    height: 175px;
+    position: relative;
+    background-position: top left;
+    background-repeat: no-repeat;
+  }
+  #canvas { background-image: url(doodle-png-24.png); }
+  #canvas div {
+    position: absolute;
+    overflow: hidden;
+  }
+  #canvas div { background-image: url(sprite-png-24.png); }
+  
+</style>
+
+<div style='width: 100%; height: 100%; display: table'>
+  <div style='width: 100%; height: 100%; display: table-cell; text-align: center; vertical-align: middle'>
+
+    <div id='canvas' onclick='activate()'>
+    </div>
+  </div>
+</div>
+
+<script>
+  var FRAME_COUNT = 81;
+  
+  // Animation data. One entry per frame. Four numbers each frame:
+  // X, Y, width, height
+  var ANIMATION_POS = [[0],[87,114,34,40],[92,49,82,105],[92,49,82,107],[93,47,81,114],[100,136,40,26],[100,136,40,26],[144,68,37,61],[153,56,37,49],[158,42,42,50],[168,27,39,53],[179,14,47,54],[183,0,47,68],[194,0,105,109],[204,0,105,122],[217,0,93,123],[222,45,89,80],[220,50,91,70],[214,55,84,53],[251,80,45,29],[251,81,41,29],[252,81,37,29],[252,89,11,21],[252,89,11,21],[251,82,61,38],[251,82,61,42],[251,84,79,45],[272,86,37,32],[280,90,36,34],[288,95,35,33],[294,100,38,31],[303,102,38,34],[313,107,37,34],[319,7,88,158],[312,7,95,157],[312,8,95,155],[312,8,142,159],[312,8,144,163],[314,12,155,161],[307,6,164,168],[304,0,167,174],[302,0,169,174],[302,19,163,156],[316,19,149,156],[323,19,142,156],[319,19,146,156],[400,19,65,107],[400,19,65,98],[400,19,65,98],[417,82,42,64],[419,83,42,63],[419,83,44,64],[420,85,46,59],[0],[0],[0],[463,79,15,28],[463,76,16,31],[464,74,15,30],[464,71,16,31],[465,68,15,31],[465,65,16,31],[466,63,15,30],[466,60,16,31],[467,57,16,31],[468,56,15,29],[461,56,22,72],[461,55,22,73],[464,54,19,77],[467,54,16,77],[468,54,15,77],[0],[470,88,25,66],[0],[469,97,24,59],[466,102,26,54],[466,64,36,92],[476,19,34,113],[484,0,28,87],[492,0,20,41]];
+  
+  // The animation sprite has all the fragments laid out horizontally.
+  // This keeps track of where we are in the sprite (starting from the left).
+  var jointWidth;
+  
+  // Current frame.
+  var animFrame;
+  
+  var animateTimerId = -1;
+  
+  function animate() {    
+    var anim = ANIMATION_POS[animFrame];
+    
+    // Some frames are empty. You can tell those by all the values being 0.
+    if (anim[0]) {
+      var divEl = document.createElement('div');
+
+      // For debugging/visualization.
+      //if (transmogrifier.get('debug-rectangles') == 'yes') {
+      //  divEl.style.outline = '1px solid red';
+      //}
+
+      divEl.style.left = anim[0] + 'px';
+      divEl.style.top = anim[1] + 'px';
+      divEl.style.width = anim[2] + 'px';
+      divEl.style.height = anim[3] + 'px';
+      
+      divEl.style.backgroundPosition = (-jointWidth) + 'px 0';
+      
+      document.getElementById('canvas').appendChild(divEl);
+
+      // Moving in the sprite.
+      jointWidth += anim[2];      
+    }
+    
+    animFrame++;
+    if (animFrame == FRAME_COUNT - 1) {
+      window.clearTimeout(animateTimerId);
+    }
+  }
+
+  function activate() {
+    window.clearTimeout(animateTimerId);
+    document.getElementById('canvas').innerHTML = '';
+    
+    animFrame = 1;    
+    jointWidth = 0;
+    
+    animateTimerId = window.setInterval(animate, 50);
+  }
+</script>
+

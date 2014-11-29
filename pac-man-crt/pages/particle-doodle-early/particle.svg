@@ -1,0 +1,363 @@
+<svg width="100%" height="100%" 
+version="1.1"
+xmlns="http://www.w3.org/2000/svg" 
+onload="init(evt)" >
+
+	<defs>
+		<script type="text/ecmascript">
+		<![CDATA[		
+		    var svgNS = "http://www.w3.org/2000/svg";
+		    var xlinkNS = "http://www.w3.org/1999/xlink";						
+			
+			var width = window.innerWidth ;
+			var height =  window.innerHeight ;
+			var widthHalf = window.innerWidth / 2;
+			var heightHalf = window.innerHeight / 2;
+			var mouseX = 0;
+			var mouseY = 0;	
+			var pmouseX = 0;
+			var pmouseY = 0;
+			var mousePressed = false;
+			var rate = 12;
+			
+			var TWO_PI = 2*Math.PI;
+			
+			var needsSetup = true;
+			
+			var g;			
+			
+			function init(event)
+			{					
+				g = document.getElementById("canvas");		
+			    top.window.addEventListener('mousemove', onDocumentMouseMove, false);								
+//			    top.window.addEventListener('resize', onResize, false);
+			    this.addEventListener('mousedown', onDocumentMouseDown, false);
+			    this.addEventListener('mouseup', onDocumentMouseUp, false);					
+				setTimeout(drawInternal, rate);		
+			}
+			
+
+			function setWindowSizes(){
+				width = window.width ;
+				height =  window.height ;
+				widthHalf = window.width / 2;
+				heightHalf = window.height / 2;								
+			}
+			
+			function drawInternal(){
+				if(needsSetup){
+					//	for whatever reason when onload is called window sizes are undefined
+					//	hence we are doing this here!
+					setWindowSizes();
+					setup();
+					needsSetup = false;
+				}
+			
+				draw();
+				setTimeout('drawInternal()', rate);		
+				pmouseX = mouseX;
+				pmouseY = mouseY;					
+			}			
+			
+			function onDocumentMouseMove(event) {
+			    mouseX = event.clientX;
+			    mouseY = event.clientY;		
+			    mouseMovedEvent();
+			}	
+
+			function onDocumentMouseDown(event) {
+			    mousePressed = true;			
+			    mousePressedEvent();
+			}				
+			
+			function onDocumentMouseUp(event) {
+			    mousePressed = false;			
+			}							
+					
+			var throwDistance = 200;
+			var simulationSteady = false;						
+			var particles;
+			var mouseSpeed;
+			
+			function createParticle(x,y,r,c){
+				var p = new Particle(x,y,r,c);
+				particles.push(p);
+			}			
+			
+			function setup(){
+				particles = new Array();
+				createParticle(32-1 - 138, 16-1+120 - 55,2,'#BDBEBD');
+				createParticle(40-1 - 138, 16-1+120 - 55,2,'#BDBABD');
+				createParticle(48-1 - 138, 16-1+120 - 55,2,'#6379A4');
+				createParticle(56-1 - 138, 16-1+120 - 55,2,'#1851CE');
+				createParticle(208-1 - 138, 16-1+120 - 55,2,'#DEDFE7');
+				createParticle(216-1 - 138, 16-1+120 - 55,2,'#085108');
+				createParticle(16-1 - 138, 24-1+120 - 55,2,'#082463');
+				createParticle(24-1 - 138, 24-1+120 - 55,2,'#E7E7E7');
+				createParticle(56-1 - 138, 24-1+120 - 55,2,'#7B86AD');
+				createParticle(64-1 - 138, 24-1+120 - 55,2,'#E7E7E7');
+				createParticle(216-1 - 138, 24-1+120 - 55,2,'#085108');
+				createParticle(8-1 - 138, 32-1+120 - 55,2,'#6396EF');
+				createParticle(16-1 - 138, 32-1+120 - 55,2,'#B5B2B5');
+				createParticle(88-1 - 138, 32-1+120 - 55,2,'#B52410');
+				createParticle(96-1 - 138, 32-1+120 - 55,2,'#E74931');
+				createParticle(136-1 - 138, 32-1+120 - 55,2,'#BD9600');
+				createParticle(144-1 - 138, 32-1+120 - 55,2,'#EFBA00');
+				createParticle(184-1 - 138, 32-1+120 - 55,2,'#5A8AEF');
+				createParticle(192-1 - 138, 32-1+120 - 55,2,'#3971DE');
+				createParticle(200-1 - 138, 32-1+120 - 55,2,'#103484');
+				createParticle(216-1 - 138, 32-1+120 - 55,2,'#085108');
+				createParticle(240-1 - 138, 32-1+120 - 55,2,'#D62408');
+				createParticle(248-1 - 138, 32-1+120 - 55,2,'#E74931');
+				createParticle(264-1 - 138, 32-1+120 - 55,2,'#6B696B');
+				createParticle(272-1 - 138, 32-1+120 - 55,2,'#6B696B');
+				createParticle(8-1 - 138, 40-1+120 - 55,2,'#2159D6');
+				createParticle(16-1 - 138, 40-1+120 - 55,2,'#DEDFE7');
+				createParticle(80-1 - 138, 40-1+120 - 55,2,'#BDB6BD');
+				createParticle(104-1 - 138, 40-1+120 - 55,2,'#C61800');
+				createParticle(128-1 - 138, 40-1+120 - 55,2,'#B5B6B5');
+				createParticle(152-1 - 138, 40-1+120 - 55,2,'#D6AE00');
+				createParticle(168-1 - 138, 40-1+120 - 55,2,'#6396EF');
+				createParticle(176-1 - 138, 40-1+120 - 55,2,'#BDBABD');
+				createParticle(192-1 - 138, 40-1+120 - 55,2,'#1851CE');
+				createParticle(200-1 - 138, 40-1+120 - 55,2,'#EFEFEF');
+				createParticle(216-1 - 138, 40-1+120 - 55,2,'#085108');
+				createParticle(232-1 - 138, 40-1+120 - 55,2,'#BD2C18');
+				createParticle(240-1 - 138, 40-1+120 - 55,2,'#E7E7E7');
+				createParticle(256-1 - 138, 40-1+120 - 55,2,'#8C1000');
+				createParticle(8-1 - 138, 48-1+120 - 55,2,'#1851CE');
+				createParticle(16-1 - 138, 48-1+120 - 55,2,'#DEDBDE');
+				createParticle(72-1 - 138, 48-1+120 - 55,2,'#FF7563');
+				createParticle(80-1 - 138, 48-1+120 - 55,2,'#C6BEBD');
+				createParticle(104-1 - 138, 48-1+120 - 55,2,'#E74931');
+				createParticle(112-1 - 138, 48-1+120 - 55,2,'#6B2C21');
+				createParticle(120-1 - 138, 48-1+120 - 55,2,'#FFCF00');
+				createParticle(128-1 - 138, 48-1+120 - 55,2,'#C6BEBD');
+				createParticle(152-1 - 138, 48-1+120 - 55,2,'#FFCF00');
+				createParticle(160-1 - 138, 48-1+120 - 55,2,'#847539');
+				createParticle(168-1 - 138, 48-1+120 - 55,2,'#3971DE');
+				createParticle(176-1 - 138, 48-1+120 - 55,2,'#E7E3E7');
+				createParticle(192-1 - 138, 48-1+120 - 55,2,'#5A8AEF');
+				createParticle(200-1 - 138, 48-1+120 - 55,2,'#B5B2B5');
+				createParticle(216-1 - 138, 48-1+120 - 55,2,'#085108');
+				createParticle(232-1 - 138, 48-1+120 - 55,2,'#8C1000');
+				createParticle(240-1 - 138, 48-1+120 - 55,2,'#C61800');
+				createParticle(248-1 - 138, 48-1+120 - 55,2,'#CECFCE');
+				createParticle(256-1 - 138, 48-1+120 - 55,2,'#D6D7D6');
+				createParticle(8-1 - 138, 56-1+120 - 55,2,'#1851CE');
+				createParticle(16-1 - 138, 56-1+120 - 55,2,'#103C94');
+				createParticle(48-1 - 138, 56-1+120 - 55,2,'#D6DBDD');
+				createParticle(56-1 - 138, 56-1+120 - 55,2,'#4A7DE7');
+				createParticle(64-1 - 138, 56-1+120 - 55,2,'#BDBABD');
+				createParticle(72-1 - 138, 56-1+120 - 55,2,'#E73C21');
+				createParticle(80-1 - 138, 56-1+120 - 55,2,'#B5B2B5');
+				createParticle(104-1 - 138, 56-1+120 - 55,2,'#F79684');
+				createParticle(112-1 - 138, 56-1+120 - 55,2,'#847D73');
+				createParticle(120-1 - 138, 56-1+120 - 55,2,'#EFBA00');
+				createParticle(128-1 - 138, 56-1+120 - 55,2,'#B5B2B5');
+				createParticle(152-1 - 138, 56-1+120 - 55,2,'#F7DF5A');
+				createParticle(160-1 - 138, 56-1+120 - 55,2,'#94928C');
+				createParticle(168-1 - 138, 56-1+120 - 55,2,'#949EB5');
+				createParticle(176-1 - 138, 56-1+120 - 55,2,'#083CA5');
+				createParticle(192-1 - 138, 56-1+120 - 55,2,'#103C94');
+				createParticle(200-1 - 138, 56-1+120 - 55,2,'#D6D3D6');
+				createParticle(216-1 - 138, 56-1+120 - 55,2,'#085108');
+				createParticle(232-1 - 138, 56-1+120 - 55,2,'#AD1400');
+				createParticle(16-1 - 138, 64-1+120 - 55,2,'#1849B5');
+				createParticle(24-1 - 138, 64-1+120 - 55,2,'#3961B5');
+				createParticle(56-1 - 138, 64-1+120 - 55,2,'#6396EF');
+				createParticle(64-1 - 138, 64-1+120 - 55,2,'#B5B2AD');
+				createParticle(72-1 - 138, 64-1+120 - 55,2,'#F7F3EF');
+				createParticle(80-1 - 138, 64-1+120 - 55,2,'#AD1400');
+				createParticle(104-1 - 138, 64-1+120 - 55,2,'#BD2C18');
+				createParticle(112-1 - 138, 64-1+120 - 55,2,'#CECBCE');
+				createParticle(120-1 - 138, 64-1+120 - 55,2,'#F7F3EF');
+				createParticle(128-1 - 138, 64-1+120 - 55,2,'#BD9600');
+				createParticle(152-1 - 138, 64-1+120 - 55,2,'#BD9600');
+				createParticle(160-1 - 138, 64-1+120 - 55,2,'#C6C3C6');
+				createParticle(176-1 - 138, 64-1+120 - 55,2,'#CECBCE');
+				createParticle(184-1 - 138, 64-1+120 - 55,2,'#3165D6');
+				createParticle(192-1 - 138, 64-1+120 - 55,2,'#BDBEBD');
+				createParticle(216-1 - 138, 64-1+120 - 55,2,'#006500');
+				createParticle(232-1 - 138, 64-1+120 - 55,2,'#C61800');
+				createParticle(240-1 - 138, 64-1+120 - 55,2,'#C61800');
+				createParticle(24-1 - 138, 72-1+120 - 55,2,'#73798C');
+				createParticle(32-1 - 138, 72-1+120 - 55,2,'#103484');
+				createParticle(40-1 - 138, 72-1+120 - 55,2,'#1845AD');
+				createParticle(48-1 - 138, 72-1+120 - 55,2,'#103C94');
+				createParticle(56-1 - 138, 72-1+120 - 55,2,'#C6C3C6');
+				createParticle(64-1 - 138, 72-1+120 - 55,2,'#BDB6BD');
+				createParticle(80-1 - 138, 72-1+120 - 55,2,'#D6D7D6');
+				createParticle(88-1 - 138, 72-1+120 - 55,2,'#ADB2B5');
+				createParticle(96-1 - 138, 72-1+120 - 55,2,'#DEE3E7');
+				createParticle(104-1 - 138, 72-1+120 - 55,2,'#C6C3C6');
+				createParticle(128-1 - 138, 72-1+120 - 55,2,'#DEDBDE');
+				createParticle(136-1 - 138, 72-1+120 - 55,2,'#ADB2B5');
+				createParticle(144-1 - 138, 72-1+120 - 55,2,'#DEE3E7');
+				createParticle(152-1 - 138, 72-1+120 - 55,2,'#C6C3C6');
+				createParticle(176-1 - 138, 72-1+120 - 55,2,'#184DC6');
+				createParticle(184-1 - 138, 72-1+120 - 55,2,'#294994');
+				createParticle(192-1 - 138, 72-1+120 - 55,2,'#1849B5');
+				createParticle(216-1 - 138, 72-1+120 - 55,2,'#A5A2A5');
+				createParticle(224-1 - 138, 72-1+120 - 55,2,'#CECBCE');
+				createParticle(240-1 - 138, 72-1+120 - 55,2,'#A5A6A5');
+				createParticle(248-1 - 138, 72-1+120 - 55,2,'#9C9E9C');
+				createParticle(256-1 - 138, 72-1+120 - 55,2,'#BDBABD');
+				createParticle(168-1 - 138, 80-1+120 - 55,2,'#082463');
+				createParticle(176-1 - 138, 80-1+120 - 55,2,'#EFEBEF');
+				createParticle(192-1 - 138, 80-1+120 - 55,2,'#E7E7E7');
+				createParticle(200-1 - 138, 80-1+120 - 55,2,'#103484');
+				createParticle(168-1 - 138, 88-1+120 - 55,2,'#103C94');
+				createParticle(200-1 - 138, 88-1+120 - 55,2,'#9C9A9C');
+				createParticle(168-1 - 138, 96-1+120 - 55,2,'#BDB6BD');
+				createParticle(176-1 - 138, 96-1+120 - 55,2,'#1845AD');
+				createParticle(184-1 - 138, 96-1+120 - 55,2,'#2951B5');
+				createParticle(192-1 - 138, 96-1+120 - 55,2,'#CECFCE');
+				createParticle(200-1 - 138, 96-1+120 - 55,2,'#E7E7E7');		
+			}
+			
+			var whActive = 320;
+			
+			function draw(){			
+				simulationSteady = true;
+				whActive = window.innerWidth/2;				
+				
+				for(var i=0; i<particles.length; i++){		
+					var particle = particles[i];											
+					particle.update();					
+					
+					if(simulationSteady){
+						simulationSteady = particle.steady;
+					}
+					
+					particle.draw();		
+					
+					if(simulationSteady){
+						rate = 250;
+					}
+					else{
+						rate = 10;
+					}					
+				}						
+			}
+			
+			function mousePressedEvent(){
+			}
+			
+			function mouseMovedEvent(){
+			    if(simulationSteady)
+				    rate = 50;				
+			}
+			
+			function Particle(x,y,r,c){	
+				this.ox = x;
+				this.oy = y;
+				this.x = x + widthHalf;
+				this.y = y;
+				this.px = x;
+				this.py = x;
+				this.ppx = x;
+				this.ppy = y;
+				
+				var initV = 100;
+				this.vx = -initV / 2 + Math.random() * initV;
+				this.vy = -initV / 2 + Math.random() * initV;
+				
+				this.r = r;
+				this.c = c;
+				
+				this.throwAmount = 3 + Math.random() * 98;
+				this.snapBack = 0.1 + Math.random() * 0.4;
+				this.snapValue = 0;
+				this.stickiness = 1.0;		
+				
+				this.steady = false;
+				
+				this.graphic = document.createElementNS(svgNS, "circle");			
+				this.graphic.setAttributeNS(null,"cx",x);
+				this.graphic.setAttributeNS(null,"cy",y);
+				this.graphic.setAttributeNS(null,"fill",c);
+				this.graphic.setAttributeNS(null,"r", r);		
+				g.appendChild(this.graphic);	
+				
+				
+				this.update = function(){
+					this.ppx = this.px;
+					this.ppy = this.py;
+					this.px = this.x;
+					this.py = this.y;
+					
+					this.x += this.vx;
+					this.y += this.vy;
+					
+					this.vx *= 0.92;
+					this.vy *= 0.92;				
+					
+					var dx = mouseX - this.x;
+					var dy = mouseY - this.y;
+					
+					var d = Math.sqrt(dx * dx + dy * dy);
+					dx /= d;
+					dy /= d;
+					
+					
+					if(d<throwDistance){
+						this.vx -= dx * this.throwAmount;
+						this.vy -= dy * this.throwAmount;
+						this.snapValue += (0.005 - this.snapValue) * 0.4;
+						this.stickiness *= 0.9;
+						this.stickiness -= 0.01;
+						if(this.stickiness < 0 )
+							this.stickiness = 0;
+						this.vx *= 1-this.stickiness;
+						this.vy *= 1-this.stickiness;
+					}
+					else{
+						this.snapValue += (this.snapBack - this.snapValue) * 0.005;
+						this.stickiness += 0.03;
+						if(this.stickiness > 1)
+							this.stickiness = 1;
+					}		
+					
+					dx = this.ox - this.x + whActive;
+					dy = this.oy - this.y;
+					d = Math.sqrt(dx * dx + dy * dy);
+					
+					this.vx += dx * this.snapValue;
+					this.vy += dy * this.snapValue;
+					
+					this.r = 3 + d /5;		
+					
+					if( Math.abs(this.x - this.ox) < 0.1 &&	Math.abs(this.y - this.oy) < 0.1){
+						this.steady = true;
+					}
+					else{
+						this.steady = false;
+					}					
+				}											
+				
+				var cx = "cx";
+				var cy = "cy";
+				var radius = "r";
+				
+				this.draw = function(){						
+					if(this.px!=this.x && this.py!=this.y){							
+						var graphic = this.graphic;
+						var x = this.x;
+						var y = this.y;
+						var r = this.r;
+						graphic.setAttributeNS(null, cx, x);
+						graphic.setAttributeNS(null, cy, y);
+						graphic.setAttributeNS(null, radius, r);
+					}					
+				}			
+			}					
+			
+		]]>
+		</script>
+	</defs>
+	
+	<g id="canvas">
+	</g>
+
+</svg>

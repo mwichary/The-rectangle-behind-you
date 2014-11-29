@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+
+<meta charset='utf-8'>
+
+<style>
+  body {
+    padding: 0;
+    width: 1280px;
+    height: 768px;
+    margin: 0;
+    overflow: hidden;
+  }
+  #picture-canvas {
+    position: absolute;
+    overflow: hidden;
+    left: 80px;
+    top: -80px;
+    width: 1024px;
+    height: 768px;
+    background: url(ss_final.jpg) top left no-repeat;
+    cursor: crosshair;
+  }
+
+  body.hide-pointer,
+  body.hide-pointer #picture-canvas {
+    cursor: none !important;
+  }
+  
+  #loupe {
+    position: absolute;
+    overflow: hidden;
+    z-index: 5000;
+    -webkit-box-shadow: 0 2px 4px rgba(0, 0, 0, .5);
+    background: white;    
+    opacity: 0;
+    display: none;
+    -webkit-mask: url(images/loupe-mask-thin.png) top left no-repeat;    
+    -webkit-transition: opacity .25s;/*, -webkit-transform .25s;*/
+    /*-webkit-transform: scale(.33);*/
+    -webkit-transform-origin: 150px 150px;
+    -webkit-transition-delay: 0;
+    cursor: none;
+  }
+  #loupe.visible {
+    opacity: 1;
+    /*-webkit-transform: scale(1);*/
+    -webkit-transition: opacity 500ms;/*, -webkit-transform .25s;*/
+    -webkit-transition-delay: 0, 0;
+  }
+  #loupe-canvas {
+    position: absolute;
+    background: url(ss_alt_ryan.png) top left no-repeat;
+    width: 1024px;
+    height: 768px;
+  }
+  #loupe img {
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+  #loupe-image {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 300px;
+    height: 300px;
+    background: url(images/loupe-image-thin.png) top left no-repeat;
+    z-index: 25000;
+  }
+  
+</style>
+
+<div id='loupe'>
+  <div id='loupe-image'></div>
+  <div id='loupe-canvas'>
+  </div>
+</div>
+
+<div id='picture-canvas'>
+</div>
+
+<script>   
+  var LOUPE_MAGNIFICATION = 1;
+  var LOUPE_SIZE = 300;
+  var LOUPE_MARGIN = 30;
+  
+  var IMAGE_WIDTH = 1024;
+  var IMAGE_HEIGHT = 1024;
+
+  var loupeEnabledPermanently = true;
+  var loupeShown = false;  
+  
+  function moveLoupeOld() {
+    if (loupeEnabledPermanently) {
+      var relX = lastLoupeX - pictureCanvasEl.offsetLeft;
+      var relY = lastLoupeY - pictureCanvasEl.offsetTop;
+
+      var doNotShow = false;
+
+      if (((relX < -LOUPE_MARGIN) || (relY < -LOUPE_MARGIN)) ||  
+          (relX > IMAGE_WIDTH + LOUPE_MARGIN) || (relX > IMAGE_WIDTH + LOUPE_MARGIN)) {
+        if (loupeShown) {
+          hideLoupe();
+        }
+        doNotShow = true;
+        //return;
+      }
+      
+      if (!loupeShown && !doNotShow) {
+        showLoupe();
+      }
+    
+      if (relX < -LOUPE_MARGIN * 4) {
+        relX = -LOUPE_MARGIN * 4;
+      } else if (relX > IMAGE_WIDTH + LOUPE_MARGIN * 4) {
+        relX = IMAGE_WIDTH + LOUPE_MARGIN * 4;
+      }
+    
+      if (relY < -LOUPE_MARGIN * 4) {
+        relY = -LOUPE_MARGIN * 4;
+      } else if (relY > IMAGE_HEIGHT + LOUPE_MARGIN * 4) {
+        relY = IMAGE_HEIGHT + LOUPE_MARGIN * 4;
+      }
+    
+      var x = relX + pictureCanvasEl.offsetLeft;
+      var y = relY + pictureCanvasEl.offsetTop;
+    
+      loupeEl.style.left = x + 'px';
+      loupeEl.style.top = y + 'px';
+      
+      //console.log(x + ' : ' + y);
+      
+      loupeCanvasEl.style.marginLeft = -(-80 + x * LOUPE_MAGNIFICATION - LOUPE_SIZE / 2) + 'px';
+      loupeCanvasEl.style.marginTop = -(80 + y * LOUPE_MAGNIFICATION - LOUPE_SIZE / 2) + 'px';
+    } else {
+      if (loupeShown) {
+        hideLoupe();
+      }
+    }    
+  }
+  
+  function moveLoupeIOS(x, y) {
+    if (loupeEnabledPermanently) {
+      /*var relX = lastLoupeX - pictureCanvasEl.offsetLeft;
+      var relY = lastLoupeY - pictureCanvasEl.offsetTop;
+
+      var doNotShow = false;
+
+      if (((relX < -LOUPE_MARGIN) || (relY < -LOUPE_MARGIN)) ||  
+          (relX > IMAGE_WIDTH + LOUPE_MARGIN) || (relX > IMAGE_WIDTH + LOUPE_MARGIN)) {
+        if (loupeShown) {
+          hideLoupe();
+        }
+        doNotShow = true;
+        //return;
+      }
+      
+      if (!loupeShown && !doNotShow) {
+        showLoupe();
+      }
+    
+      if (relX < -LOUPE_MARGIN * 4) {
+        relX = -LOUPE_MARGIN * 4;
+      } else if (relX > IMAGE_WIDTH + LOUPE_MARGIN * 4) {
+        relX = IMAGE_WIDTH + LOUPE_MARGIN * 4;
+      }
+    
+      if (relY < -LOUPE_MARGIN * 4) {
+        relY = -LOUPE_MARGIN * 4;
+      } else if (relY > IMAGE_HEIGHT + LOUPE_MARGIN * 4) {
+        relY = IMAGE_HEIGHT + LOUPE_MARGIN * 4;
+      }
+    
+      var x = relX + pictureCanvasEl.offsetLeft;
+      var y = relY + pictureCanvasEl.offsetTop;*/
+    
+      showLoupe();
+    
+      loupeEl.style.left = x + 'px';
+      loupeEl.style.top = y + 'px';
+      
+      //console.log(x + ' : ' + y);
+      
+      loupeCanvasEl.style.marginLeft = -(-80 + x * LOUPE_MAGNIFICATION - LOUPE_SIZE / 2) + 'px';
+      loupeCanvasEl.style.marginTop = -(80 + y * LOUPE_MAGNIFICATION - LOUPE_SIZE / 2) + 'px';
+    } else {
+      if (loupeShown) {
+        hideLoupe();
+      }
+    }
+  }
+  
+  var lastLoupeX = 0;
+  var lastLoupeY = 0;
+  
+  function handleMouseMove(event) {
+    showMousePointer();   
+
+    var el = event.target;
+  
+    while (el && (el != pictureCanvasEl && el != loupeEl)) {
+      el = el.parentNode;
+    }
+  
+    if ((el == pictureCanvasEl) || (el == loupeEl)) {    
+      lastLoupeX = event.clientX;
+      lastLoupeY = event.clientY;
+
+      moveLoupeOld();
+    } else {
+      if (loupeShown) {
+        hideLoupe();
+      }
+    }
+    
+  }
+
+  function showLoupe(override) {
+    if (!loupeEnabledPermanently && !override) {
+      return;
+    }
+    
+    loupeEl.style.display = 'block';
+    window.setTimeout(function() { loupeEl.className = 'visible'; }, 0);
+    
+    loupeShown = true;
+  }
+  
+  function hideLoupe(override) {
+    if (!loupeEnabledPermanently && !override) {
+      return;
+    }
+    
+    loupeEl.className = '';
+
+    loupeShown = false;
+  }  
+  
+  function toggleLoupePermanently() {
+    /*loupeEnabledPermanently = !loupeEnabledPermanently;
+
+    if (loupeEnabledPermanently) {
+      moveLoupeOld();
+    } else if (!loupeEnabledPermanently && loupeShown) {
+      hideLoupe(true);
+    }*/
+  }
+  
+  function handleLoupeTransitionEnd(event) {
+    if (!loupeShown) {
+      loupeEl.style.display = 'none';
+    }
+  }
+
+  function handlePictureCanvasMouseDown(event) {
+    toggleLoupePermanently();
+    
+    event.preventDefault();
+  }
+
+  function handleLoupeMouseDown(event) {
+    toggleLoupePermanently();
+    
+    event.preventDefault();
+  }
+
+  
+  function hideMousePointer() {
+    if (document.body.className.indexOf('hide-pointer') == -1) {
+      document.body.className += ' hide-pointer';
+    }
+  }
+  
+  function showMousePointer() {
+    document.body.className = document.body.className.replace(/hide-pointer/, '');
+  }
+  
+  function handleKeyDown(event) {
+    switch (event.keyCode) {
+      case 32: // space
+        toggleLoupePermanently();
+        event.preventDefault();
+        break;
+    }
+  }
+  
+  function initializeMaps() {
+    loupeEl = document.getElementById('loupe');
+    loupeCanvasEl = document.getElementById('loupe-canvas');
+    pictureCanvasEl = document.getElementById('picture-canvas');
+    //mainCanvasEl = document.getElementById('main-canvas');
+
+    loupeEl.style.marginLeft = (- LOUPE_SIZE / 2) + 'px';
+    loupeEl.style.marginTop = (- LOUPE_SIZE / 2) + 'px';
+    loupeEl.style.width = (LOUPE_SIZE) + 'px';
+    loupeEl.style.height = (LOUPE_SIZE) + 'px';
+
+    document.body.addEventListener('mousemove', handleMouseMove, false);
+    document.body.addEventListener('keydown', handleKeyDown, false);
+    loupeEl.addEventListener('webkitTransitionEnd', handleLoupeTransitionEnd, false);
+    pictureCanvasEl.addEventListener('mousedown', handlePictureCanvasMouseDown, false);
+    loupeEl.addEventListener('mousedown', handleLoupeMouseDown, false);
+    
+  }
+  
+  initializeMaps();
+  
+</script>

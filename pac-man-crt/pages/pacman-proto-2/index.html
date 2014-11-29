@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+
+<body>
+
+  <style>
+    html {
+      height: 100%;
+    }
+    body {
+      background: black;
+  
+      padding: 0;
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      display: -webkit-box;
+      -webkit-box-pack: center;
+      -webkit-box-align: center;
+    }
+    #playfield {
+      margin: 0 auto;
+      width: 750px;
+      height: 261px;
+      background: url(bk.png) top left no-repeat;
+      position: relative;
+      overflow: hidden;
+    }
+    #playfield .path {
+      position: absolute;
+      background: white;
+      opacity: .2;
+      z-index: 10;
+    }
+    #playfield .junction {
+      position: absolute;
+      width: 5px;
+      margin-left: -2px;
+      height: 5px;
+      margin-top: -2px;
+      background: red;
+      opacity: .2;
+      z-index: 20;
+    }
+    #playfield .character {
+      position: absolute;
+      width: 15px;
+      margin-left: -7px;
+      height: 15px;
+      margin-top: -7px;
+      background: yellow;
+      opacity: 1;
+      -webkit-border-radius: 7px;
+      -moz-border-radius: 7px;
+      z-index: 100;
+    }
+    #playfield .character#character1,
+    #playfield .character#character2,
+    #playfield .character#character3,
+    #playfield .character#character4 {
+      -webkit-border-bottom-left-radius: 0;
+      -webkit-border-bottom-right-radius: 0;
+      -moz-border-radius-bottomleft: 0;
+      -moz-border-radius-bottomright: 0;
+    }
+    #playfield .character#character1 {
+      background: red;
+    }
+    #playfield .character#character2 {
+      background: blue;
+    }
+    #playfield .character#character3 {
+      background: white;
+    }
+    #playfield .character#character4 {
+      background: green;
+    }
+    #playfield .pellet {
+      position: absolute;
+      width: 3px;
+      margin-left: -1px;
+      height: 3px;
+      margin-top: -1px;
+      background: yellow;
+      z-index: 80;
+    }
+  </style>
+
+  <div id='playfield'>
+    
+  </div>
+
+
+  <script>
+    // config
+    
+    var TICK_TIME = 10;
+    var PELLET_DISTANCE = 12;    
+    
+    var CHARACTER_COUNT = 4; // excluding player character
+    
+    // const
+  
+    var DIR_UP = 1;
+    var DIR_DOWN = 2;
+    var DIR_LEFT = 4;
+    var DIR_RIGHT = 8;
+    
+    var DIR_HORIZONTAL = DIR_LEFT + DIR_RIGHT;
+    var DIR_VERTICAL = DIR_LEFT + DIR_RIGHT;
+    
+    // data
+  
+    var SPECIAL_HORIZONTAL_PORTAL = 1;
+  
+    var paths = [
+    
+      // x   108  154 173 218  287 307 329 396  506  551 640
+      // y   39  90  135 146 179     227
+      { x1: 108, y1: 39, x2: 108, y2: 227 },
+      { x1: 108, y1: 39, x2: 640, y2: 39 },
+      { x1: 640, y1: 39, x2: 640, y2: 227 },
+      { x1: 218, y1: 39, x2: 218, y2: 179 },
+      { x1: 108, y1: 179, x2: 396, y2:179 },
+      { x1: 396, y1: 90, x2: 396, y2: 227 },
+      { x1: 506, y1: 39, x2: 506, y2: 227 },
+      { x1: 551, y1: 39, x2: 551, y2: 179 },
+      { x1: 551, y1: 90, x2: 640, y2: 90 },
+      { x1: 506, y1: 179, x2: 640, y2: 179 },
+      { x1: 329, y1: 227, x2: 640, y2: 227 },
+      { x1: 329, y1: 179, x2: 329, y2: 227 },
+      { x1: 287, y1: 179, x2: 287, y2: 227 },
+      { x1: 154, y1: 179, x2: 154, y2: 227 },
+      { x1: 154, y1: 227, x2: 287, y2: 227 },
+      { x1: 154, y1: 90, x2: 506, y2: 90 },
+      { x1: 154, y1: 90, x2: 154, y2: 135 },
+      { x1: 154, y1: 135, x2: 173, y2: 135 },
+      { x1: 307, y1: 90, x2: 307, y2: 179 },
+      { x1: 396, y1: 146, x2: 506, y2: 146 },
+      { x1: 597, y1: 135, x2: 640, y2: 135 },
+      
+      { x1: 92, y1: 135, x2: 108, y2: 135, special: [SPECIAL_HORIZONTAL_PORTAL, 656] }, // left portal
+      { x1: 640, y1: 135, x2: 656, y2: 135, special: [SPECIAL_HORIZONTAL_PORTAL, 92] }, // right portal
+    ];
+    
+    var startingPosition = [
+      { x: 108, y: 39, direction: DIR_RIGHT },
+      { x: 451, y: 90, direction: DIR_LEFT },
+      { x: 451, y: 90, direction: DIR_LEFT },
+      { x: 451, y: 90, direction: DIR_RIGHT },
+      { x: 451, y: 90, direction: DIR_RIGHT },
+    ];
+      
+
+    // vars
+    
+    var junctions = [];
+    var pellets = [];
+    var characters = [];
+
+    var oppositeDirections = [];
+    var randomDirections = [DIR_LEFT, DIR_RIGHT, DIR_UP, DIR_DOWN];
+
+    
+    // ----------------
+    
+    // TODO: rewrite to do a look-up
+    function findJunction(x, y) {
+      for (var i in junctions) {
+        if (junctions[i].x == x && junctions[i].y == y) {
+          return junctions[i];
+        }
+      }
+      return false;
+    }
+    
+    // TODO: merge with above
+    function findPellet(x, y) {
+      for (var i in pellets) {
+        if (pellets[i].x == x && pellets[i].y == y) {
+          return pellets[i];
+        }
+      }
+      return false;
+    }
+    
+    function createJunction(x, y, direction, special) {
+      var junction = findJunction(x, y);
+      
+      if (!junction) {
+        junctions.push({x: x, y: y, directions: direction, special: special});
+      } else {
+        junction.directions |= direction;
+        if (!special) {
+          junction.special = null;
+        }
+      }
+    }
+    
+    function createPellet(x, y) {
+      var pellet = findPellet(x, y);
+      
+      if (!pellet) {
+        pellets.push({x: x, y: y});
+      }
+    }
+    
+    function processPaths() {
+      for (var i in paths) {
+        if (paths[i].y1 == paths[i].y2) {
+          paths[i].direction = DIR_HORIZONTAL;
+          createJunction(paths[i].x1, paths[i].y1, DIR_RIGHT, paths[i].special);
+          createJunction(paths[i].x2, paths[i].y2, DIR_LEFT, paths[i].special);
+          
+          if (!paths[i].special) {
+            for (var j = paths[i].x1; j <= paths[i].x2; j += PELLET_DISTANCE) {
+              createPellet(j, paths[i].y1);
+            }
+          }
+        } else {
+          paths[i].direction = DIR_VERTICAL;
+          createJunction(paths[i].x1, paths[i].y1, DIR_DOWN, paths[i].special);
+          createJunction(paths[i].x2, paths[i].y2, DIR_UP, paths[i].special);
+
+          if (!paths[i].special) {
+            for (var j = paths[i].y1; j <= paths[i].y2; j += PELLET_DISTANCE) {
+              createPellet(paths[i].x1, j);
+            }
+          }
+        }        
+      }
+      
+      for (var i in paths) {
+        for (var j in paths) {
+          if (i != j) {
+            if (paths[i].direction == DIR_HORIZONTAL && 
+                paths[j].direction == DIR_VERTICAL) {
+              if (paths[i].x1 <= paths[j].x1 && paths[i].x2 >= paths[j].x1 && paths[j].y1 <= paths[i].y1 && paths[j].y2 >= paths[i].y1) {
+                
+                var direction = 0;
+                if (paths[i].x1 < paths[j].x1) {
+                  direction += DIR_LEFT;
+                }
+                if (paths[i].x2 > paths[j].x1) {
+                  direction += DIR_RIGHT;
+                }
+                if (paths[j].y1 < paths[i].y1) {
+                  direction += DIR_UP;
+                }
+                if (paths[j].y2 > paths[i].y1) {
+                  direction += DIR_DOWN;
+                }
+                
+                createJunction(paths[j].x1, paths[i].y1, direction);
+              }
+            } 
+          }
+        }
+      }
+    }
+    
+    function createDebugVisualElements() {
+      for (var i in paths) {
+        var path = paths[i];
+        
+        var el = document.createElement('div');
+        el.className = 'path';
+        el.style.left = path.x1 + 'px';
+        el.style.top = path.y1 + 'px';
+        el.style.width = (path.x2 - path.x1 + 1) + 'px';
+        el.style.height = (path.y2 - path.y1 + 1) + 'px';
+        playfieldEl.appendChild(el);
+      }
+    
+      for (var i in junctions) {
+        var junction = junctions[i];
+        
+        var el = document.createElement('div');
+        el.className = 'junction';
+        el.style.left = junction.x + 'px';
+        el.style.top = junction.y + 'px';
+        playfieldEl.appendChild(el);
+      }
+    }
+    
+    function createPelletElements() {
+      for (var i in pellets) {
+        var pellet = pellets[i];
+        
+        var el = document.createElement('div');
+        el.className = 'pellet';
+        el.style.left = pellet.x + 'px';
+        el.style.top = pellet.y + 'px';
+        pellets[i].el = el;
+        playfieldEl.appendChild(el);
+      }      
+    }
+    
+    function createCharacterElements() {
+      for (var i in characters) {
+        var character = characters[i];
+        
+        var el = document.createElement('div');
+        el.className = 'character';
+        el.id = 'character' + i;
+        playfieldEl.appendChild(el);
+      }
+    }
+    
+    function updateCharacterElements() {
+      for (var i in characters) {
+        var character = characters[i];
+        var el = document.getElementById('character' + i);        
+
+        el.style.left = character.x + 'px';
+        el.style.top = character.y + 'px';
+      }
+      
+    }
+    
+    function tick() {
+      for (var i in characters) {
+        var character = characters[i];
+        
+        if (i == 0) { // player character
+          pellet = findPellet(character.x, character.y);
+          
+          if (pellet) {
+            pellet.el.style.visibility = 'hidden';
+          }
+        }
+        
+        if (character.direction) {
+          var junction = findJunction(character.x, character.y);
+          
+          if (junction) {
+            if (i == 0) { // player character
+              if (junction.special && junction.special[0] == SPECIAL_HORIZONTAL_PORTAL) {
+                character.x = junction.special[1];
+              } else if (character.nextDirection && (character.nextDirection & junction.directions)) {
+                character.direction = character.nextDirection;
+                character.nextDirection = 0;
+              } else if ((character.direction & junction.directions) == 0) {
+                character.direction = 0;
+              } 
+            } else {
+              if ((character.direction & junction.directions) == 0) {
+                do {
+                  var random = randomDirections[Math.floor(Math.random() * 4)];
+                } while ((random & junction.directions) == 0);
+                character.direction = random;
+              }
+            }
+          }
+        
+          switch (character.direction) {
+            case DIR_RIGHT: 
+              character.x++;
+              break;
+            case DIR_LEFT: 
+              character.x--;
+              break;
+            case DIR_UP: 
+              character.y--;
+              break;
+            case DIR_DOWN: 
+              character.y++;
+              break;
+          }
+        }
+      }
+      
+      updateCharacterElements();
+    }
+    
+    function processNewDirection(newDirection) {
+      var character = characters[0];
+      
+      var junction = findJunction(character.x, character.y);
+      
+      if (junction) {
+        if ((newDirection & junction.directions) > 0) {
+          character.direction = newDirection;
+          character.nextDirection = 0;
+        }
+      } else {
+        if (character.direction == oppositeDirections[newDirection]) {
+          character.direction = newDirection;
+          character.nextDirection = 0;
+        } else if (character.direction != newDirection) {
+          character.nextDirection = newDirection;
+        }
+      }
+    }
+    
+    function handleKeyDown(event) {
+      switch (event.keyCode) {
+        case 37: // left
+          processNewDirection(DIR_LEFT);
+          break;
+        case 38: // up
+          processNewDirection(DIR_UP);
+          break;
+        case 39: // right
+          processNewDirection(DIR_RIGHT);
+          break;
+        case 40: // down
+          processNewDirection(DIR_DOWN);
+          break;
+      }
+      
+    } 
+
+    function activate() {
+      window.setInterval(tick, TICK_TIME);
+    }
+
+    function initialize() {
+      playfieldEl = document.getElementById('playfield');
+      
+      processPaths();
+      //createDebugVisualElements();
+      
+      for (var i = 0; i <= CHARACTER_COUNT; i++) {
+        characters.push({ x: startingPosition[i].x, y: startingPosition[i].y, direction: startingPosition[i].direction, nextDirection: 0 });
+      }
+
+      createPelletElements();
+      
+      createCharacterElements();
+      updateCharacterElements();
+      
+      oppositeDirections[DIR_UP] = DIR_DOWN;
+      oppositeDirections[DIR_DOWN] = DIR_UP;
+      oppositeDirections[DIR_LEFT] = DIR_RIGHT;
+      oppositeDirections[DIR_RIGHT] = DIR_LEFT;
+      
+      window.addEventListener('keydown', handleKeyDown, false);
+      
+      playfieldEl.addEventListener('click', activate, false);
+      
+    }
+
+    initialize();
+  </script>
+  
+</body>

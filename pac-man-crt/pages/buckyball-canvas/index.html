@@ -1,0 +1,604 @@
+<html>
+<head>
+<script type="text/javascript" src="BuckyBall.js"></script>
+<script type="text/javascript" src="CanvasParticle.js"></script>
+<script type="text/javascript">
+
+////// PARAMETERS ///////
+
+// lower values = more fisheye, more drastic perspective
+// higher values = more "orthographic", less perspective
+var focalLength = 3.8;
+	
+// radius of entire bucky ball
+var buckyBallSize = 20;
+
+// size of the circle our orbiting particle makes
+var orbitRadius = 20;
+	
+// size of dots at z = 0, dots closer to you will be bigger.
+// this should be SMALLER than the actual size of the image (which should be square)
+var atomSize = 4;
+
+var frameRate = 100/6;
+
+// How far is the center of the ball from the top of the page?
+var topOffset = 148;
+
+// How many dots in our motion trail?
+var numParticles = 40;
+
+// How fast is orbit?
+var orbitRatio = 1/15;
+
+// How far to the right is the center of the ball from the center of the page?
+var leftOffset = 5;
+
+var distanceToOpen = 40;
+
+var expandStrength = 0.4;
+var expandDampening = 0.7;
+
+var rotationEasing = 0.4;
+
+var glowColor = [255, 203, 70];
+
+var ballInnerColor = [255, 203, 70, 1];
+var ballOuterColor = [207, 88, 0, 1];
+
+var whitenessFalloff = 3;
+
+var rodColor = [232, 141, 7, 1];
+
+var magicScaleFactor = Math.PI / 180; // Basically this is tracking rotation speed (when the mouse is over the ball).
+
+var throwSpeedDecay = 0.97;
+var minThrowSpeed = 0.5;
+var maxThrowSpeed = 35;
+
+////// INTERNAL VARIABLES ///////
+
+
+var maxRotationVel = 0.25;
+
+var axis = [0, 0, 0]; // defines buckyball rotation
+
+var targetXRotation = xRotation = lxRotation = 0;
+var targetYRotation = yRotation = lyRotation = 0;
+
+var targetBuckyBallSize = 0;
+var currentBuckyBallSize = 0;
+
+var particles = []; // holds the dots of our motion trail
+var particleIndex = 0;
+
+var orbital = null; // the orbiting dot (IMG tag)
+
+var windowWidthHalf = 0;
+
+var expandVelocity = 0;
+
+var mouseX = mouseY = 0;
+
+var opened = false;
+var justOpened = false;
+
+var justStarted = true;
+
+var frame = 0;
+
+var wasHovering = false;
+
+var canvas;
+var g;
+
+var mvx = mvy = 0;
+var mx = my = 0;
+var pmouseX = pmouseY = 0;
+var glowOpacity = 0;
+
+var xDiff = yDiff = 0;
+
+var lastPoints =[];
+var lastLines1 =[];
+var lastLines2 = [];
+
+var throwSpeed = 0;
+var throwAngle = 0;
+
+////// LOGIC //////
+
+var init = function() {
+	
+	
+	canvas = document.getElementById('the-canvas');
+	g = canvas.getContext('2d');
+	
+	
+	// init dots for motion trail
+	while (particles.length < numParticles) {
+		particles.push(new Particle());
+	}
+	
+	// add listeners
+	if (window.addEventListener) {
+		window.addEventListener('resize', onWindowResize, true);
+		window.addEventListener('mousemove', onWindowMouseMove, true);
+	} else {
+		window.attachEvent('onresize', onWindowResize);
+		document.attachEvent('onmousemove', onWindowMouseMove);
+	}
+	onWindowResize(null);
+	
+	mx = (canvas.offsetLeft + canvas.width/2);
+	my = (canvas.offsetTop + canvas.height/2);
+	
+	setInterval(update, frameRate);
+	
+}
+
+var update = function() {
+
+	g.clearRect(0, 0, canvas.width, canvas.height);
+	
+	
+	if (!opened) {
+	
+		// Spin orbital
+		var or = -frame*orbitRatio;
+		var oox = canvas.width/2+Math.sin(or)*orbitRadius;
+		var ooy = canvas.height/2 + Math.cos(or)*orbitRadius;
+		
+		drawAtom(oox, ooy, 3);
+		
+		
+
+		// Add motion trail
+		particles[particleIndex++].show(oox+5+Math.random()*2-5, ooy+4+Math.random()*2-5);
+		particleIndex %= particles.length;
+		for (var i in particles) {
+			particles[i].update();
+		}
+		
+		justStarted = false;
+		
+	} else {	
+		
+		// Spring open the ball
+		var diff = currentBuckyBallSize - targetBuckyBallSize;
+		if (Math.abs(diff) > 0.01) {
+			var force = -expandStrength * (diff);
+			expandVelocity += force;
+			expandVelocity *= expandDampening;
+			currentBuckyBallSize += expandVelocity;
+			if (currentBuckyBallSize < 0) {
+				currentBuckyBallSize = 0;
+			}
+		} else {
+			currentBuckyBallSize = targetBuckyBallSize;
+		}
+		
+		
+		
+	if (wasHovering && !isHovering()) {
+		 mvx = mouseX-pmouseX;
+		 mvy = mouseY-pmouseY;
+		 throwSpeed = Math.sqrt(mvx*mvx+mvy*mvy);
+		 if (throwSpeed > maxThrowSpeed) throwSpeed = maxThrowSpeed;
+		 var xd = mouseX - (canvas.offsetLeft + canvas.width/2);
+		 var yd = mouseY - (canvas.offsetTop + canvas.height/2);
+		 throwAngle = Math.atan2(yd, xd);
+	}
+	
+		
+		if (isHovering()){ 
+		
+	mx += mouseX-pmouseX;
+	my += mouseY-pmouseY;
+	} else {
+		
+		mx += Math.cos(throwAngle)*throwSpeed;
+		my += Math.sin(throwAngle)*throwSpeed;
+
+		if (throwSpeed > minThrowSpeed) {
+		throwSpeed *= throwSpeedDecay;
+		} else { 
+			throwSpeed = minThrowSpeed;
+		}
+	
+	
+	}
+	
+		
+			targetXRotation = mx - (canvas.offsetLeft + canvas.width/2);
+			targetYRotation = my - (canvas.offsetTop + canvas.height/2);
+	
+		
+		
+		var xRotationVel = (targetXRotation-xRotation)*rotationEasing;
+		var yRotationVel = (targetYRotation-yRotation)*rotationEasing;
+		
+		//no need to constrain this anymore
+		//xRotationVel = constrain(xRotationVel, maxRotationVel);
+		//yRotationVel = constrain(yRotationVel, maxRotationVel);
+		
+		xRotation += xRotationVel;
+		yRotation += yRotationVel;
+		
+		
+		
+		// Draw the rods (back hemisphere)
+		var rr = 0;
+		for (var j in BuckyBall) { 
+			var poly = BuckyBall[j];
+			
+			var lines;
+			if (lastLines1[j]) {
+					lines = transform(lastLines1[j], xRotation-lxRotation, yRotation-lyRotation);
+			} else {
+					lines = transform(BuckyBall[j], xRotation-lxRotation, yRotation-lyRotation);
+			}
+			lastLines1[j] = lines;
+		
+			var fflat = project(lines, axis);
+			for (var p = 0; p < fflat.length; p++) {
+				var cur = fflat[p];
+				var np = (p+1)%fflat.length;
+				var next = fflat[np];
+				
+				var ccz = cur[2]/2 + next[2]/2;
+				
+				if (ccz < 1) {
+				g.lineWidth = 1 *ccz;
+				g.strokeStyle = lerpWhite(rodColor, 1-Math.pow(ccz, whitenessFalloff));
+				line(cur[0]*currentBuckyBallSize+canvas.width/2, cur[1]*currentBuckyBallSize+canvas.height/2, next[0]*currentBuckyBallSize+canvas.width/2, next[1]*currentBuckyBallSize+canvas.height/2);
+				}
+				
+				rr++;
+		
+			}
+		}
+		
+		
+		var flat = [];
+		for (var i in BuckyBall) {
+                var points;
+                if (lastPoints[i]) {
+                        points = transform(lastPoints[i], xRotation-lxRotation, yRotation-lyRotation);
+                } else {
+                        points = transform(BuckyBall[i], xRotation-lxRotation, yRotation-lyRotation);
+                }
+                lastPoints[i] = points;
+			flat = flat.concat(project(points, axis));
+		}
+		flat.sort(zsort);
+		
+		// Draw the atoms (back hemisphere)
+	
+	
+		for (var i in flat) {
+			var f = flat[i];
+			
+			
+			
+			
+			var x = canvas.width/2 + f[0]*currentBuckyBallSize;
+			var y = canvas.height/2 + f[1]*currentBuckyBallSize;
+			var s = atomSize*f[2]/2;
+			
+			if (f[2] < 1) {
+			
+			drawAtom(x, y, s, 1-Math.pow(f[2], whitenessFalloff));
+			
+			}
+		}
+		
+		
+		// Draw the rods (front hemisphere)
+		
+		var rr = 0;
+		for (var j in BuckyBall) { 
+
+			var poly = BuckyBall[j];
+			
+			var lines;
+			if (lastLines2[j]) {
+					lines = transform(lastLines2[j], xRotation-lxRotation, yRotation-lyRotation);
+			} else {
+					lines = transform(BuckyBall[j], xRotation-lxRotation, yRotation-lyRotation);
+			}
+			lastLines2[j] = lines;
+		
+			var fflat = project(lines, axis);
+			for (var p = 0; p < fflat.length; p++) {
+				var cur = fflat[p];
+				var np = (p+1)%fflat.length;
+				var next = fflat[np];
+				
+				var ccz = cur[2]/2 + next[2]/2;
+				
+				if (ccz >= 1) {
+				g.lineWidth = 1 *ccz;
+				g.strokeStyle = lerpWhite(rodColor, 0);
+				line(cur[0]*currentBuckyBallSize+canvas.width/2, cur[1]*currentBuckyBallSize+canvas.height/2, next[0]*currentBuckyBallSize+canvas.width/2, next[1]*currentBuckyBallSize+canvas.height/2);
+				}
+				
+				rr++;
+		
+			}
+		}
+		
+		
+		// Draw the atoms (front hemisphere)
+	
+	
+		for (var i in flat) {
+			var f = flat[i];
+			
+			
+			
+			
+			var x = canvas.width/2 + f[0]*currentBuckyBallSize;
+			var y = canvas.height/2 + f[1]*currentBuckyBallSize;
+			var s = atomSize*f[2]/2;
+			
+			if (f[2] >= 1) {
+			
+			drawAtom(x, y, s);
+			
+			}
+		}
+		
+		wasHovering = isHovering();
+		justOpened = false;
+		
+	}
+	
+	lxRotation = xRotation;
+	lyRotation = yRotation;
+	
+	pmouseX = mouseX;
+	pmouseY = mouseY;
+	frame++;
+	
+}
+
+var open = function() {
+	opened = true;
+	justOpened = true;
+	targetBuckyBallSize = buckyBallSize;
+	for (var i in particles) {
+		particles[i].hide();
+	}
+}
+
+
+
+////// LISTENERS //////
+
+var onWindowResize = function() {
+	if (window.innerWidth) {
+		windowWidthHalf = window.innerWidth/2;
+	} else {
+		windowWidthHalf = document.body.clientWidth/2;
+	}
+}
+
+var onWindowMouseMove = function(e) {
+	
+	
+	
+	if (e.clientX) {
+		mouseX = e.clientX;
+		mouseY = e.clientY;
+	} else {
+		mouseX = e.pageX;
+		mouseY = e.pageY;
+	}
+	
+	/*var correctX = document.getElementById('the-canvas').offsetLeft + document.getElementById('the-canvas').offsetParent.offsetLeft;
+	var correctY = document.getElementById('the-canvas').offsetTop + document.getElementById('the-canvas').offsetParent.offsetTop;
+
+	mouseX -= correctX;
+	mouseY -= correctY;*/
+	
+	if (!opened && isHovering()) {
+		open();
+	}
+}
+
+
+
+////// UTIL //////
+
+function zsort(a, b) {
+	return a[2]-b[2];
+}
+
+function isHovering() {
+	return dist(mouseX, mouseY, canvas.offsetLeft+canvas.offsetParent.offsetLeft+canvas.width/2, canvas.offsetTop+canvas.offsetParent.offsetTop+canvas.height/2) < distanceToOpen;
+}
+
+function dist(x, y, xx, yy) {
+	return Math.sqrt((xx-x)*(xx-x)+(yy-y)*(yy-y));
+}
+
+function makeImage(i, o) {
+		var img = document.createElement('img');
+		if (i) img.setAttribute('src', i);
+		img.style.position = "absolute";
+		return img;
+}
+
+function constrain(value, max) {
+	if (Math.abs(value) > max) {
+		return max*sign(value);
+	} else {
+		return value;
+	}
+}
+
+function sign(value) {
+	if (value > 0) return 1;
+	if (value < 0) return -1;
+	return 0;
+}
+
+function project(p, a){
+	var r = [];
+	var sx = Math.sin(a[0]);
+	var cx = Math.cos(a[0]);
+	var sy = Math.sin(a[1]);
+	var cy = Math.cos(a[1]);
+	var sz = Math.sin(a[2]);
+	var cz = Math.cos(a[2]);
+	var x,y,z,xy,xz,yx,yz,zx,zy,sr;
+	var i = p.length;
+	while (i--) {
+		x = p[i][0];
+		y = p[i][1];
+		z = p[i][2];
+		xy = cx*y - sx*z;
+		xz = sx*y + cx*z;
+		yz = cy*xz - sy*x;
+		yx = sy*xz + cy*x;
+		zx = cz*yx - sz*xy;
+		zy = sz*yx + cz*xy;
+		sr = focalLength/(focalLength + yz);
+		x = zx*sr;
+		y = zy*sr;
+		r[i] = [x, y, sr]; // including scale ratio as the third paramter, could also include 3d info
+	}
+	return r;
+};
+
+function drawAtom(x, y, r, whiteness) {
+
+	whiteness = whiteness || 0;
+
+	var atomGradient  = g.createRadialGradient(x-r/3, y-r/3,r/4,x, y, r);
+  	atomGradient.addColorStop(0, lerpWhite(ballInnerColor, whiteness));
+  	atomGradient.addColorStop(1, lerpWhite(ballOuterColor, whiteness));
+  
+  	g.fillStyle = atomGradient;
+  	fillCircle(x, y, r);
+  	
+  	
+}
+function lerpWhite(color, t) {
+	var opa = color[3];
+	var rr = Math.round(lerp(color[0], 255, t));
+	var gg = Math.round(lerp(color[1], 255, t));
+	var bb = Math.round(lerp(color[2], 255, t));
+	var tr =  "rgba("+rr+", "+gg+", "+bb+", "+opa+")";
+	return tr;
+}
+
+function lerp(a, b, t) {
+	return (b-a)*t+a;
+}
+
+function fillCircle(x, y, r) {
+
+	g.beginPath();
+    g.arc(x, y, r, 0, Math.PI*2, true);
+    g.fill();
+}
+function fillPixel(x, y) {
+	g.beginPath();
+	g.moveTo(x-0.5, y-0.5);
+	g.lineTo(x+0.5, y-0.5);
+	g.lineTo(x+0.5, y+0.5);
+	g.lineTo(x-0.5, y+0.5);
+	g.fill();
+}
+function line(x, y, xx, yy) {
+	g.beginPath();
+	g.moveTo(x, y);
+	g.lineTo(xx, yy);
+	g.stroke();
+}
+
+/* PAUL YANG ROOLZ */
+function transform(p, xOffset, yOffset) {
+  var norm = Math.sqrt(xOffset * xOffset + yOffset * yOffset);
+ 
+  if (norm == 0) {
+    // simply return p if no rotation is needed.
+	return p;
+  }
+ 
+  // The axis of rotation is [yOffset / norm, -xOffset / norm, 0]
+  var x = yOffset / norm;
+  var y = -xOffset / norm;
+  var angle = norm * magicScaleFactor;
+  var cosA = Math.cos(angle);
+  var sinA = Math.sin(angle);
+ 
+  // The rotation matrix defined by the axis / angle provided.
+  var m00 = 1 + (1 - cosA) * (x * x -1);
+  var m01 = (1 - cosA) * x * y;
+  var m02 = y * sinA;
+  var m10 = (1 - cosA) * x * y;
+  var m11 = 1 + (1-cosA)*(y * y - 1)
+  var m12 = -x * sinA;
+  var m20 = -y * sinA;
+  var m21 = x * sinA;
+  var m22 = 1 + (1 - cosA) * (-1);
+ 
+  var r = [];
+ 
+  var count = p.length;
+ 
+  for (var i = 0; i < count; ++i) {
+    var x = p[i][0];
+    var y = p[i][1];
+    var z = p[i][2];
+ 
+	r.push([m00 * x + m01 * y + m02 * z,
+            m10 * x + m11 * y + m12 * z,
+            m20 * x + m21 * y + m22 * z]);
+  }
+ 
+  return r;
+}
+</script>
+<style type="text/css">
+* { 
+margin: 0;
+padding: 0;
+}
+html {
+  height: 100%;
+}
+body {
+  padding: 0;
+  margin: 0;
+  
+  width: 100%;
+  height: 100%;
+  
+  display: -webkit-box;
+  -webkit-box-align: center;
+  -webkit-box-pack: center;
+}
+div {
+  background: url(google.png) center center no-repeat;
+  text-align: center;
+  width: 400px;
+  height: 200px;
+  position: relative;
+}
+canvas { 
+  position: absolute;
+  top: 47px;
+  left: 157px;
+}
+</style>
+</head>
+<body onload="init()">
+  <div>
+    <canvas id="the-canvas" width="100" height="100"></canvas>
+  </div>
+</body>
+</html>

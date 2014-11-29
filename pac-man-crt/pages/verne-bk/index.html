@@ -1,0 +1,2305 @@
+<!DOCTYPE html> 
+
+<title>Jules Verne doodle - Google</title>
+
+<meta http-equiv="X-UA-Compatible" content="chrome=1">
+ 
+<body> 
+ 
+<style> 
+  html {
+    height: 100%;
+  }
+  body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background: white;
+    overflow: hidden;
+    
+    margin-left: -250px;
+  }
+  #canvas {
+    padding: 0;
+    margin: 0 auto;
+    border-collapse: collapse;
+    height: 100%;
+    
+    opacity: 0;
+    -webkit-transition: opacity 2s;
+  }
+  #canvas td {
+    padding: 0;
+    margin: 0;
+    vertical-align: center;
+    height: 100%;
+  }
+  #hplogo {
+    overflow: hidden;
+    position: relative;
+    width: 1494px;
+    height: 860px;
+  }
+  #hplogo, #hplogo * {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+  }
+ 
+  #hplogo.drag-active #verne-drag,
+  #hplogo.drag-active #verne-drag * {
+    cursor: move !important;
+    cursor: none !important;
+  }
+ 
+  #verne-chrome {
+    height: 860px;
+    left: -20px;
+    position: absolute;
+    top: 0;
+    width: 1534px;
+    z-index: 400;
+  }
+  #verne-chrome-img {
+    width: 1534px;
+    height: 2774px;
+    margin-top: -150px;
+    display: none;
+  }
+  #verne-layers {
+    height: 860px;
+    left: 0;
+    top: 0;
+    overflow: hidden;
+    position: absolute;
+    width: 1428px;
+  }
+  #verne-layers img {
+    opacity: 0;
+    width: 1534px;
+    height: 2774px;
+  }
+  #verne-layer-0,
+  #verne-layer-1,
+  #verne-layer-2,
+  #verne-layer-3 {
+    height: 2776px;
+    left: 1px;
+    position: absolute;
+    top: 1px;
+    margin-top: 20px;
+    width: 1428px;
+  }
+ 
+  #verne-layer-0 {
+    z-index: 300;
+  }
+  #verne-layer-1 {
+    z-index: 200;
+  }
+  #verne-layer-2 {
+    z-index: 100;
+  }
+  #verne-layer-3 {
+    z-index: 50;
+    background: white;
+  }
+ 
+  #verne-lever {
+    background: url(logos/2011/verne-hp.png) no-repeat 0 -190px;
+    height: 39px;
+    left: 1448px;
+    position: absolute;
+    top: 387px;
+    width: 39px;
+    z-index: 500;
+ 
+    transition: transform .1s linear, top .1s linear, left .1s linear;
+    -moz-transition: -moz-transform .1s linear, top .1s linear, left .1s linear;
+    -webkit-transition: -webkit-transform .1s linear, top .1s linear, left .1s linear;
+    -o-transition: -o-transform .1s linear, top .1s linear, left .1s linear;
+  }
+ 
+  #verne-drag {
+    background: url(logos/2011/verne-hp.png) no-repeat 1000px 1000px;
+    cursor: pointer;
+    height: 150px;
+    left: 565px;
+    position: absolute;
+    top: 15px;
+    width: 150px;
+    z-index: 700;
+  }
+ 
+  #verne-dials-click {
+    background: url(logos/2011/verne-hp.png) no-repeat 1000px 1000px;
+ 
+    height: 860px;
+    left: 0;
+    position: absolute;
+    top: 0px;
+    width: 100px;
+    z-index: 700;
+ 
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  #verne-dial-depth-big,
+  #verne-dial-depth-small,
+  #verne-dial-position {
+    display: none;
+    position: absolute;
+    width: 7px;
+    transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transition: transform .2s linear;
+    -moz-transition: -moz-transform .2s linear;
+    -webkit-transition: -webkit-transform .2s linear;
+    -o-transition: -webkit-transform .2s linear;
+  }
+ 
+  #verne-dial-depth-big {
+    background: url(logos/2011/verne-hp.png) no-repeat -351px -199px;
+    height: 15px;
+    left: 37px;
+    top: 401px;
+    z-index: 600;
+ 
+    transform-origin: 3px 12px;
+    -moz-transform-origin: 3px 12px;
+    -webkit-transform-origin: 3px 12px;
+    -o-transform-origin: 3px 12px;
+  }
+ 
+  #verne-dial-depth-small {
+    background: url(logos/2011/verne-hp.png) no-repeat -351px -215px;
+    height: 15px;
+    left: 37px;
+    top: 401px;
+    z-index: 620;
+ 
+    transform-origin: 3px 12px;
+    -moz-transform-origin: 3px 12px;
+    -webkit-transform-origin: 3px 12px;
+    -o-transform-origin: 3px 12px;
+  }
+ 
+  #verne-dial-position {
+    background: url(logos/2011/verne-hp.png) no-repeat -351px -190px;
+    height: 8px;
+    left: 48px;
+    top: 449px;
+    z-index: 600;
+ 
+    transform-origin: 4px 8px;
+    -moz-transform-origin: 4px 8px;
+    -webkit-transform-origin: 4px 8px;
+    -o-transform-origin: 4px 8px;
+  }
+ 
+  #verne-border {
+    display: none;
+  }
+</style> 
+ 
+<noscript> 
+  <style>
+    #verne-chrome {
+      background: url(logos/2011/verne-hp.jpg) no-repeat;
+      left: 100px;
+    }
+    #verne-lever,
+    #verne-dial-depth-big,
+    #verne-dial-depth-small,
+    #verne-dial-position,
+    #verne-dial-position {
+      display: none;
+    }
+  </style>
+</noscript> 
+ 
+<table id=canvas><tr><td>
+  <div id=hplogo onselectstart="return false;"> 
+    <div id="verne-dials-click"></div> 
+    <div id="verne-drag"></div> 
+    <div id="verne-lever"></div> 
+    <div id="verne-chrome"></div> 
+    <div id="verne-layers"> 
+      <div id="verne-layer-0"></div> 
+      <div id="verne-layer-1"></div> 
+      <div id="verne-layer-2"></div> 
+      <div id="verne-layer-3"></div> 
+    </div> 
+    <div id="verne-dial-depth-big"></div> 
+    <div id="verne-dial-depth-small"></div> 
+    <div id="verne-dial-position"></div> 
+    <div id="verne-border"></div> 
+  </div> 
+</td></tr></table>
+ 
+<script> 
+// Create namespace.
+if (!window.google) {
+  window.google = {};
+}
+ 
+// Create namespace.
+if (!google.doodle) {
+  /**
+   * Registered at http://wiki/Main/GwsJavascriptNamespace
+   * @type {Object}
+   */
+  google.doodle = {};
+}
+ 
+/**
+ * Globals
+ *
+ * Members of the google.doodle namespace persist across page transitions and
+ * threads. Unless they are explicitly defined as a string
+ * google.doodle['name'], they will be renamed by the js compiler.
+ */
+ 
+/**
+ * Global function queue used for thread syncronizaiton of initialize() and
+ * destroy().
+ * @type {Array}
+ */
+if (!google.doodle.queue) {
+  google.doodle.queue = [];
+}
+ 
+/**
+ * Constants
+ */
+ 
+/**
+ * True if the browser is IE.
+ * @type {boolean}
+ * @private
+ * @const
+ */
+var IS_IE = navigator.userAgent.indexOf('MSIE') != -1;
+ 
+/**
+ * Array of browser-specific CSS transform properties.
+ * @type {Array.<string>}
+ * @private
+ * @const
+ */
+var CSS_TRANSFORM_NAMES =
+    ['webkitTransform', 'MozTransform', 'OTransform', 'transform'];
+ 
+/**
+ * Array of browser-specific CSS transition properties.
+ * @type {Array.<string>}
+ * @private
+ * @const
+ */
+var CSS_TRANSITION_NAMES =
+    ['webkitTransition', 'MozTransition', 'OTransition', 'transition'];
+ 
+/**
+ * Direction enum.
+ * @type {number}
+ * @private
+ * @const
+ */
+var DIR_NONE = 0;
+var DIR_UP = 1;
+var DIR_DOWN = 2;
+var DIR_LEFT = 3;
+var DIR_RIGHT = 4;
+ 
+/**
+ * Mapping of arrow key code to direction enum.
+ * @type {Object}
+ * @private
+ * @const
+ */
+var KEYCODE_DIR_MAP = {
+  37: DIR_LEFT,
+  38: DIR_UP,
+  39: DIR_RIGHT,
+  40: DIR_DOWN
+}
+ 
+/**
+ * Array of image filenames for the chrome and parallax layers. The first image
+ * contains the Google logo portholes and the sprites for the dials and lever.
+ * @type {Array.<string>}
+ * @private
+ * @const
+ */
+var LAYER_FILENAMES =
+  ['verne_demo-1.png', 'verne_demo-2.png',
+   'verne_demo-3.png', 'verne_demo-4.png',
+   'verne_demo-5.png'];
+ 
+/**
+ * The number of parallax layers used to render the ocean.
+ * @type {number}
+ * @private
+ * @const
+ */
+var LAYER_COUNT = 4;
+ 
+/**
+ * The total vertical distance above the initial position of the ship.
+ * @type {number}
+ * @private
+ * @const
+ */
+var SKY_HEIGHT = 109;
+ 
+/**
+ * The total vertical distance of the environement including both sky and ocean
+ * depth.
+ * @type {number}
+ * @private
+ * @const
+ */
+var HEIGHT = SKY_HEIGHT * 2 + (992 + 15) * 2;
+ 
+/**
+ * The total horizontal distance of the environment. Assuming the ship is
+ * exactly in the center initially, half of this distance will be to the left,
+ * and half to the right.
+ * @type {number}
+ * @private
+ * @const
+ */
+var WIDTH = 0;
+ 
+/**
+ * The bottom-most transparent pixel in the porthole layer e.g. actual height
+ * of the visible area.
+ * @type {number}
+ * @private
+ * @const
+ */
+var PORTHOLE_HEIGHT = 170;
+ 
+/**
+ * The artificial ceiling which caps the maximum height of the ship.
+ * @type {number}
+ * @private
+ * @const
+ */
+var TOP_BARRIER = SKY_HEIGHT - 5;
+ 
+/**
+ * The vertical area above the ocean floor inside which a braking force is
+ * applied to slow the ship.
+ * @type {number}
+ * @private
+ * @const
+ */
+var FLOOR_BUFFER = 162;
+ 
+/**
+ * The horizontal area adjacent to the walls inside which a braking force is
+ * applied to slow the ship.
+ * @type {number}
+ * @private
+ * @const
+ */
+var SIDE_BUFFER = 5;
+ 
+/**
+ * The ship bobs at the surface at a depth below this threshold.
+ * @type {number}
+ * @private
+ * @const
+ */
+var BOB_THRESHOLD_TOP = SKY_HEIGHT - 3;
+ 
+/**
+ * The ship bobs at the surface at a depth above this threshold.
+ * @type {number}
+ * @private
+ * @const
+ */
+var BOB_THRESHOLD_BOTTOM = SKY_HEIGHT + 3;
+ 
+/**
+ * The ship slowly rises to the surface when idle at a depth below this
+ * threshold.
+ * @type {number}
+ * @private
+ * @const
+ */
+var SURFACE_THRESHOLD = SKY_HEIGHT + 20;
+ 
+/**
+ * The difference between the left margin of the porthole layer and the left
+ * margin of the actual graphic layers.
+ * @type {number}
+ * @private
+ * @const
+ */
+var POSITION_X_CORRECTION = 10;
+ 
+/**
+ * Starting horizontal position of the ship.
+ * @type {number}
+ * @private
+ * @const
+ */
+var INITIAL_POSITION_X = WIDTH / 2;
+ 
+/**
+ * Starting vertical position of the ship, just below sea level.
+ * @type {number}
+ * @private
+ * @const
+ */
+var INITIAL_POSITION_Y = SKY_HEIGHT + 10;
+ 
+/**
+ * Coefficents applied to the layer position movements in renderOcean to create
+ * the parallax visual effect.
+ * @type {Array.<number>}
+ * @private
+ * @const
+ */
+var LAYER_MOVE_MULTIPLIER = [1, .8726, .7427, .5];
+ 
+/**
+ * Max diving speed.
+ * @type {number}
+ * @private
+ * @const
+ */
+var SPEED_DOWN = 2;
+ 
+/**
+ * Max surfacing speed. Slightly faster than diving.
+ * @type {number}
+ * @private
+ * @const
+ */
+var SPEED_UP = 5;
+ 
+/**
+ * Max turning speed. Very slow.
+ * @type {number}
+ * @private
+ * @const
+ */
+var SPEED_SIDE = 2;
+ 
+/**
+ * Speed at which the ship slowly surfaces when idle.
+ * @type {number}
+ * @private
+ * @const
+ */
+var SPEED_INACTIVE = -.2;
+ 
+/**
+ * Speed at which the ship bobs up and down at the surface.
+ * @type {number}
+ * @private
+ * @const
+ */
+var BOBBING_SPEED = .2;
+ 
+/**
+ * Rate of accelleration when motors are running.
+ * @type {number}
+ * @private
+ * @const
+ */
+var ACCEL_MOTORS_ACTIVE = .2;
+ 
+/**
+ * Rate of accelleration when motors are not running.
+ * @type {number}
+ * @private
+ * @const
+ */
+var ACCEL_MOTORS_INACTIVE = .05;
+ 
+/**
+ * Rate of accelleration when motors are turning the ship.
+ * @type {number}
+ * @private
+ * @const
+ */
+var ACCEL_SIDE_MOTORS = .05;
+ 
+/**
+ * The speed with which the lever goes back to the center when activated
+ * by keyboard.
+ * @type {number}
+ * @private
+ * @const
+ */
+var LEVER_SPEED_KEYBOARD = .2;
+ 
+/**
+ * The speed with which the lever goes back to the center when activated
+ * by mouse click or short mouse drag.
+ * @type {number}
+ * @private
+ * @const
+ */
+var LEVER_SPEED_MOUSE_CLICK = .01;
+ 
+/**
+ * The speed with which the lever goes back to the center when activated
+ * by long mouse drag.
+ * @type {number}
+ * @private
+ * @const
+ */
+var LEVER_SPEED_MOUSE_DRAG = .1;
+ 
+/**
+ * Lever glow speed.
+ * @type {number}
+ * @private
+ * @const
+ */
+var LEVER_GLOW_SPEED = .1;
+ 
+/*
+ * How many glows for the lever each time.
+ * @type {number}
+ * @private
+ * @const
+ */
+var LEVER_GLOW_COUNT = 3;
+ 
+/**
+ * Number of milliseconds between ticks.
+ * @type {number}
+ * @private
+ * @const
+ */
+var TICK_TIME = 33;
+ 
+/**
+ * The number of ticks that pass before the 10 second inactivity timer kicks in.
+ * @type {number}
+ * @private
+ * @const
+ */
+var DORMANT_TICK_TIMEOUT = 10 * 1000 / TICK_TIME;
+ 
+/**
+ * Number of idle milliseconds after which lever glows.
+ * @type {number}
+ * @private
+ * @const
+ */
+var AUTOGLOW_START_TIMEOUT = 3000;
+ 
+/**
+ * Number of idle milliseconds after which the ship starts to dive automagically.
+ * @type {number}
+ * @private
+ * @const
+ */
+var AUTODIVE_START_TIMEOUT = 6000;
+ 
+/**
+ * Number of milliseconds after which the idle ship stops diving.
+ * @type {number}
+ * @private
+ * @const
+ */
+var AUTODIVE_STOP_TIMEOUT = 9000;
+ 
+/**
+ * Speed at which the ship dives during autodive.
+ * @type {number}
+ * @private
+ * @const
+ */
+var AUTODIVE_SPEED = .5;
+ 
+/**
+ * If it takes longer than LAYER_FADE_IN_TIME ms to load layer images,
+ * fade them in instead of just showing them.
+ * @type {number}
+ * @private
+ * @const
+ */
+var LAYER_FADE_IN_TIME = 50;
+ 
+/**
+ * If you hold the mouse button for this long, we assume you are dragging.
+ * Otherwise, it's just a click.
+ * @type {number}
+ * @private
+ * @const
+ */
+var MOUSE_DRAG_TIME = 500;
+ 
+/**
+ * Dragging params for manipulating the lever control.
+ * @type {number}
+ * @private
+ * @const
+ */
+var DRAG_SIZE_X = 34;
+var DRAG_BUFFER_X = 60;
+var DRAG_MARGIN_X = 20;
+var DRAG_SIZE_Y = 54;
+var DRAG_BUFFER_Y = 45;
+var DRAG_MARGIN_Y = 20;
+var DRAG_SNAP = .2;
+var DRAG_CORRECTION_SPACE = 15;
+var DRAG_CORRECTION_SIZE = 20;
+ 
+/**
+ * Number of orientation samples recorded to establish a baseline measurement.
+ * Must be a non-negative integer.
+ * @type {number}
+ * @private
+ * @const
+ */
+var ORIENTATION_MEASURE_COUNT = 10;
+ 
+/**
+ * Lower orientation threshold.
+ * @type {number}
+ * @private
+ * @const
+ */
+var ORIENTATION_MOVE_MIN = 5;
+ 
+/**
+ * Upper orientation threshold.
+ * @type {number}
+ * @private
+ * @const
+ */
+var ORIENTATION_MOVE_MAX = 15;
+ 
+/**
+ * Detla between min and max orientation thresholds.
+ * @type {number}
+ * @private
+ * @const
+ */
+var ORIENTATION_RANGE = ORIENTATION_MOVE_MAX - ORIENTATION_MOVE_MIN;
+ 
+/**
+ * Experimentally-determined coefficients that are applied to Firefox/iOS
+ * event values to synchronize the measurements with Chrome
+ * deviceorientation event values.
+ * @type {number}
+ * @private
+ * @const
+ */
+var MOZ_ORIENTATION_SCALE_FACTOR = 57;
+var IOS_ORIENTATION_SCALE_FACTOR = 2;
+ 
+/**
+ * Mathematical constants.
+ * @type {number}
+ * @private
+ * @const
+ */
+var ONE_THIRD = 1 / 3;
+var TWO_THIRDS = 2 / 3;
+var ONE_HALF = 1 / 2;
+ 
+/**
+ * Sky blue hex color string set to the background of the bottom most layer once
+ * the porthole chrome image has loaded.
+ * @type {string}
+ * @private
+ * @const
+ */
+var SKY_COLOR = '#b9e5e7';
+ 
+/**
+ * Time in ms for which the first callUntilTrue retry will be scheduled.
+ * @type {number}
+ * @private
+ * @const
+ */
+var MIN_RETRY_DELAY = 100;
+ 
+/**
+ * Do not schedule callUntilTrue if the timeout is longer than this value.
+ * @type {number}
+ * @private
+ * @const
+ */
+var MAX_RETRY_DELAY = 200;
+ 
+/**
+ * Send a gen_204 ping if a user interaction lasts longer than this time in ms.
+ * @type {number}
+ * @private
+ * @const
+ */
+var USER_INTERACTION_THRESHOLD = 250;
+ 
+/**
+ * Keyboard user interaction type string sent in the cad param of the gen_204.
+ * @type {string}
+ * @private
+ * @const
+ */
+var USER_INTERACTION_KEYBOARD = 'k';
+ 
+/**
+ * Mouse user interaction type string sent in the cad param of the gen_204.
+ * @type {string}
+ * @private
+ * @const
+ */
+var USER_INTERACTION_MOUSE = 'm';
+ 
+/**
+ * Variables
+ */
+ 
+/**
+ * Contains one of the direction enums.
+ * @type {number}
+ * @private
+ */
+var currentLeverDirection = DIR_NONE;
+ 
+/**
+ * Current (visible) position of the lever, from 0 to 1 in each direction.
+ * @type {number}
+ * @private
+ */
+var currentLeverPosition = 0;
+ 
+ 
+/**
+ * Is the lever glowing? If so, this goes from 1 to 0.
+ * @type {number}
+ * @private
+ */
+var leverGlowProgress = 0;
+ 
+/**
+ * Target position of the lever, from 0 to 1 in each direction. Used to
+ * slowly auto-center the lever.
+ * @type {number}
+ * @private
+ */
+var targetLeverPosition = 0;
+ 
+/**
+ * Horizontal displacement of the boat.
+ * @type {number}
+ * @private
+ */
+var positionX = INITIAL_POSITION_X;
+ 
+/**
+ * Current horizontal speed of the boat.
+ * @type {number}
+ * @private
+ */
+var currentSpeedX = 0;
+ 
+/**
+ * Desired horizontal speed of the boat.
+ * @type {number}
+ * @private
+ */
+var targetSpeedX = 0;
+ 
+/**
+ * Vertical displacement of the boat.
+ * @type {number}
+ * @private
+ */
+var positionY = INITIAL_POSITION_Y;
+ 
+/**
+ * Current vertical speed of the boat.
+ * @type {number}
+ * @private
+ */
+var currentSpeedY = 0;
+ 
+/**
+ * Desired vertical speed of the boat.
+ * @type {number}
+ * @private
+ */
+var targetSpeedY = 0;
+ 
+/**
+ * Reflects the pressed state of the mouse button.
+ * @type {boolean}
+ * @private
+ */
+var mouseButtonPressed = false;
+ 
+/**
+ * Time when the mouse button was pressed. Used to distinguish between
+ * a mouse click and a mouse drag.
+ * @type {number}
+ */
+var mouseButtonDownTime;
+ 
+/**
+ * True if one of the registered keys is pressed.
+ * @type {boolean}
+ * @private
+ */
+var keyPressed = false;
+ 
+/**
+ * When clicking the lever, this is the horizontal distance between the mouse
+ * and the center of the lever control area that looks like a "+" sign.
+ * @type {number}
+ * @private
+ */
+var dragCorrectionX = 0;
+ 
+/**
+ * When clicking the lever, this is the vertical distance between the mouse
+ * and the center of the lever control area that looks like a "+" sign.
+ * @type {number}
+ * @private
+ */
+var dragCorrectionY = 0;
+ 
+/**
+ * The left offset of the drag element.
+ * @type {number}
+ * @private
+ */
+var dragOriginX = 0;
+ 
+/**
+ * The top offset of the drag element.
+ * @type {number}
+ * @private
+ */
+var dragOriginY = 0;
+ 
+/**
+ * This bool is used to rate limit the handleMouseMove function.
+ * @type {boolean}
+ * @private
+ */
+var allowMouseMove_ = true;
+ 
+/**
+ * Timer which drives the clock tick.
+ * @type {number}
+ * @private
+ */
+var mainTimerId = 0;
+ 
+/**
+ * True if the main timer has been set and not cleared.
+ * @type {boolean}
+ * @private
+ */
+var mainTimerActive = false;
+ 
+/**
+ * Number of main timer ticks since the last user input.
+ * @type {number}
+ * @private
+ */
+var dormantTicks = 0;
+ 
+/**
+ * Timer which checks to see if the user is still interacting.
+ * @type {number}
+ * @private
+ */
+var userInteractionTimerId = 0;
+ 
+/**
+ * True if the gen_204 ping has been sent.
+ * @type {boolean}
+ * @private
+ */
+var userInteractionLogged = false;
+ 
+/**
+ * ID of the timer which disables automatic diving.
+ * @type {number}
+ * @private
+ */
+var stopAutoDiveTimerId;
+ 
+/**
+ * True if the user started playing with the doodle (means no auto-dive, etc.)
+ * @type {boolean}
+ * @private
+ */
+var userInteractionOccured = false;
+ 
+/**
+ * True if automatic dive is currently in effect.
+ * @type {boolean}
+ * @private
+ */
+var autoDiveHappening = false;
+ 
+/**
+ * Number of images remaining to be loaded before preloading is complete.
+ * @type {number}
+ * @private
+ */
+var imagesToBeLoaded = 0;
+ 
+/**
+ * Set to true when all images have been loaded.
+ * @type {boolean}
+ * @private
+ */
+var allImagesLoaded = false;
+ 
+/**
+ * The time in milliseconds at which the first image was requested.
+ * @type {number}
+ * @private
+ */
+var loadStartTime;
+ 
+/**
+ * The sum of the x (gamma) orientation recorded during the most recent
+ * baseline measurement.
+ * @type {number}
+ * @private
+ */
+var orientationAverageX = 0;
+ 
+/**
+ * The sum of the y (beta) orientation recorded during the most recent
+ * baseline measurement.
+ * @type {number}
+ * @private
+ */
+var orientationAverageY = 0;
+ 
+/**
+ * The the number of remaining orientation measurements to collect for the
+ * baseline reading.
+ * @type {number}
+ * @private
+ */
+var orientationMeasureCount = ORIENTATION_MEASURE_COUNT;
+ 
+/**
+ * The delta between the current gamma orientation and the average reading
+ * established as the baseline.
+ * baseline reading.
+ * @type {number}
+ * @private
+ */
+var orientationMoveX = 0;
+ 
+/**
+ * The delta between the current beta orientation and the average reading
+ * established as the baseline.
+ * baseline reading.
+ * @type {number}
+ * @private
+ */
+var orientationMoveY = 0;
+ 
+/**
+ * Previously recorded window.orientation for iOS devices.
+ * @type {number}
+ * @private
+ */
+var lastIosOrientation = 0;
+ 
+/**
+ * Set to the browser-specific CSS transformation name from CSS_TRANSFORM_NAMES.
+ * @type {string}
+ * @private
+ */
+var cssTransformName = '';
+ 
+/**
+ * Set to the browser-specific CSS transition name from CSS_TRANSITION_NAMES.
+ * @type {string}
+ * @private
+ */
+var cssTransitionName = '';
+ 
+/**
+ * Set to true if the browser supports 3D CSS transformations.
+ * @type {boolean}
+ * @private
+ */
+var use3DTransforms = false;
+ 
+/**
+ * Set to true if the browser supports CSS transformations.
+ * @type {boolean}
+ * @private
+ */
+var useCssTransforms = false;
+ 
+/**
+ * Set to true if the browser supports CSS transitions.
+ * @type {boolean}
+ * @private
+ */
+var useCssTransitions = false;
+ 
+/**
+ * The hplogo div that contains all other divs.
+ * @type {Element}
+ * @private
+ */
+var canvasEl;
+ 
+/**
+ * The div that contains the parallax layers of the ocean scenery.
+ * @type {Element}
+ * @private
+ */
+var layersEl;
+ 
+/**
+ * Array of the layer elements that are children of layersEl.
+ * @type {Array.<Element>}
+ * @private
+ */
+var layerEls;
+ 
+/**
+ * The big hand of the depth dial.
+ * @type {Element}
+ * @private
+ */
+var dialDepthBigEl;
+ 
+/**
+ * The small hand of the depth dial.
+ * @type {Element}
+ * @private
+ */
+var dialDepthSmallEl;
+ 
+/**
+ * The arrow of the compass.
+ * @type {Element}
+ * @private
+ */
+var dialPositionEl;
+ 
+/**
+ * The lever used to control the ship.
+ * @type {Element}
+ * @private
+ */
+var leverEl;
+ 
+/**
+ * The invisible element that displays the pointer cursor.
+ * @type {Element}
+ * @private
+ */
+var dragEl;
+ 
+/**
+ * The speed with which the lever goes back to the center when released.
+ * This varies depending on how the lever got interacted with.
+ * @type {number}
+ */
+var leverSpeed = LEVER_SPEED_KEYBOARD;
+ 
+/**
+ * Event listening
+ */
+ 
+/**
+ * From google.listen in extern_js/common/events.js
+ * @param {Document|Element|Window} obj What to attach an event handler to.
+ * @param {string} event The name of the event without the "on" prefix.
+ * @param {Function} listener The listener function to add.
+ */
+function listen(obj, event, listener) {
+  if (obj.addEventListener) {
+    obj.addEventListener(event, listener, false);
+  } else {
+    obj.attachEvent('on' + event, listener);
+  }
+}
+ 
+/**
+ * Wrapper around listen which records this registration for future
+ * unlistening during JESR dstr.
+ * @param {Document|Element|Window} obj What to attach an event handler to.
+ * @param {string} event The name of the event without the "on" prefix.
+ * @param {Function} listener The listener function to add.
+ */
+function scoped_listen(obj, event, listener) {
+  if (!google.doodle.scoped_listeners) {
+    google.doodle.scoped_listeners = [];
+  }
+  google.doodle.scoped_listeners.push(arguments);
+  listen(obj, event, listener);
+}
+ 
+/**
+ * From google.unlisten in extern_js/common/events.js
+ * @param {Document|Element|Window} obj What to remove the event handler from.
+ * @param {string} event The name of the event without the "on" prefix.
+ * @param {Function} listener The listener function to remove.
+ */
+function unlisten(obj, event, listener) {
+  if (obj.removeEventListener) {
+    obj.removeEventListener(event, listener, false);
+  } else {
+    obj.detachEvent('on' + event, listener);
+  }
+};
+ 
+/**
+ * Utils
+ */
+ 
+/**
+ * Function wrapper for the modulo operator since gws messages don't support the
+ * % character. Call using google.doodle['mod'](a, n);
+ * @param {number} a Numerator.
+ * @param {number} n Denominator.
+ * @return {number} a % n.
+ * @private
+ */
+eval('google.doodle.mod = function(a,n){return a' + '%%'.charAt(0) + 'n;}');
+ 
+/**
+ * Recursively calculate the left offset of the element.
+ * @param {Element} el Element to calculate the offset.
+ * @return {number}
+ */
+function getElementLeft(el) {
+  var left = 0;
+  do {
+    left += el.offsetLeft;
+  } while (el = el.offsetParent);
+  return left;
+}
+ 
+/**
+ * Recursively calculate the right offset of the element.
+ * @param {Element} el Element to calculate the offset.
+ * @return {number}
+ */
+function getElementTop(el) {
+  var top = 0;
+  do {
+    top += el.offsetTop;
+  } while (el = el.offsetParent);
+  return top;
+}
+ 
+/**
+ * Factors out the browser-specific parts of cancelling event bubbling.
+ * From extern_js/common/util.js.
+ * @param {Event} e The event object.
+ **/
+function stopPropagation(e) {
+  if (!e) {
+    window.event.cancelBubble = true;  // IE
+  } else if (e.stopPropagation) {
+    e.stopPropagation();
+  }
+};
+ 
+/**
+ * Calls targetFunction until it returns true or the maximum retry delay is
+ * reached. The retry attempt will be scheduled for retryDelay ms.
+ * @param {number} retryDelay Time in ms to schedule the retry attempt.
+ * @param {Function} targetFunction Executed until it returns true.
+ * @private
+ */
+function callUntilTrue(retryDelay, targetFunction) {
+  if (!targetFunction() && retryDelay < MAX_RETRY_DELAY) {
+    window.setTimeout(function() {
+      callUntilTrue(retryDelay + 1, targetFunction);
+    }, retryDelay);
+  }
+}
+ 
+/**
+ * Event Handlers
+ */
+ 
+/**
+ * Compute the mouse position relative to the top left corner of the doodle.
+ * @param {Event} e Event data.
+ * @return {Array.<number>} An array containging the [x, y] coordinate.
+ */
+function getEventPoint(e) {
+  e = e || window.event;
+  var x = (e.clientX || (e.targetTouches && e.targetTouches[0].clientX) || 0) +
+      (document.body.scrollLeft || document.documentElement.scrollLeft);
+  var y = (e.clientY || (e.targetTouches && e.targetTouches[0].clientY) || 0) +
+      (document.body.scrollTop || document.documentElement.scrollTop);
+  return [x, y];
+}
+ 
+/**
+ * React to mouse leaving an element (this is a method attached to <body>).
+ * If the mouse pointer leaves the webpage body, stop draggin the lever.
+ * @private
+ * @param {Event} e Happening.
+ */
+function handleMouseOut(e) {
+  e = e || window.event;
+ 
+  if (e && !e.toElement) {
+    handleMouseUp(e);
+  }
+};
+ 
+/**
+ * Handler for mouse down events.
+ * @param {Event} event Event data.
+ * @param {boolean} callPreventDefault
+ * @private
+ */
+function handleMouseDown(event, callPreventDefault) {
+  userInteractionOccured = true;
+  resetDeviceOrientation();
+ 
+  dragEl = document.getElementById('verne-drag');
+  dragOriginX = getElementLeft(dragEl);
+  dragOriginY = getElementTop(dragEl);
+ 
+  var point = getEventPoint(event);
+  var x = point[0] - dragOriginX;
+  var y = point[1] - dragOriginY;
+ 
+  if ((x >= DRAG_BUFFER_X - DRAG_MARGIN_X) &&
+      (x <= DRAG_BUFFER_X + DRAG_MARGIN_X + DRAG_SIZE_X) &&
+      (y >= DRAG_BUFFER_Y - DRAG_MARGIN_Y) &&
+      (y <= DRAG_BUFFER_Y + DRAG_MARGIN_Y + DRAG_SIZE_Y)) {
+    // Show the drag cursor.
+    canvasEl.className = 'drag-active';
+ 
+    mouseButtonPressed = true;
+    mouseButtonDownTime = new Date().getTime();
+ 
+    // If the user clicks close enough to the lever, a correction is applied to
+    // subsequent mousemove locations so that the lever moves in relation to
+    // that initial point. If the click is not within the drag correction area,
+    // then the correction will be zero and the lever will snap to the exact
+    // mouse location.
+    if ((x >= DRAG_BUFFER_X + DRAG_SIZE_X / 2 + DRAG_CORRECTION_SPACE) &&
+        (x <= DRAG_BUFFER_X + DRAG_SIZE_X / 2 + DRAG_CORRECTION_SPACE +
+                                            DRAG_CORRECTION_SIZE) &&
+        (y >= DRAG_BUFFER_Y + DRAG_SIZE_Y / 2 - DRAG_CORRECTION_SPACE -
+                                            DRAG_CORRECTION_SIZE) &&
+        (y <= DRAG_BUFFER_Y + DRAG_SIZE_Y / 2 - DRAG_CORRECTION_SPACE)) {
+      dragCorrectionX = x - DRAG_BUFFER_X - DRAG_SIZE_X / 2;
+      dragCorrectionY = y - DRAG_BUFFER_Y - DRAG_SIZE_Y / 2;
+    } else {
+      dragCorrectionX = 0;
+      dragCorrectionY = 0;
+    }
+ 
+    handleMouseMove(event);
+ 
+    startUserInteractionTimer(USER_INTERACTION_MOUSE);
+ 
+    if (callPreventDefault) {
+      // This call seems to crash IE8.
+      event.preventDefault();
+    }
+  }
+}
+ 
+/**
+ * Handler for mouse up events.
+ * @param {Event} event Event data.
+ * @private
+ */
+function handleMouseUp(event) {
+  var mouseMoveTime = new Date().getTime() - mouseButtonDownTime;
+ 
+  if (mouseMoveTime > MOUSE_DRAG_TIME) {
+    leverSpeed = LEVER_SPEED_MOUSE_DRAG;
+  } else {
+    leverSpeed = LEVER_SPEED_MOUSE_CLICK;
+  }
+ 
+  moveLever(DIR_NONE);
+  canvasEl.className = '';
+  mouseButtonPressed = false;
+}
+ 
+/**
+ * Handler for mouse movements which interprets drag events to lever movement.
+ * @param {Event} event Event data.
+ * @private
+ */
+function handleMouseMove(event) {
+  startMainTimer();
+ 
+  if (mouseButtonPressed && allowMouseMove_) {
+    allowMouseMove_ = false;
+    // Rate limit this calculation to save CPU while dragging.
+    window.setTimeout(function() { allowMouseMove_ = true; }, 25);
+ 
+    // Ignore device orientation events and recalculate the baseline.
+    resetDeviceOrientation();
+ 
+    var point = getEventPoint(event);
+    var x = point[0] - dragOriginX - dragCorrectionX;
+    var y = point[1] - dragOriginY - dragCorrectionY;
+ 
+    var possibleHorMove = DIR_NONE;
+    var possibleHorPosition = 0;
+    var possibleHorWeight = 0;
+    var possibleVertMove = DIR_NONE;
+    var possibleVertPosition = 0;
+    var possibleVertWeight = 0;
+    var move = DIR_NONE;
+    var position = 0;
+ 
+    if (x < DRAG_BUFFER_X) {
+      possibleHorMove = DIR_LEFT;
+      possibleHorPosition = 1;
+      possibleHorWeight = -x;
+    } else if (x > DRAG_BUFFER_X + DRAG_SIZE_X) {
+      possibleHorMove = DIR_RIGHT;
+      possibleHorPosition = 1;
+      possibleHorWeight = x;
+    } else if (y < DRAG_BUFFER_Y) {
+      possibleVertMove = DIR_UP;
+      possibleVertPosition = 1;
+      possibleVertWeight = -y;
+    } else if (y > DRAG_BUFFER_Y + DRAG_SIZE_Y) {
+      possibleVertMove = DIR_DOWN;
+      possibleVertPosition = 1;
+      possibleVertWeight = y;
+    } else {
+      x = (x - DRAG_BUFFER_X - DRAG_SIZE_X / 2) / DRAG_SIZE_X;
+      y = (y - DRAG_BUFFER_Y - DRAG_SIZE_Y / 2) / DRAG_SIZE_Y;
+ 
+      if ((y > -DRAG_SNAP) && (y < DRAG_SNAP)) {
+        if (x < 0) {
+          possibleHorMove = DIR_LEFT;
+          possibleHorPosition = -x * 2;
+        } else {
+          possibleHorMove = DIR_RIGHT;
+          possibleHorPosition = x * 2;
+        }
+      }
+ 
+      if ((x > -DRAG_SNAP) && (x < DRAG_SNAP)) {
+        if (y < 0) {
+          possibleVertMove = DIR_UP;
+          possibleVertPosition = -y * 2;
+        } else {
+          possibleVertMove = DIR_DOWN;
+          possibleVertPosition = y * 2;
+        }
+      }
+    }
+ 
+    if ((possibleHorMove != DIR_NONE) && (possibleVertMove != DIR_NONE)) {
+      if (possibleVertWeight > possibleHorWeight) {
+        move = possibleVertMove;
+        position = possibleVertPosition;
+      } else if (possibleVertWeight < possibleHorWeight) {
+        move = possibleHorMove;
+        position = possibleHorPosition;
+      } else if (Math.abs(possibleVertPosition) >
+                 Math.abs(possibleHorPosition)) {
+        move = possibleVertMove;
+        position = possibleVertPosition;
+      } else {
+        move = possibleHorMove;
+        position = possibleHorPosition;
+      }
+    } else {
+      if (possibleHorMove != DIR_NONE) {
+        move = possibleHorMove;
+        position = possibleHorPosition;
+      } else {
+        move = possibleVertMove;
+        position = possibleVertPosition;
+      }
+    }
+ 
+    moveLever(move, position);
+  }
+}
+ 
+/**
+ * Sends a gen_204 ping to indicate that a reasonably non-trivial user
+ * interaction with the doodle has occured.
+ * @param {string} data The value of the cad= param of the gen_204 request.
+ * @private
+ */
+function logUserInteraction(data) {
+  if (google.log) {
+    google.log('verne', data);
+    userInteractionLogged = true;
+  }
+}
+ 
+/**
+ * Start the user interaction timer or send a gen_204 if it is already running.
+ * @param {string} data The value of the cad= param of the gen_204 request.
+ * @private
+ */
+function startUserInteractionTimer(data) {
+  if (!userInteractionLogged) {
+    if (userInteractionTimerId) {
+      // Timer was already running and another interaction started.
+      window.clearTimeout(userInteractionTimerId);
+      userInteractionTimerId = 0;
+      logUserInteraction(data);
+    } else {
+      userInteractionTimerId = window.setTimeout(userInteractionTimeout,
+                                                 USER_INTERACTION_THRESHOLD);
+    }
+  }
+}
+ 
+/**
+ * Callback for the user interaction timer.
+ * @private
+ */
+function userInteractionTimeout() {
+  userInteractionTimerId = 0;
+  // Log if the timer fired while an action was in progress, indicating that
+  // the action was sustained for the duration of the timer.
+  if (keyPressed) {
+    logUserInteraction(USER_INTERACTION_KEYBOARD);
+  } else if (mouseButtonPressed) {
+    logUserInteraction(USER_INTERACTION_MOUSE);
+  }
+}
+ 
+/**
+ * Handler for key down events.
+ * @param {Event} event Event data.
+ * @private
+ */
+function handleKeyDown(event) {
+  startMainTimer();
+ 
+  userInteractionOccured = true;
+  resetDeviceOrientation();
+ 
+  var direction = KEYCODE_DIR_MAP[event.keyCode];
+  if (direction) {
+    moveLever(direction, 1);
+    startUserInteractionTimer(USER_INTERACTION_KEYBOARD);
+    keyPressed = true;
+  }
+ 
+  // Prevent events picked up by the search box from propagating to the document
+  // or window, which would then call this handler again.
+  stopPropagation(event);
+}
+ 
+/**
+ * Handler for key up events.
+ * @param {Event} event Event data.
+ * @private
+ */
+function handleKeyUp(event) {
+  startMainTimer();
+ 
+  if (KEYCODE_DIR_MAP[event.keyCode]) {
+    leverSpeed = LEVER_SPEED_KEYBOARD;
+    moveLever(DIR_NONE);
+    keyPressed = false;
+  }
+ 
+  // Prevent events picked up by the search box from propagating to the document
+  // or window, which would then call this handler again.
+  stopPropagation(event);
+}
+ 
+/**
+ * Handler for window focus and document focusin events.
+ * @param {Event} event Event data.
+ * @private
+ */
+function handleWindowFocus(event) {
+  startMainTimer();
+}
+ 
+/**
+ * Clear the baseline orientation measurement, causing a new baseline to be
+ * established in handleDeviceOrientation.
+ * @private
+ */
+function resetDeviceOrientation() {
+  orientationMeasureCount = ORIENTATION_MEASURE_COUNT;
+  orientationAverageX = 0;
+  orientationAverageY = 0;
+}
+ 
+/**
+ * Handler for device orientation events.
+ * If accelerometer data is available, Chrome fires this event continuously
+ * whereas firefox only fires when a change is detected. For this reason we
+ * could consider reducing ORIENTATION_MEASURE_COUNT in Firefox.
+ * @param {Event} event Event data.
+ * @private
+ */
+function handleDeviceOrientation(event) {
+  var iosOrientation = window.orientation;
+ 
+  if (iosOrientation != lastIosOrientation) {
+    lastIosOrientation = iosOrientation;
+    resetDeviceOrientation();
+  }
+ 
+  var acceleration = event.accelerationIncludingGravity;
+  if (acceleration) {
+    switch (iosOrientation) {
+      case 90:
+        var iosX = -acceleration.y;
+        var iosY = acceleration.z;
+        break;
+      case -90:
+        var iosX = acceleration.y;
+        var iosY = acceleration.z;
+        break;
+      case 180:
+        var iosX = -acceleration.x;
+        var iosY = acceleration.z;
+        break;
+      default:
+        var iosX = acceleration.x;
+        var iosY = acceleration.z;
+        break;
+    }
+  }
+ 
+  var orientationX =
+      event.gamma ||
+      (event.x * MOZ_ORIENTATION_SCALE_FACTOR) ||
+      (iosX * IOS_ORIENTATION_SCALE_FACTOR);
+  var orientationY =
+      event.beta ||
+      (event.y * MOZ_ORIENTATION_SCALE_FACTOR) ||
+      (iosY * IOS_ORIENTATION_SCALE_FACTOR);
+ 
+  // Initially we measure average orientation in the X and Y axis and use this
+  // as a baseline (so that people holding their notebooks funny won't end up
+  // moving the ship by accident). When the user interacts using the arrow keys
+  // or the mouse, we reset the average and collect a new baseline.
+  if (orientationMeasureCount) {
+    orientationAverageX += orientationX;
+    orientationAverageY += orientationY;
+ 
+    orientationMeasureCount--;
+ 
+    if (orientationMeasureCount == 0) {
+      orientationAverageX = orientationAverageX / ORIENTATION_MEASURE_COUNT;
+      orientationAverageY = orientationAverageY / ORIENTATION_MEASURE_COUNT;
+    }
+  } else {
+    orientationMoveX = orientationX - orientationAverageX;
+    orientationMoveY = orientationY - orientationAverageY;
+    var direction = DIR_NONE;
+    var speed = 0;
+ 
+    // Horizontal movement.
+    if (orientationMoveX > ORIENTATION_MOVE_MIN) {
+      speed = (orientationMoveX - ORIENTATION_MOVE_MIN) / ORIENTATION_RANGE;
+      direction = DIR_RIGHT;
+    } else if (orientationMoveX < -ORIENTATION_MOVE_MIN) {
+      speed = (-orientationMoveX - ORIENTATION_MOVE_MIN) / ORIENTATION_RANGE;
+      direction = DIR_LEFT;
+    }
+ 
+    // Vertical movement. Since we only support one direction at a time, the
+    // direction with the strongest orientation change takes precedent.
+    if (Math.abs(orientationMoveY) > Math.abs(orientationMoveX)) {
+      if (orientationMoveY > ORIENTATION_MOVE_MIN) {
+        speed = (orientationMoveY - ORIENTATION_MOVE_MIN) / ORIENTATION_RANGE;
+        direction = DIR_DOWN;
+      } else if (orientationMoveY < -ORIENTATION_MOVE_MIN) {
+        speed = (-orientationMoveY - ORIENTATION_MOVE_MIN) / ORIENTATION_RANGE;
+        direction = DIR_UP;
+      }
+    }
+ 
+    if (speed > 1) {
+      speed = 1;
+    }
+    if (speed > 0) {
+      startMainTimer();
+      userInteractionOccured = true;
+      moveLever(direction, speed);
+    }
+  }
+}
+ 
+/**
+ * Rendering
+ */
+ 
+/**
+ * Makes the lever glow.
+ * @private
+ */
+function glowLever() {
+  leverGlowProgress += LEVER_GLOW_COUNT;
+}
+ 
+/**
+ * If the user clicks on dials, glow the lever to draw attention to it.
+ * @private
+ */
+function handleDialsClicked() {
+  userInteractionOccured = true;
+  glowLever();
+}
+ 
+/**
+ * Updates the position of the lever (variables only).
+ * @param {number} direction Direction enum.
+ * @param {number} opt_position The magnitude to which the lever is pushed,
+          ranging from 0 to 1. If not specified, it will default to 0.
+ * @private
+ */
+function moveLever(direction, opt_position) {
+  if (!opt_position) {
+    opt_position = 0;
+  } else if (opt_position > 1) {
+    opt_position = 1;
+  }
+ 
+  if (direction == DIR_NONE) {
+    targetLeverPosition = 0;
+  } else {
+    currentLeverDirection = direction;
+    currentLeverPosition = opt_position;
+    targetLeverPosition = opt_position;
+  }
+ 
+  drawLever();
+}
+ 
+/**
+ * Updates the position of the lever automagically if the lever is
+ * auto-centering.
+ * @private
+ */
+function updateLever() {
+  if (leverGlowProgress > 0) {
+    leverGlowProgress -= LEVER_GLOW_SPEED;
+    drawLever();
+  }
+ 
+  if (currentLeverPosition > targetLeverPosition) {
+    currentLeverPosition -= leverSpeed;
+    drawLever();
+  }
+ 
+  if (currentLeverPosition <= leverSpeed) {
+    currentLeverDirection = DIR_NONE;
+    currentLeverPosition = 0;
+    drawLever();
+  }
+}
+ 
+/**
+ * Draws the lever on the screen.
+ * @private
+ */
+function drawLever() {
+  var direction = currentLeverDirection;
+  var position = currentLeverPosition;
+ 
+  if (direction == DIR_NONE) {
+    direction = DIR_LEFT;
+    position = 0;
+  }
+ 
+  var x = 0;
+  var y = 0;
+  var offset = 0;
+  var LEVER_X_MIN = -15;
+  var LEVER_X_MAX = 12;
+  var LEVER_Y_MIN = -23;
+  var LEVER_Y_MAX = 26;
+  var SPRITE_WIDTH = 39;
+  switch (direction) {
+    case DIR_LEFT:
+      if (position > ONE_HALF) {
+        offset = SPRITE_WIDTH * 3;
+      } else {
+        if (leverGlowProgress > 0) {
+          var progress = google.doodle['mod'](leverGlowProgress, 1);
+          if ((progress < .25) || ((progress >= .5) && (progress < .75))) {
+            offset = SPRITE_WIDTH * 1;
+          } else if ((progress >= .25) && (progress < .5)) {
+            offset = SPRITE_WIDTH * 2;
+          }
+        }
+      }
+      x = LEVER_X_MIN * position;
+ 
+      break;
+    case DIR_RIGHT:
+      if (position > ONE_HALF) {
+        offset = SPRITE_WIDTH * 4;
+      }
+      x = LEVER_X_MAX * position;
+      break;
+    case DIR_UP:
+      if (position > TWO_THIRDS) {
+        offset = SPRITE_WIDTH * 5;
+      } else if (position > ONE_THIRD) {
+        offset = SPRITE_WIDTH * 6;
+      }
+      y = LEVER_Y_MIN * position;
+      break;
+    case DIR_DOWN:
+      if (position > TWO_THIRDS) {
+        offset = SPRITE_WIDTH * 7;
+      } else if (position > ONE_THIRD) {
+        offset = SPRITE_WIDTH * 8;
+      }
+      y = LEVER_Y_MAX * position;
+      break;
+  }
+  var LEVER_INITIAL_X = 639;
+  var LEVER_INITIAL_Y = 49;
+  if (useCssTransforms) {
+    leverEl.style[cssTransformName] = 'translate(' + x + 'px, ' + y + 'px)';
+  } else {
+    leverEl.style.left = (x + LEVER_INITIAL_X) + 'px';
+    leverEl.style.top = (y + LEVER_INITIAL_Y) + 'px';
+  }
+ 
+  // Choose the correct sprite to approximate the angle of the lever.
+  // Setting this property causes the hourglass pointer in IE6. Ideally we would
+  // nest an <img> inside a <div>, but the <img> interferes with dragging.
+  leverEl.style.backgroundPosition = -offset + 'px -190px';
+}
+ 
+/**
+ * Update the position of the parallax layers, using CSS3 rotation and
+ * translation if available.
+ * @private
+ */
+function renderOcean() {
+  var posX = -(positionX + POSITION_X_CORRECTION);
+  for (var i = 0; i < LAYER_COUNT; i++) {
+    var posY = 80
+        -((positionY - SKY_HEIGHT) * LAYER_MOVE_MULTIPLIER[i] + SKY_HEIGHT);
+ 
+    // If available, CSS transforms are used to smooth the motion.
+    if (useCssTransforms) {
+      if (use3DTransforms) {
+        layerEls[i].style[cssTransformName] =
+            'translate3d(' + posX + 'px, ' +  posY + 'px, 0)';
+      } else {
+        layerEls[i].style[cssTransformName] =
+            'translate(' + posX + 'px, ' +  posY + 'px)';
+      }
+    } else {
+      layerEls[i].style.left = posX + 'px';
+      layerEls[i].style.top = posY + 'px';
+    }
+  }
+ 
+  if (useCssTransforms) {
+    // Tilt the ocean in proportion to horizontal speed.
+    layersEl.style[cssTransformName] =
+        'rotate(' + (-currentSpeedX * 5) + 'deg)';
+ 
+    // Update the hands on the depth dial and the arrow of the compass.
+    dialDepthBigEl.style[cssTransformName] =
+        'rotate(' + (positionY * 4) + 'deg)';
+    dialDepthSmallEl.style[cssTransformName] =
+        'rotate(' + (positionY * 4 / 16) + 'deg)';
+    dialPositionEl.style[cssTransformName] =
+        'rotate(' + (positionX - 90) + 'deg)';
+  }
+}
+ 
+/**
+ * Main Loop
+ */
+ 
+/**
+ * The heartbeat of the game, during which the movement of the ship is
+ * calculated and the rendering routines are called.
+ * @private
+ */
+function tick() {
+  if (!allImagesLoaded) {
+    return;
+  }
+ 
+  //if (autoDiveHappening && !userInteractionOccured) {
+    moveLever(DIR_DOWN, AUTODIVE_SPEED);
+  //}
+ 
+  var motorsActive = currentLeverDirection != DIR_NONE;
+ 
+  var horDormant = false;
+  var vertDormant = false;
+ 
+  // Horizontal movement.
+  if (currentLeverDirection == DIR_LEFT) {
+    targetSpeedX = -SPEED_SIDE * currentLeverPosition;
+  } else if (currentLeverDirection == DIR_RIGHT) {
+    targetSpeedX = SPEED_SIDE * currentLeverPosition;
+  } else {
+    targetSpeedX = 0;
+    horDormant = true;
+  }
+ 
+  // Vertical movement.
+  if (currentLeverDirection == DIR_DOWN) {
+    targetSpeedY = SPEED_DOWN * currentLeverPosition;
+  } else if (currentLeverDirection == DIR_UP) {
+    targetSpeedY = -SPEED_UP * currentLeverPosition;
+  } else {
+    vertDormant = true;
+    if (positionY <= BOB_THRESHOLD_TOP) {
+      targetSpeedY = BOBBING_SPEED;
+    } else if (positionY >= SURFACE_THRESHOLD) {
+      vertDormant = false;
+      targetSpeedY = SPEED_INACTIVE;
+    } else if (positionY >= BOB_THRESHOLD_BOTTOM) {
+      targetSpeedY = -BOBBING_SPEED;
+    }
+  }
+ 
+  // Horizontal barriers.
+  if (positionX < 0) {
+    // Hard stop on the left.
+    positionX = 0;
+  } else if (positionX > WIDTH) {
+    // Hard stop on the right.
+    positionX = WIDTH;
+  } else if ((positionX < SIDE_BUFFER && targetSpeedX < 0) ||
+             (positionX > WIDTH - SIDE_BUFFER && targetSpeedX > 0)) {
+    // Soft stop on the left and right.
+    targetSpeedX = 0;
+    motorsActive = false;
+  }
+ 
+  // Vertical barriers.
+  if (positionY < TOP_BARRIER) {
+    // Ship is partly out of the water.
+    targetSpeedY = SPEED_DOWN;
+  } else if (positionY > HEIGHT - PORTHOLE_HEIGHT) {
+    // Hard stop at the ocean floor.
+    positionY = HEIGHT - PORTHOLE_HEIGHT;
+  } else if (positionY > HEIGHT - PORTHOLE_HEIGHT -
+             FLOOR_BUFFER / SPEED_DOWN * currentSpeedY && targetSpeedY > 0) {
+    // Soft stop as the ship reaches the bottom.
+    targetSpeedY = 0;
+    motorsActive = false;
+  }
+ 
+  // Accelerate toward the target vertical speed.
+  if (targetSpeedY > currentSpeedY) {
+    currentSpeedY += motorsActive ? ACCEL_MOTORS_ACTIVE : ACCEL_MOTORS_INACTIVE;
+    if (currentSpeedY > targetSpeedY) {
+      currentSpeedY = targetSpeedY;
+    }
+  } else if (targetSpeedY < currentSpeedY) {
+    currentSpeedY -= motorsActive ? ACCEL_MOTORS_ACTIVE : ACCEL_MOTORS_INACTIVE;
+    if (currentSpeedY < targetSpeedY) {
+      currentSpeedY = targetSpeedY;
+    }
+  }
+ 
+  // Accelerate toward the target horizontal speed.
+  if (targetSpeedX > currentSpeedX) {
+    currentSpeedX += ACCEL_SIDE_MOTORS;
+    if (currentSpeedX > targetSpeedX) {
+      currentSpeedX = targetSpeedX;
+    }
+  } else if (targetSpeedX < currentSpeedX) {
+    currentSpeedX -= ACCEL_SIDE_MOTORS;
+    if (currentSpeedX < targetSpeedX) {
+      currentSpeedX = targetSpeedX;
+    }
+  }
+ 
+  // Prevents residual horizontal speeds that are smaller than acceleration.
+  if ((targetSpeedX == 0) &&
+      (currentSpeedX >= -ACCEL_SIDE_MOTORS) &&
+      (currentSpeedX <= ACCEL_SIDE_MOTORS)) {
+    currentSpeedX = 0;
+  }
+ 
+  positionX += currentSpeedX;
+  positionY += currentSpeedY;
+ 
+  renderOcean();
+ 
+  updateLever();
+ 
+  if (horDormant && vertDormant) {
+    dormantTicks++;
+    if (dormantTicks > DORMANT_TICK_TIMEOUT) {
+      stopMainTimer();
+    }
+  } else {
+    dormantTicks = 0;
+  }
+}
+ 
+/**
+ * Image Preloading
+ */
+ 
+/**
+ * Make sure that we display the image containing the portholes first so that it
+ * masks the ocean layers below it.
+ */
+function loadImages() {
+  loadStartTime = new Date().getTime();
+ 
+  var id = 'verne-chrome-img';
+  if (document.getElementById(id)) {
+    handleChromeImageLoad();
+  } else {
+    var imgEl = document.createElement('img');
+    scoped_listen(imgEl, 'load', handleChromeImageLoad);
+    imgEl.id = id;
+    imgEl.src = LAYER_FILENAMES[0];
+    document.getElementById('verne-chrome').appendChild(imgEl);
+  }
+}
+ 
+/**
+ * Callback for the load event of the chrome image which contains the logo and
+ * sprites.
+ * @private
+ */
+function handleChromeImageLoad() {
+  // Render the sky now that the chrome image is displayed on top. This way we
+  // don't show a blue rectangle before the portholes appear.
+  layerEls[LAYER_COUNT - 1].style.background = SKY_COLOR;
+ 
+  for (var i = 0; i < LAYER_COUNT; i++) {
+    var id = 'verne-layer' + i + '-img';
+    if (!document.getElementById(id)) {
+      imagesToBeLoaded++;
+      var imgEl = document.createElement('img');
+      scoped_listen(imgEl, 'load', handleLayerImageLoad);
+      imgEl.src = LAYER_FILENAMES[i + 1];
+      imgEl.id = id;
+      layerEls[i].appendChild(imgEl);
+    }
+  }
+  checkAllImagesLoaded();
+}
+ 
+/**
+ * Callback for the load event of a layer image.
+ * @private
+ */
+function handleLayerImageLoad() {
+  imagesToBeLoaded--;
+  checkAllImagesLoaded();
+}
+ 
+/**
+ * Check that all images have finished preloading and display them behind the
+ * logo. If they take a while to load, fade them in gradually.
+ * @private
+ */
+function checkAllImagesLoaded() {
+  if (imagesToBeLoaded == 0) {
+    var loadEndTime = new Date().getTime();
+    var fadeIn = (loadEndTime - loadStartTime) > LAYER_FADE_IN_TIME;
+    for (var i = 0; i < LAYER_COUNT; i++) {
+      var el = document.getElementById('verne-layer' + i + '-img');
+      if (!el) {
+        return;
+      }
+      if (fadeIn && useCssTransitions) {
+        el.style[cssTransitionName] = 'opacity 1s ease-out';
+      }
+      el.style.opacity = 1; // el is sometimes null in IE on reload.
+    }
+    allImagesLoaded = true;
+ 
+    window.setTimeout(startAutoGlow, AUTOGLOW_START_TIMEOUT);
+    //window.setTimeout(startAutoDive, AUTODIVE_START_TIMEOUT);
+  }
+}
+ 
+/**
+ * Browser-specific CSS3
+ */
+ 
+/**
+ * Check the values of several known CSS properties in order to determine if
+ * they are supported by the browser.
+ * @private
+ */
+function detectBrowserCapabilities() {
+  for (var i = 0, transform; transform = CSS_TRANSFORM_NAMES[i++];) {
+    if (typeof canvasEl.style[transform] != 'undefined') {
+      useCssTransforms = true;
+      cssTransformName = transform;
+      canvasEl.style[transform] = 'translate3d(0, 0, 0)';
+      use3DTransforms = (canvasEl.style[transform] != '');
+      break;
+    }
+  }
+ 
+  for (var i = 0, transition; transition = CSS_TRANSITION_NAMES[i++];) {
+    if (typeof canvasEl.style[transition] != 'undefined') {
+      useCssTransitions = true;
+      cssTransitionName = transition;
+      break;
+    }
+  }
+}
+ 
+/**
+ * Set the transition property of the layers.
+ * @private
+ */
+function initializeTransitions() {
+  if (useCssTransitions) {
+    for (var i = 0; i < LAYER_COUNT; i++) {
+      document.getElementById('verne-layer-' + i).style[cssTransitionName] =
+          '-webkit-transform .2s linear, top .2s linear';
+    }
+  }
+}
+ 
+/**
+ * Timers
+ */
+ 
+/**
+ * Start the main tick timer if it is not already running.
+ * @private
+ */
+function startMainTimer() {
+  if (!mainTimerActive) {
+    mainTimerActive = true;
+    mainTimerId = window.setInterval(tick, TICK_TIME);
+    dormantTicks = 0;
+  }
+}
+ 
+/**
+ * Stop the main tick timer if it is running.
+ * @private
+ */
+function stopMainTimer() {
+  if (mainTimerActive) {
+    mainTimerActive = false;
+    window.clearInterval(mainTimerId);
+  }
+}
+ 
+/**
+ * Glow the lever automagically to draw the user attention to it.
+ * @private
+ */
+function startAutoGlow() {
+  if (!userInteractionOccured) {
+    glowLever();
+  }
+}
+ 
+/**
+ * Begin diving to show off the doodle and encourage the user to interact.
+ * @private
+ */
+function startAutoDive() {
+  if (!userInteractionOccured) {
+    autoDiveHappening = true;
+ 
+    stopAutoDiveTimerId =
+        window.setTimeout(stopAutoDive, AUTODIVE_STOP_TIMEOUT);
+  }
+}
+ 
+/**
+ * Shut off the auto descent intro movement.
+ * @private
+ */
+function stopAutoDive() {
+  if (autoDiveHappening && !userInteractionOccured) {
+    autoDiveHappening = false;
+ 
+    window.clearTimeout(stopAutoDiveTimerId);
+ 
+    moveLever(DIR_NONE);
+  }
+}
+ 
+/**
+ * Init and Destroy
+ */
+ 
+/**
+ * Save references to the common elements.
+ * @private
+ */
+function initializeDomElements() {
+  canvasEl = document.getElementById('hplogo');
+  layersEl = document.getElementById('verne-layers');
+  layerEls = [
+    document.getElementById('verne-layer-0'),
+    document.getElementById('verne-layer-1'),
+    document.getElementById('verne-layer-2'),
+    document.getElementById('verne-layer-3')
+  ]
+  dialDepthBigEl = document.getElementById('verne-dial-depth-big');
+  dialDepthSmallEl = document.getElementById('verne-dial-depth-small');
+  dialPositionEl = document.getElementById('verne-dial-position');
+  leverEl = document.getElementById('verne-lever');
+  dragEl = document.getElementById('verne-drag');
+}
+ 
+/**
+ * Bind event handlers and keep track of them for later.
+ * @private
+ */
+function initializeEventListeners() {
+  var searchForm = document.forms.f || document.forms.gs || document.forms.tsf;
+  if (searchForm) {
+    scoped_listen(searchForm.q, 'keydown', handleKeyDown);
+    scoped_listen(searchForm.q, 'keyup', handleKeyUp);
+  }
+  scoped_listen(document, 'keydown', handleKeyDown);
+  scoped_listen(document, 'keyup', handleKeyUp);
+  scoped_listen(document, 'mousedown', function(event) { handleMouseDown(event, false); });
+  scoped_listen(document, 'mousemove', handleMouseMove);
+  scoped_listen(document, 'mouseup', handleMouseUp);
+  if (IS_IE) scoped_listen(document.body, 'mouseout', handleMouseOut);
+ 
+  scoped_listen(document, 'touchstart', function(event) { handleMouseDown(event, true); });
+  scoped_listen(document, 'touchmove', handleMouseMove);
+  scoped_listen(document, 'touchend', handleMouseUp);
+ 
+  scoped_listen(document, IS_IE ? 'focusin' : 'focus', handleWindowFocus);
+  scoped_listen(window, 'deviceorientation', handleDeviceOrientation);
+  scoped_listen(window, 'MozOrientation', handleDeviceOrientation);
+  scoped_listen(window, 'devicemotion', handleDeviceOrientation);
+ 
+  scoped_listen(document.getElementById('verne-dials-click'), 'click', handleDialsClicked);
+ 
+  google.doodle.initializing = false;
+  var process;
+  while (process = google.doodle.queue.shift()) {
+    process();
+  }
+}
+ 
+/**
+ * Unbind all event handlers assigned by initializeEventListeners.
+ * @private
+ */
+function uninitializeEventListeners() {
+  var listener;
+  while (listener = google.doodle.scoped_listeners.pop()) {
+    unlisten(listener[0], listener[1], listener[2]);
+  }
+}
+ 
+/**
+ * Clean up the doodle during page transitions.
+ * @private
+ */
+function destroy() {
+  if (google.doodle.initializing) {
+    // Don't destroy if an initialization is in progress.
+    google.doodle.queue.push(destroy);
+    return;
+  }
+  uninitializeEventListeners();
+  stopMainTimer();
+  stopAutoDive();
+}
+ 
+/**
+ * Resister the destroy function with google.dstr.
+ * @private
+ */
+function registerJesr() {
+  if (google.dstr) {
+    // This actually gets renamed by the compiler to a random variable name
+    // under google.doodle, but we'll allow it since it is not referenced
+    // outside of this script.
+    if (!google.doodle.registeredJesr) {
+      google.doodle.registeredJesr = true;
+      google.dstr.push(destroy);
+    }
+    return true;
+  }
+  return false;
+}
+ 
+/**
+ * Setup the doodle.
+ * @private
+ */
+function initialize() {
+  // Always register the destroy function in case the user refreshes the SRP and
+  // then clicks back to the webhp.
+  window.setTimeout(function() {
+    callUntilTrue(MIN_RETRY_DELAY, registerJesr);
+  }, 0);
+  // Do not run on JESR result page, as indicated by a # and a non-empty q=
+  // param.
+  if (/#.*q=[^&]/.test(window.location.href)) {
+    return;
+  }
+  if (google.doodle.initializing) {
+    // Don't initinitialize if another initialization is in progress.
+    google.doodle.queue.push(initialize);
+    return;
+  }
+  google.doodle.initializing = true;
+  initializeDomElements();
+  loadImages();
+  window.setTimeout(initializeEventListeners, 0);
+  detectBrowserCapabilities();
+ 
+  moveLever(DIR_NONE);
+  renderOcean();
+ 
+  window.setTimeout(initializeTransitions, 0);
+  if (IS_IE) {
+    try {
+      document.execCommand('BackgroundImageCache', false, true);
+    } catch(e) {}
+  }
+}
+
+function masterFadeIn() {
+  document.getElementById('canvas').style.opacity = 1;
+}
+
+function start() {
+  window.setTimeout(startMainTimer, 0);
+  
+  window.setTimeout(masterFadeIn, 2500);
+}
+ 
+initialize();
+ 
+</script>

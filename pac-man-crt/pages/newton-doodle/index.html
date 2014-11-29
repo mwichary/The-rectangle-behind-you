@@ -1,0 +1,38 @@
+<style>
+  html {
+    height: 100%;
+  }
+  body {
+    background: white;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    display: -webkit-box;
+    -webkit-box-pack: center;
+    -webkit-box-align: start;
+  
+    overflow: hidden;
+  }
+  #main {
+    width: 560px;
+    height: 240px;
+    margin-top: 20px;
+    text-align: left;
+  }
+</style>
+
+<div id='main'>
+  <script>
+    function startIsaac() {
+      (function(){var f=document.getElementById('fall'),h=0,v=1,y='92px';window.newton&&clearTimeout(window.newton);if(f.style.bottom==y){window.newton=setInterval(function(){if(f){var r=parseInt(f.style.right)+h,b=parseInt(f.style.bottom)-v;f.style.right=r+'px';f.style.bottom=b+'px';if(b>-230){v+=2}else{if(v>9){h=v*0.1;v*=-0.3}else{h=v=0;}}}},25)}else{f.style.bottom=y;f.style.right='40px';}})();
+    }
+   </script>
+  <img style="display: block; margin: .5em auto 0" src="newton10-tree.jpg" title="Sir Isaac Newton's Birthday [Click the doodle]" onclick="startIsaac()">
+  <img id="fall" src="newton10-apple.png" style="margin: .5em auto 0; display: block; position:relative;right:40px;bottom:92px">           
+</div>
+
+<script>
+  function activate() {
+    startIsaac();
+  }
+</script>

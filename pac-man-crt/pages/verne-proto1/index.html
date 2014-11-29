@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+
+<title>Jules Verne doodle – prototype №1</title>
+<meta charset='utf-8'>
+
+<style>
+  html {
+    height: 100%;
+  }
+  body {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    display: -webkit-box;
+    -webkit-box-pack: center;
+    -webkit-box-align: center;
+  }
+  #verne-canvas {
+    width: 605px;
+    height: 215px;
+    
+    position: relative;
+    overflow: hidden;
+  }
+  #verne-chrome {
+    width: 605px;
+    height: 215px;
+    background: url(verne10_draft-1.png) top left no-repeat;
+    
+    position: absolute;
+    left: 0;
+    top: 0;
+    
+    z-index: 400;
+  }
+  #verne-layers {
+    width: 605px;
+    height: 215px;/*605px;*/
+    
+    overflow: hidden;    
+    position: absolute;
+    left: 0;
+    /*top: -200px;
+    
+    padding-top: 200px;    */
+    
+    /*-webkit-transform-origin: 50% 107px;*/
+    
+    /*-webkit-transform-origin: 0 0;*/
+    /*-webkit-transform: scale(2);*/
+  }
+  #verne-layer-0,
+  #verne-layer-1,
+  #verne-layer-2,
+  #verne-layer-3 {
+    width: 603px;
+    height: 1201px;
+    position: absolute;
+    left: 1px;
+    top: 1px;
+    
+    /*-webkit-transform-origin: 0 0;*/
+    -webkit-transition: -webkit-transform .2s linear;
+  }
+  
+  #verne-layer-0 {
+    z-index: 300;
+    background: url(verne10_draft-2.png) top left no-repeat;
+  }
+  #verne-layer-1 {
+    z-index: 200;
+    background: url(verne10_draft-3.png) top left no-repeat;
+  }
+  #verne-layer-2 {
+    z-index: 100;
+    background: url(verne10_draft-4.png) top left no-repeat;
+  }
+  #verne-layer-3 {
+    z-index: 350;
+    background: black;
+  }
+</style>
+
+<div id='verne-canvas'>
+  <div id='verne-chrome'></div>
+  <div id='verne-layers'>
+    <div id='verne-layer-0'></div>
+    <div id='verne-layer-1'></div>
+    <div id='verne-layer-2'></div>
+    <div id='verne-layer-3'></div>
+  </div>
+</div>
+
+<div id='debug'></div>
+<div id='debug2'></div>
+
+<script>
+  var LAYER_COUNT = 3;
+  
+  var HEIGHT = 1203;
+  var WINDOW_HEIGHT = 215;
+  var FLOOR_BUFFER = 50;
+  
+  var SPEED_DOWN = 2;
+  var SPEED_UP = 2.5;
+  var SPEED_INACTIVE = -.05;
+  
+  var ACCEL_MOTORS_ACTIVE = .1;
+  var ACCEL_MOTORS_INACTIVE = .025;
+  
+  var DARKNESS_MULTIPLIER = .0002;
+  
+  /*var ACCEL_ROTATION = 1;*/
+  
+  var LAYER_MOVE_MULTIPLIER = [1, .87, .74];
+
+  var position = 10;
+  var currentSpeed = 0;
+  var targetSpeed = 0;
+  
+  /*var currentRotation = 0;
+  var targetRotation = 0;*/
+  
+  var keyDownPressed = false;
+  var keyUpPressed = false;
+  
+  var ORIENTATION_MEASURE_COUNT = 10;
+  
+  var ORIENTATION_MOVE_MIN = 5;
+  var ORIENTATION_MOVE_MAX = 15;
+  
+  var orientationMeasureCount;
+  var orientationMove;
+  var averageBetaOrientation = 0;
+  
+  function handleKeyDown(event) {
+    switch (event.keyCode) {
+      case 38:
+        keyUpPressed = true;
+        break;
+      case 40:
+        keyDownPressed = true;
+        break;
+    }
+  }
+  
+  function handleKeyUp(event) {
+    switch (event.keyCode) {
+      case 38:
+        keyUpPressed = false;
+        break;
+      case 40:
+        keyDownPressed = false;
+        break;
+    }
+  }
+  
+  function handleDeviceOrientation(event) {
+    //var a = event.alpha;
+    var b = event.beta;
+    var g = event.gamma;
+    
+    if (orientationMeasureCount) {
+      averageBetaOrientation += b;
+      
+      orientationMeasureCount--;
+      
+      if (orientationMeasureCount == 0) {
+        averageBetaOrientation = averageBetaOrientation / ORIENTATION_MEASURE_COUNT;
+      }
+    } else {
+      orientationMove = b - averageBetaOrientation;
+    }
+    
+    /*if (g) {
+      targetRotation = - Math.floor(g / 5) * 5;
+    }*/
+    
+    //layersEl.style.opacity = .5;
+    //layersEl.style.webkitTransform = 'rotateZ(' + g + 'deg)';
+    //document.getElementById('debug').innerHTML = g;
+  }
+  
+  function updatePosition() {
+    for (var i = 0; i < LAYER_COUNT; i++) {
+      var pos = -(position * LAYER_MOVE_MULTIPLIER[i]);
+      
+      //layerEls[i].style.top = pos + 'px';
+      layerEls[i].style.webkitTransform = 'translate3d(0, ' +  pos + 'px, 0)';
+    }
+    
+    layerEls[3].style.opacity = position * DARKNESS_MULTIPLIER;
+    
+    //layersEl.style.webkitTransform = 'rotateZ(' + currentRotation + 'deg)';    
+  }
+  
+  function tick() {
+    var motorsActive = keyDownPressed || keyUpPressed;
+    
+    if (keyDownPressed) {
+      targetSpeed = SPEED_DOWN;
+    } else if (keyUpPressed) {
+      targetSpeed = -SPEED_UP;
+    } else if (orientationMove > ORIENTATION_MOVE_MIN) {
+      var speed = (orientationMove - ORIENTATION_MOVE_MIN) / (ORIENTATION_MOVE_MAX - ORIENTATION_MOVE_MIN);
+      if (speed > 1) {
+        speed = 1;
+      }
+      targetSpeed = SPEED_DOWN * speed;
+    } else if (orientationMove < -ORIENTATION_MOVE_MIN) {
+      var speed = (-orientationMove - ORIENTATION_MOVE_MIN) / (ORIENTATION_MOVE_MAX - ORIENTATION_MOVE_MIN);
+      if (speed > 1) {
+        speed = 1;
+      }
+      targetSpeed = -SPEED_UP * speed;
+    } else {
+      if (position <= -3) {
+        targetSpeed = .20;
+      } else if (position >= 3) {
+        targetSpeed = -.20;
+      } else if (position >= 20) {
+        targetSpeed = SPEED_INACTIVE;
+      }
+    }
+    
+    // necessary?
+    if (position < -5) {
+      targetSpeed = 1;
+    }
+
+    if (position > HEIGHT - WINDOW_HEIGHT - FLOOR_BUFFER) {
+      if (targetSpeed > 0) {
+        targetSpeed = 0;        
+      }
+    }
+    
+    if (position > HEIGHT - WINDOW_HEIGHT) {
+      position = HEIGHT - WINDOW_HEIGHT;
+    }
+    
+    if (targetSpeed > currentSpeed) {
+      currentSpeed += motorsActive ? ACCEL_MOTORS_ACTIVE : ACCEL_MOTORS_INACTIVE;
+    }
+    if (targetSpeed < currentSpeed) {
+      currentSpeed -= motorsActive ? ACCEL_MOTORS_ACTIVE : ACCEL_MOTORS_INACTIVE;
+    }
+    
+    position += currentSpeed;
+    
+    
+    /*if (targetRotation > currentRotation) {
+      currentRotation += ACCEL_ROTATION;
+    } else if (targetRotation < currentRotation) {
+      currentRotation -= ACCEL_ROTATION;      
+    }*/
+    
+    updatePosition();
+  }
+
+  function initialize() {
+    layersEl = document.getElementById('verne-layers');
+    
+    layerEls = [
+      document.getElementById('verne-layer-0'),
+      document.getElementById('verne-layer-1'),
+      document.getElementById('verne-layer-2'),
+      document.getElementById('verne-layer-3')
+    ]
+    
+    document.body.addEventListener('keydown', handleKeyDown, false);
+    document.body.addEventListener('keyup', handleKeyUp, false);
+    
+    orientationMeasureCount = ORIENTATION_MEASURE_COUNT;
+    window.addEventListener('deviceorientation', handleDeviceOrientation, false);
+    
+    window.setInterval(tick, 33);
+  }
+  
+  initialize();
+</script>

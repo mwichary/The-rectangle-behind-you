@@ -1,0 +1,2309 @@
+<!DOCTYPE html>
+
+<title> </title>
+<link rel='stylesheet' href='styles.css'>
+<script src='prettify.js'></script>
+<script src='scripts.js'></script>
+<meta charset='utf-8'>
+
+<body>
+  <full>
+  <presentation>
+    
+    <slides>  
+      <slide class='text' group='start' slideclass='intro'>
+        Pac-Man Slide deck demo<br><br>
+        <a href='https://medium.com/the-rectangle-behind-you/the-day-skeuomorphism-went-too-far-47188d5e5ada'>Context</a><br><br>
+        Press right arrow to continue<br><br>
+        Note: Looks best in desktop Chrome/Safari
+      </slide>
+
+      <slide class='text' slideclass='intro'>
+        <img style='position: absolute; bottom: -20px; right: 30px; z-index: 99999; width: 300px' 
+             src='images/pacman_incognito.png'>
+        <h1 style='padding-bottom: 100px'>
+          The secrets<br>of<br>Google Pac-Man
+          <legend style='line-height: 40px; margin-top: 40px'>
+            with your hosts<br>Ryan Germick and Marcin Wichary
+          </legend>
+        </h1>
+      </slide>
+
+      <slide class='image' slideclass='intro'>
+        <div class='vert-grid joint'>
+          <img class='bordered' src='images/ryan.jpg'>
+          <img class='bordered' src='images/marcin.jpg'>
+        </div>
+      </slide>
+      
+      <slide class='image fullscreen' slideclass='intro'>
+        <img src='images/atari.jpg'>
+      </slide>
+
+      <slide class='image white' slideclass='intro'>
+        <div class='vert-grid joint'>
+          <img src='images/suggest-ryan.png'>
+          <img src='images/suggest-marcin.png'>
+        </div>
+      </slide>
+            
+      <slide class='iframe white' slideclass='intro' remote='slider'>
+        <iframe src='pages/sesame-street-transition/index.html'></iframe>
+      </slide>
+      
+      <slide class='image white' slideclass='intro'>
+        <img src='images/html5logo.png'>
+      </slide>
+      
+      <slide class='text white' slideclass='intro'>
+<pre>
+cover {
+  background: -webkit-linear-gradient(rgba(0, 0, 0, .5), transparent),
+              -webkit-linear-gradient(transparent, rgba(0, 0, 0, .33), rgba(0, 0, 0, .33), transparent, transparent, transparent, transparent, transparent, transparent);
+  background-size: 100% 2px, 1200px 620px;
+  background-clip: border-box;
+  pointer-events: none;
+  -webkit-animation-name: flicker;
+  -webkit-animation-duration: 2s;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-timing-function: linear;    
+}
+
+@-webkit-keyframes flicker {
+  0% { opacity: .95; background-position: 0 0, 0 620px; }
+  10% { opacity: .9; }
+  20% { opacity: .75; }
+  30% { opacity: .9; }
+  40% { opacity: .75; }
+  50% { opacity: .9; }
+  80% { opacity: .7; }
+  90% { opacity: .92; }
+  100% { opacity: .9; background-position: 0 0, 0 0; }
+}
+</pre>
+      </slide>
+      
+      <slide class='iframe white' slideclass='intro' remote='slider'>
+        <iframe src='pages/sesame-street-transition/index.html'></iframe>
+      </slide>      
+      
+      <slide class='iframe white' slideclass='intro' remote='loupe'>
+        <iframe src='pages/sesame-street-loupe/index.html'></iframe>
+      </slide>
+      
+      
+      <slide class='text' slideclass='intro'>
+        <img style='position: absolute; bottom: -20px; right: 30px; z-index: 99999; width: 300px' 
+             src='images/pacman_incognito.png'>
+        <img style='position: absolute; top: 20px; left: 20px; width: 250px; height: 250px'
+             src='images/gameshow.png'>
+        <h1>
+          The secrets<br>of<br>Google Pac-Man
+        </h1>
+      </slide>
+      
+      <slide class='text' slideclass='intro-score'>
+        <div style='position: absolute; left: 100px; top: 280px'>Team<br>Pac-Man</div>
+        <div style='position: absolute; right: 100px; top: 250px'>Team<br>Ms.<br>Pac-Man</div>
+        <img style='margin: 50px; width: 400px' src='images/cut-characters/mr-and-mrs.png'>
+        <credit>Image credit: Namco Bandai Games</credit>
+      </slide>      
+      
+      <slide class='image text white' nextgroup='scoreboard'>
+        io-pac-man.appspot.com
+        <br><br>
+        <img style='height: 400px !important' src='images/voting.png'>
+      </slide>
+      
+      <slide class='centered' group='scoreboard'>
+        
+        <div>
+          <table class='main-menu'>
+            <tr>
+              <th>
+                History of Pac-Man and doodles
+              <td onclick='selectQuestion(0, 0)'>
+                200
+              <td onclick='selectQuestion(0, 1)'>
+                400
+              <td onclick='selectQuestion(0, 2)'>
+                800
+              <td onclick='selectQuestion(0, 3)'>
+                1600
+          
+            <tr>
+              <th>
+                Pac-Man, the game
+              <td onclick='selectQuestion(1, 0)'>
+                200
+              <td onclick='selectQuestion(1, 1)'>
+                400
+              <td onclick='selectQuestion(1, 2)'>
+                800
+              <td onclick='selectQuestion(1, 3)'>
+                1600
+              
+            <tr>
+              <th>
+                Technology
+              <td onclick='selectQuestion(2, 0)'>
+                200
+              <td onclick='selectQuestion(2, 1)'>
+                400
+              <td onclick='selectQuestion(2, 2)'>
+                800
+              <td onclick='selectQuestion(2, 3)'>
+                1600
+              
+            <tr>
+              <th>
+                Programming Pac-Man doodle
+              <td onclick='selectQuestion(3, 0)'>
+                200
+              <td onclick='selectQuestion(3, 1)'>
+                400
+              <td onclick='selectQuestion(3, 2)'>
+                800
+              <td onclick='selectQuestion(3, 3)'>
+                1600
+              
+            <tr>
+              <th>
+                User feedback
+              <td onclick='selectQuestion(4, 0)'>
+                200
+              <td onclick='selectQuestion(4, 1)'>
+                400
+              <td onclick='selectQuestion(4, 2)'>
+                800
+              <td onclick='selectQuestion(4, 3)'>
+                1600
+          </table>          
+        </div>
+            
+      </slide>
+      
+      <slide class='text' group='finale'>
+        <img style='width: 200px' src='images/cut-characters/puckman.png'>
+        <br>
+        Final showdown!
+        <br>
+        (worth <span id='finale-score-total'></span> points)
+      </slide>
+      
+      <slide class='small-text centered' slideclass='final-score'>
+        <div style='position: absolute; left: 100px; top: 280px' id='final-score-0' class='big score'>0</div>
+        <div style='position: absolute; right: 100px; top: 280px' id='final-score-1' class='big score'>0</div>
+        <div>
+          <img style='margin: 50px; width: 400px' src='images/cut-characters/mr-and-mrs.png'>
+          <br>
+          http://goo.gl/8RqYt
+          <br><br>
+          @ m wichary &nbsp; @ ryan germick &nbsp; # io 2011 &nbsp; # techtalks
+        </div>
+        <credit>Image credit: Namco Bandai Games</credit>
+      </slide>
+      
+      <!-- -------------------------------------------------------------- -->
+
+      <slide class='question' group='first'>
+        Which of these Pac-Man doodle features were a first for 
+        a Google doodle?
+      </slide>
+
+      <slide class='answer'>
+        <div>
+          <div class='no'>1</div>
+          A doodle with sound
+        </div>
+      </slide>
+
+      <slide class='answer'>
+        <div>
+          <div class='no'>2</div>
+          A doodle running for 48 hours
+        </div>
+      </slide>
+       
+      <slide class='answer'>
+        <div>
+          <div class='no'>3</div>
+          An interactive doodle
+        </div>
+      </slide>
+
+      <slide class='answer'>
+        <div>
+          <div class='no'>4</div>
+          An animated doodle
+        </div>
+      </slide>
+       
+      <slide class='answer'>
+        <div>
+          <div class='no'>5</div>
+          A doodle using Flash
+        </div>
+      </slide>
+  
+      <slide class='answers'>
+        <ol>
+          <li>
+            A doodle with sound
+          <li>
+            A doodle running for 48 hours
+          <li>
+            An interactive doodle
+          <li>
+            An animated doodle
+          <li>
+            A doodle using Flash
+        </ol>
+      </slide>      
+      
+      <slide class='iframe white' remote='activate'>
+        <iframe src='pages/click-or-treat/index.html'></iframe>
+      </slide>
+      
+      <slide class='image white'>
+        <img src='images/chaplin-doodle.jpg'>
+      </slide>
+      
+      <!-- -------------------------------------------------------------- -->
+
+      <slide class='question' group='character'>
+        Which of those is 
+        <strong>not</strong> a character in the Pac-Man universe?
+      </slide>
+
+      <slide class='answer'>
+        <div>
+          <div class='no'>1</div>
+          Pac-Man
+        </div>
+      </slide>
+
+      <slide class='answer'>
+        <div>
+          <div class='no'>2</div>
+          Ms. Pac-Man
+        </div>
+      </slide>
+      
+      <slide class='answer'>
+        <div>
+          <div class='no'>3</div>
+          Jr. Pac-Man
+        </div>
+      </slide>
+ 
+      <slide class='answer'>
+        <div>
+          <div class='no'>4</div>
+          Baby Pac-Man
+        </div>
+      </slide>
+      
+      <slide class='answer'>
+        <div>
+          <div class='no'>5</div>
+          Professor Pac-Man
+        </div>
+      </slide>
+      
+      <slide class='answer'>
+        <div>
+          <div class='no'>6</div>
+          Pac-Dog
+        </div>
+      </slide>
+      
+      <slide class='answer'>
+        <div>
+          <div class='no'>7</div>
+          Pac-Pal
+        </div>
+      </slide>
+
+      <slide class='answer'>
+        <div>
+          <div class='no'>8</div>
+          Super Pac-Man
+        </div>
+      </slide>
+      
+      <slide class='answers'>
+        <ol>
+          <li>
+            Pac-Man
+          <li>
+            Ms. Pac-Man
+          <li>
+            Jr. Pac-Man
+          <li>
+            Baby Pac-Man
+          <li>
+            Professor Pac-Man
+          <li>
+            Pac-Dog
+          <li>
+            Pac-Pal
+          <li>
+            Super Pac-Man
+        </ol>
+      </slide>
+      
+      <slide class='text'>
+        <div>
+          <div>
+            <img style='height: 200px' src='images/cut-characters/mr-and-mrs.png'>
+          </div>
+          <div>
+            Ms. Pac-Man
+            (1981)
+          </div>
+          <div class='quote'>
+            “…four new mazes, added bonus fruit symbols that float freely
+            through the maze, two new side exits that give four chances
+            for get away and a unique cartoon series” 
+          </div>
+        </div>
+
+        <credit>Image credit: Namco Bandai Games</credit>
+      </slide>
+      
+      <slide class='image'>
+        <div class='vert-grid joint'>
+          <img class='bordered' src='images/history/ms-pac-man-leaflet-1.jpg'>
+          <img class='bordered' src='images/history/ms-pac-man-leaflet-2.jpg'>
+        </div>
+
+        <credit>Image credit: Namco Bandai Games</credit>
+      </slide>
+
+      <slide class='image'>
+        <img class='bordered' src='images/history/ms-pac-man-playfield.gif'>
+
+        <credit>Image credit: Namco Bandai Games</credit>
+      </slide>        
+
+      <slide class='text'>
+        <div>
+          <div>
+            <img style='height: 300px' src='images/cut-characters/junior.png'>
+          </div>
+          <div>
+            Jr. Pac-Man
+            (1983)
+          </div>
+          <div class='quote'>
+            “Meet the new video kid on the block. Seven new mazes. 
+            With horizontal scrolling, they’re twice as wide as before!”
+          </div>
+        </div>
+
+        <credit>Image credit: Namco Bandai Games</credit>
+      </slide>
+
+      <slide class='image'>
+        <img class='bordered' src='images/history/jr-leaflet.jpg'>
+
+        <credit>Image credit: Namco Bandai Games</credit>
+      </slide>
+      
+      <slide class='image'>
+        <img class='bordered fill' src='images/history/jr-pac-man-playfield.png'>
+
+        <credit>Image credit: Namco Bandai Games</credit>
+      </slide>
+      
+      <slide class='text'>
+        <div>
+          <div>
+            <img style='height: 300px; margin-bottom: -90px' src='images/cut-characters/baby.png'>
+          </div>
+          <div>
+            Baby Pac-Man
+            (1983)
+          </div>
+          <div class='quote'>
+            “They lived happily chomping away and doing all the things Pac-People
+            do, when one day a stork delivered a bouncing bundle of joystick
+            joy, the brand new addition to the Pac-Clan!”
+          </div>
+        </div>
+
+        <credit>Image credit: Namco Bandai Games</credit>
+      </slide>
+      
+      <slide class='text'>
+        <div>
+          <div>
+            <img style='height: 200px' src='images/cut-characters/super_pac-man.png'>
+          </div>
+          <div>
+            Super Pac-Man
+            (1982)
+          </div>
+          <div class='quote'>
+            “Disguised as out mild-mannered Pac-Man, Super Pac-Man fights a never
+            ending battle to eat rows of fruit and objects, destroy enemy monsters
+            and rack up scores that are out of this world.”
+          </div>
+        </div>
+
+        <credit>Image credit: Namco Bandai Games</credit>
+      </slide>
+    
+
+      <slide class='image'>
+        <img class='bordered fill' src='images/history/super.png'>
+
+        <credit>Image credit: Namco Bandai Games</credit>
+      </slide>
+      
+      <slide class='text'>
+        <div>
+          <div>
+            <img style='height: 200px' src='images/cut-characters/professor_pac-man.png'>
+          </div>
+          <div>
+            Professor Pac-Man
+            (1983)
+          </div>
+          <div class='quote'>
+            “…it’s FUN to learn from Professor Pac-Man!” 
+          </div>
+        </div>
+
+        <credit>Image credit: Namco Bandai Games</credit>
+      </slide>   
+
+
+      <slide class='image'>
+        <img class='bordered fill' src='images/history/professor.png'>
+
+        <credit>Image credit: Namco Bandai Games</credit>
+      </slide>
+      
+      <slide class='text'>
+        <div>
+          <div>
+            <img style='height: 200px' src='images/cut-characters/pal.png'>
+          </div>
+          <div>
+            Pac & Pal
+            (1983)
+          </div>
+        </div>
+
+        <credit>Image credit: Namco Bandai Games</credit>
+      </slide>   
+      
+      <slide class='image'>
+        <img class='bordered fill' src='images/history/pac-pal.jpg'>
+
+        <credit>Image credit: Namco Bandai Games</credit>
+      </slide>
+
+      <!-- -------------------------------------------------------------- -->
+
+      <slide class='question' group='browsers-trouble'>
+        Which of these browsers have caused us most trouble when
+        programming doodles?
+      </slide>
+      
+      <slide class='answer'>
+        <div>
+          <div class='no'>1</div>
+            Internet Explorer
+          </div>
+        </div>
+      </slide>
+      
+      <slide class='answer'>
+        <div>
+          <div class='no'>2</div>
+            Google Chrome
+          </div>
+        </div>
+      </slide>
+      
+      <slide class='answers'>
+        <ol>
+          <li>  
+            Internet Explorer
+          <li>  
+            Google Chrome
+        </ol>
+      </slide>     
+      
+      <slide class='code'>
+<pre>        
+// For all the browsers coming from a good home, we are doing it via CSS.
+if (pacMan.useCss) {
+  el.style.backgroundImage = 'url(files/sprite.png)';
+  el.style.backgroundPosition = (-x) + 'px ' + (-y) + 'px';
+  el.style.backgroundRepeat = 'no-repeat';
+} else {
+  // For old Internet Explorers with CSS background reloading bug, we put
+  // an image inside an element, and move it around.
+  el.style.overflow = 'hidden';
+  var style = 'display: block; position: relative; ' +
+              'left: ' + (-x) + 'px; top: ' + (-y) + 'px';
+  el.innerHTML = '&lt;img style="' + style +
+                 '" src="files/sprite.png"&gt;';
+}
+</pre>      
+      </slide>
+      
+      <slide class='iframe white'>
+        <iframe class='top' src='pages/verne-1-full-css3/index.html'></iframe> 
+        <iframe class='medium' src='pages/verne-2-fake-ie6/index.html'></iframe> 
+        <iframe class='bottom' src='pages/verne-3-static/index.html'></iframe> 
+      </slide>
+      
+      <slide class='code'>
+<pre>
+if (useCssTransforms) {
+  if (use3DTransforms) {
+    layerEls[i].style[cssTransformName] =
+        'translate3d(' + posX + 'px, ' +  posY + 'px, 0)';
+  } else {
+    layerEls[i].style[cssTransformName] =
+        'translate(' + posX + 'px, ' +  posY + 'px)';
+  }
+} else {
+  layerEls[i].style.left = posX + 'px';
+  layerEls[i].style.top = posY + 'px';
+}
+</pre>
+      </slide>
+
+      <slide class='image white'>
+        <div class='vert-grid'>
+          <img src='images/particles-before.png'>
+          <img src='images/particles-many.png'>
+          <img src='images/particles-after.png'>
+        </div>
+      </slide>
+      
+      <!-- -------------------------------------------------------------- -->
+
+      <slide class='question' group='lines'>
+        How many lines of JavaScript were required for the Pac-Man doodle?
+      </slide>
+      
+      <slide class='answer'>
+        <div>
+          <div class='no'>1</div>
+            1,000 lines
+          </div>
+        </div>
+      </slide>
+      
+      <slide class='answer'>
+        <div>
+          <div class='no'>2</div>
+            2,000 lines
+          </div>
+        </div>
+      </slide>
+      
+      <slide class='answer'>
+        <div>
+          <div class='no'>3</div>
+            5,000 lines
+          </div>
+        </div>
+      </slide>
+      
+      <slide class='answer'>
+        <div>
+          <div class='no'>4</div>
+            8,000 lines
+          </div>
+        </div>
+      </slide>
+
+      <slide class='answers'>
+        <ol>
+          <li>  
+            1,000 lines
+          <li>  
+            2,000 lines
+          <li>
+            5,000 lines
+          <li>
+            8,000 lines
+        </ol>
+      </slide>      
+      
+      <slide class='good-answer'>
+        5,200 lines
+      </slide>        
+      
+      <slide class='iframe white' remote='activate'>
+        <iframe src='pages/halloween-doodle/index.html'></iframe>
+      </slide>
+      
+      <slide class='iframe white' remote='activate'>
+        <iframe src='pages/newton-doodle/index.html'></iframe>
+      </slide>
+      
+      <slide class='image'>
+        <img style='-webkit-transform: rotateZ(2deg); margin-top: -50px; max-height: 700px;' src='images/your-dad-optimized-js-by-hand.png'>
+      </slide>
+
+      <slide class='code'>
+<pre>
+onload="window.lol&&lol();setTimeout(function(){var h=0,v=1,
+f=document.getElementById('fall'),i=setInterval(function(){
+if(f){var r=parseInt(f.style.right)+h,b=parseInt(f.style.bottom)-v;
+f.style.right=r+'px';f.style.bottom=b+'px';if(b>-210){v+=2}else
+{h=(v>9)?v*0.1:0;v*=(v>9)?-0.3:0}}},25);google.rein&&google.rein.push(
+function(){clearInterval(i);h=0;v=1})},2000)"
+</pre>
+      </slide>  
+      
+      <!-- -------------------------------------------------------------- -->
+
+      <slide class='question' group='time'>
+        How much time did it take us to design and write Pac-Man doodle?
+      </slide>
+
+      <slide class='answer'>
+        <div>
+          <div class='no'>1</div>
+            1 hour
+          </div>
+        </div>
+      </slide>
+      
+      <slide class='answer'>
+        <div>
+          <div class='no'>2</div>
+            10 hours
+          </div>
+        </div>
+      </slide>
+
+      <slide class='answer'>
+        <div>
+          <div class='no'>3</div>
+            100 hours
+          </div>
+        </div>
+      </slide>
+      
+      <slide class='answer'>
+        <div>
+          <div class='no'>4</div>
+            1,000 hours
+          </div>
+        </div>
+      </slide>
+      
+      <slide class='answers'>
+        <ol>
+          <li>  
+            1 hour
+          <li>  
+            10 hours
+          <li>
+            100 hours
+          <li>
+            1,000 hours
+        </ol>
+      </slide>      
+      
+      <slide class='iframe'>
+        <iframe src='pages/pacman-proto-1/index.html'></iframe>
+      </slide>
+            
+      <slide class='iframe'>
+        <iframe src='pages/pacman-proto-2/index.html'></iframe>
+      </slide>
+            
+      <slide class='tweet'>
+        <div>
+          This is the original Atari code! All the tricks I learned in college
+          back in 1982 to try and beat this game work in this version! God, I
+          am so pathetic......
+          <div class='author'>— PirateBoy</div>
+        </div>
+      </slide>  
+      
+      <slide class='tweet'>
+        <div>
+          This is a poor clone of the game. It LOOKS good but plays horrible
+          (…) The ghosts are stupid (…) I didn't think it possible but it
+          appears somebody programmed a worse game than Atari Pac-Man (which
+          looks crap but is fun to play).
+          <div class='author'>— theaveng</div>
+       </div>
+      </slide>  
+      
+      <slide class='tweet'>
+        <div>
+          All the game details are spot-on, right down to the impulse to
+          ignore work, friends, family and play for hours. Curse you, Namco
+          and Google.
+          <div class='author'>— Lance Ulanoff, PC Magazine</div>
+       </div>
+      </slide>      
+            
+      <!-- -------------------------------------------------------------- -->
+            
+      <slide class='question' group='fan-proposal'>
+        Which of the following is <strong>not</strong> a fan proposal
+        for the next playable doodle?
+      </slide>
+
+      <slide class='answer image'>
+        <div>
+          <div class='no'>1</div>
+          <img style='width: 775px' class='bordered' src='images/kotaku/2.jpg'>
+        </div>
+        <legend class='invisible'>Space Invaders</legend>
+
+        <credit>Image credit: Kotaku</credit>
+      </slide>
+
+      <slide class='answer image'>
+        <div>
+          <div class='no'>2</div>
+          <img style='width: 800px' class='bordered' src='images/kotaku/3.jpg'>
+        </div>
+        <legend class='invisible'>Oregon Trail</legend>
+        <credit>Image credit: Kotaku</credit>
+      </slide>
+
+      <slide class='white answer image'>
+        <div>
+          <div class='no'>3</div>
+          <img style='width: 600px' src='images/kotaku/tetris09.gif.png'>
+        </div>
+        <legend class='invisible'>Tetris</legend>
+        <credit>Image credit: Kotaku</credit>
+      </slide>
+
+      <slide class='white answer image'>
+        <div>
+          <div class='no'>4</div>
+          <img style='width: 808px' src='images/kotaku/7.png'>
+        </div>
+        <legend class='invisible'>Zelda</legend>
+        <credit>Image credit: Kotaku</credit>
+      </slide>
+
+
+      <slide class='answers'>
+        <ol>
+          <li>  
+            Space Invaders
+          <li>  
+            Oregon Trail
+          <li>
+            Tetris
+          <li>
+            Zelda
+        </ol>
+      </slide>      
+
+      <slide class='white image'>
+        <div>
+          <img style='width: 600px' src='images/kotaku/tetris09.gif.png'>
+        </div>
+        <credit>Image credit: Kotaku</credit>
+      </slide>
+
+      <slide class='image'>
+        <img style='width: 800px' class='bordered' src='images/kotaku/lemmings.jpg'>
+        <credit>Image credit: Kotaku</credit>
+      </slide>
+
+      <slide class='image white'>
+        <img style='width: 800px' src='images/kotaku/bomberman.jpg'>
+        <credit>Image credit: Kotaku</credit>
+      </slide>
+
+      <slide class='image white'>
+        <img style='width: 800px' src='images/kotaku/5.jpg'>
+        <credit>Image credit: Kotaku</credit>
+      </slide>
+
+      <slide class='image'>
+        <img style='width: 800px' class='bordered' src='images/kotaku/4.png'>
+        <credit>Image credit: Kotaku</credit>
+      </slide>
+
+      <slide class='image'>
+        <img style='width: 800px' class='bordered' src='images/kotaku/6.jpg'>
+        <credit>Image credit: Kotaku</credit>
+      </slide>
+
+      <slide class='image'>
+        <img style='width: 800px' class='bordered' src='images/kotaku/digdug.jpg'>
+        <credit>Image credit: Kotaku</credit>
+      </slide>
+
+      <slide class='image'>
+        <img style='width: 800px' class='bordered' src='images/kotaku/8.png'>
+        <credit>Image credit: Kotaku</credit>
+      </slide>
+
+      <slide class='image'>
+        <img style='height: 600px' class='bordered' src='images/kotaku/galaga.jpg'>
+        <credit>Image credit: Kotaku</credit>
+      </slide>
+      
+      <!-- -------------------------------------------------------------- -->
+
+      <slide class='question' group='complaints'>
+        Which aspect of Pac-Man doodle did we get most complaints about?
+      </slide>
+
+      <slide class='answer'>
+        <div>
+          <div class='no'>1</div>
+            Sound
+          </div>
+        </div>
+      </slide>
+      
+      <slide class='answer'>
+        <div>
+          <div class='no'>2</div>
+            Auto-play
+          </div>
+        </div>
+      </slide>
+
+      <slide class='answer'>
+        <div>
+          <div class='no'>3</div>
+            No “I’m feeling lucky” button
+          </div>
+        </div>
+      </slide>
+      
+      <slide class='answer'>
+        <div>
+          <div class='no'>4</div>
+            Changed maze
+          </div>
+        </div>
+      </slide>
+
+      <slide class='answers'>
+        <ol>
+          <li>  
+            Sound
+          <li>  
+            Auto-play
+          <li>
+            No “I’m feeling lucky” button
+          <li>
+            Changed maze
+        </ol>
+      </slide>      
+      
+      <slide class='good-answer'>
+        Sound!
+      </slide>
+
+      <slide class='image'>
+        <div class='hor-grid joint'>
+          <img class='bordered' src='images/pac-man-before.png'>
+          <img class='bordered' src='images/pac-man-after.png'>
+        </div>
+      </slide>
+
+      
+      
+      <slide class='centered'>
+        <ul>
+          <li>no onload events when sounds are loaded 
+          <li>no ability to preload sounds (even, seemingly, if you prime the cache yourself before) and no/limited control over streaming – the only way I could think of to pre-cache all the sounds was to try to play all of them at once, but I ran into a problem of not being able to control their volume! 
+          <li>consequently, no certainty a given sound will play at the moment I want it to<br>(and not arbitrarily delayed) 
+          <li>a requirement—not unlike HTML5 Video—to prepare sounds in at least two different formats to cover both Mozilla and other browsers 
+          <li>inconsistencies in reporting which file formats are supported:<br>“yes” vs. “no” vs. “maybe” (sic!) vs. “” vs. undefined! 
+          <li>problems playing multiple instances of the same sound 
+          <li>problems seeking/rewinding a sound in FF 
+          <li>no ability to play sound from timecode X to timecode Y, which subsequently limits looping and “spriting” of files (don’t want to open 15 HTTP connections to load 15 tiny files!) 
+          <li>many (most?) of the above have subtle differences between browsers 
+          <li>as far as I understand iPhone, iPad et al. do not support background audio at all 
+          <li>very limited debugging options for the above
+        </ul>
+      </slide>
+            
+      <slide class='code'>
+<pre>
+// For some reason, creating an &lt;object&gt; in DOM failed in IE. We need
+// to put it in separate iframe to use document.write. The frame also
+// needs to be a certain size for IE to use it.
+pacMan.flashIframe = document.createElement('iframe');
+pacMan.flashIframe.name = 'pm-sound';
+pacMan.flashIframe.style.position = 'absolute';
+pacMan.flashIframe.style.top = '-150px';
+pacMan.flashIframe.style.border = 0;
+pacMan.flashIframe.style.width = '100px';
+pacMan.flashIframe.style.height = '100px';
+document.body.appendChild(pacMan.flashIframe);
+
+pacMan.flashIframeDoc = pacMan.flashIframe.contentDocument;
+if (pacMan.flashIframeDoc == undefined || pacMan.flashIframeDoc == null) {
+  pacMan.flashIframeDoc = pacMan.flashIframe.contentWindow.document;
+}
+</pre>
+      </slide>
+
+      <!-- -------------------------------------------------------------- -->
+      
+      <slide class='question' group='real-tweet'>
+        Which one of these is <strong>not</strong> a real tweet?
+      </slide>
+    
+      <slide class='tweet answer'>
+        <div>
+          <div class='no'>1</div>
+          OMG it’s the librarian playing Pacman. I love her.
+          <div class='author'>— TrishJennett</div>
+        </div>
+      </slide>
+          
+      <slide class='tweet answer'>
+        <div>
+          <div class='no'>2</div>
+          Sometimes I just love google. Happy Birthday, Pacman. Your wife is pretty hot.
+          <div class='author'>— RyanKHudson</div>
+        </div>
+      </slide>
+          
+      <slide class='tweet answer'>
+        <div>
+          <div class='no'>3</div>
+          Straight up, I’m gonna right-click save the shit out of 
+          google pac-man.
+          <div class='author'>— John29</div>
+        </div>
+      </slide>
+          
+      <slide class='tweet answer'>
+        <div>
+          <div class='no'>4</div>
+          Got caught playing pacman on google. Bossman was more impressed than
+          bothered… then he saw my twitter n facebook tabs
+          <div class='author'>— JPSESQ</div>
+        </div>
+      </slide>
+          
+      <slide class='tweet answer'>
+        <div>
+          <div class='no'>5</div>
+          Ya know that point in every working day where you say 
+          “F*ck it. I’m done.”? Just reached it.
+          <div class='author'>— bonmot</div>
+        </div>
+      </slide>
+      
+      <slide class='tweet answer'>
+        <div>
+          <div class='no'>6</div>
+          It’s a little disconcerting to play the game in a quiet, after-hours
+          office atmosphere devoid of stale cigarette smoke and the aroma of
+          1,000 spilled beers. When it comes to Pac-Man, I guess I’m a purist.
+          
+          <div class='author'>— Rick Steelhammer</div>
+        </div>
+      </slide>
+          
+      <slide class='tweet answer'>
+        <div>
+          <div class='no'>7</div>
+          Phillippines very own boxing champ Pacman is trending on twitter? 
+          why?
+          <div class='author'>— YeAve</div>
+        </div>
+      </slide>
+          
+      <slide class='tweet answer'>
+        <div>
+          <div class='no'>8</div>
+          WELL, WHAT THE FUCK AM I SUPPOSED TO DO IF I’M FEELING 
+          LUCKY TODAY THEN?
+          <div class='author'>— lovebandit</div>
+        </div>
+      </slide>
+
+      <slide class='answers'>
+        <ol>
+          <li>  
+            OMG it’s the librarian playing Pacman. I love her.
+          <li>  
+            Sometimes I just love google. Happy Birthday, Pacman. Your wife is pretty hot.            
+          <li>
+            Straight up, I’m gonna right-click save the shit out of google pac-man.
+          <li>
+            Got caught playing pacman on google. Bossman was more impressed
+            than bothered… then he saw my twitter n facebook tabs
+          <li>
+            Ya know that point in every working day where you say “F*ck it.
+            I’m done.”? Just reached it.
+          <li>
+            It’s a little disconcerting to play the game in a quiet,
+            after-hours office atmosphere devoid of stale cigarette smoke and
+            the aroma of 1,000 spilled beers. When it comes to Pac-Man, I
+            guess I’m a purist.
+          <li>
+            Phillippines very own boxing champ Pacman is trending on twitter?
+            why?
+          <li>
+            WELL, WHAT THE FUCK AM I SUPPOSED TO DO IF I’M FEELING LUCKY TODAY
+            THEN?
+        </ol>
+      </slide>
+                    
+      <slide class='tweet' group='html5'>
+        <div>
+          #pacman in #html5 works great on #opera on #wii wow!
+          <div class='author'>— gjolesuns</div>
+        </div>
+      </slide>
+
+      <!-- -------------------------------------------------------------- -->
+
+      <slide class='question'>
+        What was the only aspect of Pac-Man doodle where we used HTML5?
+      </slide>
+
+      <slide class='answer'>
+        <div>
+          <div class='no'>1</div>
+          Audio
+        </div>
+      </slide>
+          
+      <slide class='answer'>
+        <div>
+          <div class='no'>2</div>
+          Visual composition
+        </div>
+      </slide>
+          
+      <slide class='answer'>
+        <div>
+          <div class='no'>3</div>
+          User interface
+        </div>
+      </slide>
+          
+      <slide class='answer'>
+        <div>
+          <div class='no'>4</div>
+          Networking
+        </div>
+      </slide>
+          
+      <slide class='answers'>
+        <ol>
+          <li>  
+            Audio
+          <li>  
+            Visual composition
+          <li>
+            User interface
+          <li>
+            Networking
+        </ol>
+      </slide>      
+
+      <slide class='code'>
+<pre>
+/**
+ * Add handlers for touch events. We support swiping to move on machines
+ * that have that capability.
+ */
+pacMan.registerTouch = function() {
+  document.body.addEventListener('touchstart', pacMan.handleTouchStart,
+      true);
+  pacMan.canvasEl.addEventListener('touchstart', pacMan.handleTouchStart,
+      true);
+};
+</pre>
+      </slide>
+
+      <slide class='image fullscreen'>
+        <img src='images/pacman-touch.jpg'>
+      </slide>
+      
+      <slide class='tweet'>
+        <div>
+          Ha, the Evo 4g runs the Google pacman flawlessly, just swipe to control
+          <div class='author'>— capotej</div>
+        </div>
+      </slide>
+      
+      <slide class='tweet'>
+        <div>
+          Wow, the Google Pacman doodle is even playable with iPhone. First web based game I've played on the thing!
+          <div class='author'>— ted_avery</div>
+        </div>
+      </slide>
+
+      <!-- -------------------------------------------------------------- -->
+
+      <slide class='question' group='control'>
+        Which of the following is <strong>not</strong> a proper way
+        to control Google Pac-Man?
+      </slide>
+
+      <slide class='answer'>
+        <div>
+          <div class='no'>1</div>
+          Arrow keys
+        </div>
+      </slide>
+          
+      <slide class='answer'>
+        <div>
+          <div class='no'>2</div>
+          W · A · S · D
+        </div>
+      </slide>
+          
+      <slide class='answer'>
+        <div>
+          <div class='no'>3</div>
+          Clicking
+        </div>
+      </slide>
+          
+      <slide class='answer'>
+        <div>
+          <div class='no'>4</div>
+          Swiping
+        </div>
+      </slide>
+          
+      <slide class='answers'>
+        <ol>
+          <li>  
+            Arrow keys
+          <li>  
+            W · A · S · D
+          <li>
+            Clicking
+          <li>
+            Swiping
+        </ol>
+      </slide>      
+      
+      <slide class='iframe white' remote='slider'>
+        <iframe src='pages/verne-sketch/index.html'></iframe>
+      </slide>
+      
+      <slide class='iframe white'>
+        <iframe src='pages/verne-proto1/index.html'></iframe>
+      </slide>
+      
+      <slide class='iframe white'>
+        <iframe src='pages/verne-proto2/index.html'></iframe>
+      </slide>
+      
+      <slide class='iframe white'>
+        <iframe src='pages/verne-proto3/index.html'></iframe>
+      </slide>
+      
+      <slide class='iframe white'>
+        <iframe src='pages/verne-final/index.html'></iframe>
+      </slide>
+      
+      <slide class='code'>
+<pre>
+var MOZ_ORIENTATION_SCALE_FACTOR = 57;
+var IOS_ORIENTATION_SCALE_FACTOR = 2;
+
+...
+
+scoped_listen(window, 'deviceorientation', handleDeviceOrientation);
+scoped_listen(window, 'MozOrientation', handleDeviceOrientation);
+scoped_listen(window, 'devicemotion', handleDeviceOrientation);
+
+...
+
+var orientationX =
+    event.gamma ||
+    (event.x * MOZ_ORIENTATION_SCALE_FACTOR) ||
+    (iosX * IOS_ORIENTATION_SCALE_FACTOR);
+var orientationY =
+    event.beta ||
+    (event.y * MOZ_ORIENTATION_SCALE_FACTOR) ||
+    (iosY * IOS_ORIENTATION_SCALE_FACTOR);
+</pre>  
+      </slide>
+
+      <slide class='tweet'>
+        <div>
+          Nice. That’s the first time I’ve discovered unknown hardware in my laptop via HTML.
+          <div class='author'>— Alan Donovan</div>
+        </div>
+      </slide>
+      
+      <!-- -------------------------------------------------------------- -->
+
+      <slide class='question' group='framerate'>
+        What was the framerate of the Pac-Man doodle?
+      </slide>
+
+      <slide class='answer'>
+        <div>
+          <div class='no'>1</div>
+          30 fps
+        </div>
+      </slide>
+          
+      <slide class='answer'>
+        <div>
+          <div class='no'>2</div>
+          45 fps
+        </div>
+      </slide>
+          
+      <slide class='answer'>
+        <div>
+          <div class='no'>3</div>
+          60 fps
+        </div>
+      </slide>
+          
+      <slide class='answer'>
+        <div>
+          <div class='no'>4</div>
+          90 fps
+        </div>
+      </slide>
+          
+      <slide class='answers'>
+        <ol>
+          <li>  
+            30 fps
+          <li>
+            45 fps
+          <li>
+            60 fps
+          <li>
+            90 fps
+        </ol>
+      </slide>
+      
+      <slide class='code'>
+<pre>
+/**
+ * Allowed framerates. The game will start with the first one (90fps) and
+ * scale down if it determines the computer is too slow.
+ * @const
+ */
+var PM_ALLOWED_FPS = [90, 45, 30];
+  
+/**
+ * (Re)initialize the main tick timer. The tick timer ticks 90 times per
+ * seconds and keeps the game alive.
+ */
+pacMan.initializeTickTimer = function() {
+  window.clearInterval(pacMan.tickTimer);
+
+  // We're starting with 90fps, but the game can decrease it to 45fps or
+  // even 30fps if necessary.
+  pacMan.fps = PM_ALLOWED_FPS[pacMan.fpsChoice];
+  pacMan.tickInterval = 1000 / pacMan.fps;
+
+  // This is 1 for 90fps, 2 for 45fps and 3 for 30fps. It means how often
+  // the game logic will be updated compared to screen update.
+  pacMan.tickMultiplier = PM_TARGET_FPS / pacMan.fps;
+
+  ...
+</pre>
+      </slide>
+
+
+      <slide class='iframe white'>
+        <iframe src='pages/verne-final/index.html'></iframe>
+      </slide>
+      
+      <slide class='code'>
+<pre>
+function startMainTimer() {
+  if (!mainTimerActive) {
+    mainTimerActive = true;
+    mainTimerId = window.setInterval(tick, TICK_TIME);
+    dormantTicks = 0;
+  }
+}
+
+...
+
+if (horDormant && vertDormant) {
+  dormantTicks++;
+  if (dormantTicks > DORMANT_TICK_TIMEOUT) {
+    stopMainTimer();
+  }
+} else {
+  dormantTicks = 0;
+}  
+</pre>
+      </slide>
+      
+      <slide class='code'>
+<pre>
+google.doodle['hover'] = function(e) {
+  if (allowHover_) {
+    allowHover_ = false;
+    window.setTimeout(function() { allowHover_ = true; }, 50);
+  }
+  
+  ...
+}
+</pre>
+      </slide>
+      
+      <!-- -------------------------------------------------------------- -->
+
+      <slide class='question' group='advantage'>
+        Which of the following will <strong>not</strong> give you an
+        advantage as Pac-Man?
+      </slide>
+
+      <slide class='answer'>
+        <div>
+          <div class='no'>1</div>
+          Cutting a corner
+        </div>
+      </slide>
+          
+      <slide class='answer'>
+        <div>
+          <div class='no'>2</div>
+          Memorizing the patterns
+        </div>
+      </slide>
+          
+      <slide class='answer'>
+        <div>
+          <div class='no'>3</div>
+          Standing in one spot
+        </div>
+      </slide>
+          
+      <slide class='answer'>
+        <div>
+          <div class='no'>4</div>
+          Circling around the pen
+        </div>
+      </slide>
+          
+      <slide class='answer'>
+        <div>
+          <div class='no'>5</div>
+          Going through a tunnel
+        </div>
+      </slide>
+          
+      <slide class='answer'>
+        <div>
+          <div class='no'>6</div>
+          Rapidly switching directions
+        </div>
+      </slide>
+          
+      <slide class='answers'>
+        <ol>
+          <li>  
+            Cutting a corner
+          <li>
+            Memorizing the patterns
+          <li>
+            Standing in one spot
+          <li>
+            Circling around the pen
+          <li>
+            Going through a tunnel
+          <li>
+            Rapidly switching directions
+        </ol>
+      </slide>
+
+      <slide class='code'>
+<pre>
+/**
+ * Pac-Man and Ms. Pac-Man (but not ghost) are allowed to "corner." If the
+ * direction is changed in advance of intersection, a couple pixels (3 or 4)
+ * close to the middle of it are taken diagonally, allowing to gain extra
+ * distance when ghosts chase you.
+ */
+PacManActor.prototype.handleCornering = function() {
+  var tilePos = this.tilePos;
+  
+  ...
+
+  if (this.pos[0] >= minPos[0] && this.pos[0] <= maxPos[0] &&
+      this.pos[1] >= minPos[1] && this.pos[1] <= maxPos[1]) {
+    var movement = PM_MOVEMENTS[this.nextDir];
+
+    // The corner increment is stored temporarily in posDelta and added to
+    // the proper position only after cornering ends.
+    this.posDelta[movement.axis] += movement.increment;
+  }
+};  
+</pre>
+      </slide>
+  
+      <!-- -------------------------------------------------------------- -->
+
+      <slide class='question' group='published'>
+        Which one of those doodles was <strong>actually published</strong> on our
+        homepage?
+      </slide>
+
+      <slide class='answers'>
+        <ol>
+          <li>  
+            Franz Kafka
+          <li>
+            Czech Republic Freedom Day
+          <li>
+            Tanabata
+          <li>
+            Comic-Con 40th Anniversary
+          <li>
+            Bastille Day
+          <li>
+            Charlie Chaplin
+        </ol>
+      </slide>
+
+      <!-- -------------------------------------------------------------- -->
+
+      <slide class='question' group='levels'>
+        How many levels are there in the Pac-Man game? 
+      </slide>
+      
+      <slide class='answer'>
+        <div>
+          <div class='no'>1</div>
+          One
+        </div>
+      </slide>
+    
+      <slide class='answer'>
+        <div>
+          <div class='no'>2</div>
+          Twenty-one
+        </div>
+      </slide>
+    
+      <slide class='answer'>
+        <div>
+          <div class='no'>3</div>
+          255
+        </div>
+      </slide>
+    
+      <slide class='answer'>
+        <div>
+          <div class='no'>4</div>
+          256
+        </div>
+      </slide>
+    
+
+
+      <slide class='answers'>
+        <ol>
+          <li>
+            1
+          <li>
+            21
+          <li>
+            255
+          <li>
+            256
+        </ol>
+      </slide>
+
+      <slide class='image'>
+        <img class='bordered' style='height: 572px' src='images/pac-man-playfield.png'>
+
+        <credit>Image credit: Namco Bandai Games</credit>
+      </slide>        
+      
+      <slide class='code'>
+<pre>
+{
+  ghostSpeed: .95, ghostTunnelSpeed: .5,
+  playerSpeed: 1, dotEatingSpeed: .87,
+  ghostFrightSpeed: .6, playerFrightSpeed: 1, dotEatingFrightSpeed: .87,
+  elroyDotsLeftPart1: 50, elroySpeedPart1: 1,
+  elroyDotsLeftPart2: 25, elroySpeedPart2: 1.05,
+  frightTime: 5, frightBlinkCount: 5,
+  fruit: 4, fruitScore: 700,
+  ghostModeSwitchTimes: [5, 20, 5, 20, 5, 1037, 1 / 60, 1],
+  penForceTime: 3, penLeavingLimits: [0, 0, 0, 0]
+},
+</pre>
+      </slide>
+
+      <slide class='image'>
+        <img class='bordered' style='height: 572px' src='images/kill-screen.png'>
+
+        <credit>Image credit: Namco Bandai Games</credit>
+      </slide>        
+      
+      <slide class='image'>
+        <img class='bordered' style='height: 450px' src='images/history/billy-mitchell-pacman.jpg'>
+        <legend>
+          Billy Mitchell · 1999 · 3,333,360 points
+        </legend>
+
+        <credit>Image credit: spyhunter007.com</credit>
+      </slide>        
+
+      <slide class='image'>
+        <img class='bordered' style='width: 900px' src='images/google-kill-screen.png'>
+      </slide>        
+
+      <slide class='code'>
+<pre>
+/**
+ * Show the "kill screen" instead of level 256. The original Pac-Man had
+ * a bug that corrupted that level, making it look funny and impossible to
+ * finish. We're trying to procedurally generate a similarly looking level,
+ * although we're not making it playable.
+ */
+pacMan.killScreen = function() {
+  // Makes sure it always looks the same.
+  pacMan.seed(0);
+
+  pacMan.canvasEl.style.visibility = '';
+
+  // Covering the right-hand side of the playfield.
+  pacMan.createKillScreenElement(272, 0, 200, 80, false);
+  pacMan.createKillScreenElement(272 + 8, 80, 200 - 8, 136 - 80, false);
+
+  // Creating little tiles with gibberish.
+  pacMan.killScreenTileX = 80;
+  pacMan.killScreenTileY = 0;
+  for (var x = 280; x <= 472; x += 8) {
+    for (var y = 0; y <= 136; y += 8) {
+      if (pacMan.rand() < 0.03) {
+        pacMan.killScreenTileX = Math.floor(pacMan.rand() * 25) * 10;
+        pacMan.killScreenTileY = Math.floor(pacMan.rand() * 2) * 10;
+      }
+
+      pacMan.createKillScreenElement(x, y, 8, 8, true);
+    }
+  }
+
+  pacMan.changeGameplayMode(PM_GAMEPLAY_INFINITE_GAMEOVER);
+};  
+</pre>
+      </slide>
+      
+      <slide class='image'>
+        <img class='bordered' src='images/passthru-bug.png'>
+
+        <credit>Image credit: Pac-Man Dossier</credit>
+      </slide>      
+      
+      
+      <slide class='code'>
+<pre>
+for (var j = 0; j < pacMan.playerCount; j++) {
+  if (pacMan.actors[i].tilePos[0] == pacMan.actors[j].tilePos[0] &&
+      pacMan.actors[i].tilePos[1] == pacMan.actors[j].tilePos[1]) {
+
+    // If the ghost is blue, Pac-Man eats the ghost...
+    if (pacMan.actors[i].mode == PM_GHOST_MODE_FRIGHT) {
+      pacMan.ghostDies(i, j);
+
+      // return here prevents from two ghosts being eaten at the same time
+      return;
+    } else {
+      // ...otherwise, the ghost kills Pac-Man
+      if (pacMan.actors[i].mode != PM_GHOST_MODE_EYES &&
+          pacMan.actors[i].mode != PM_GHOST_MODE_IN_PEN &&
+          pacMan.actors[i].mode != PM_GHOST_MODE_EXITING_PEN &&
+          pacMan.actors[i].mode != PM_GHOST_MODE_REEXITING_PEN &&
+          pacMan.actors[i].mode != PM_GHOST_MODE_REENTERING_PEN) {
+        pacMan.playerDies(j);
+      }
+    }
+  }
+}
+</pre>
+      </slide>
+      
+      <!-- -------------------------------------------------------------- -->
+
+      <slide class='question' group='run-away'>
+        On occasion, one ghost can run away from Pac-Man while not
+        frightened.<br>Which ghost is it?
+      </slide>
+
+      <slide class='answer'>
+        <div>
+          <div class='no'>1</div>
+          Blinky
+        </div>
+      </slide>
+    
+      <slide class='answer'>
+        <div>
+          <div class='no'>2</div>
+          Inky
+        </div>
+      </slide>
+    
+      <slide class='answer'>
+        <div>
+          <div class='no'>3</div>
+          Pinky
+        </div>
+      </slide>
+    
+      <slide class='answer'>
+        <div>
+          <div class='no'>4</div>
+          Clyde
+        </div>
+      </slide>
+      
+      <slide class='answers'>
+        <ol>
+          <li>
+            Blinky
+          <li>
+            Inky
+          <li>
+            Pinky
+          <li>
+            Clyde
+        </ol>
+      </slide>
+      
+      <slide class='image'>
+        <img class='bordered' src='images/characters.png'>
+
+        <credit>Image credit: Namco Bandai Games</credit>
+      </slide>
+
+      <slide class='code'>
+<pre>
+switch (this.id) {
+  // Blinky always follows the player.
+  case pacMan.playerCount:
+    this.targetPos = [player.tilePos[0], player.tilePos[1]];
+    break;
+
+  // Pinky follows a tile ahead of player.
+  case pacMan.playerCount + 1:
+    this.targetPos = [player.tilePos[0], player.tilePos[1]];
+    var movement = PM_MOVEMENTS[player.dir];
+    this.targetPos[movement.axis] +=
+        4 * PM_TILE_SIZE * movement.increment;
+
+    // Recreating the original Pac-Man bug, in which UP = UP+LEFT
+    if (player.dir == PM_DIR_UP) {
+      this.targetPos[1] -= 4 * PM_TILE_SIZE;
+    }
+    break;
+</pre>
+          </slide>
+          <slide class='code'>
+<pre>
+  // Inky uses a convoluted scheme averaging Blinky's position and
+  // an offset tile.
+  case pacMan.playerCount + 2:
+    var blinky = pacMan.actors[pacMan.playerCount];
+
+    var offsetPos = [player.tilePos[0], player.tilePos[1]];
+    var movement = PM_MOVEMENTS[player.dir];
+    offsetPos[movement.axis] +=
+        2 * PM_TILE_SIZE * movement.increment;
+
+    // Recreating the original Pac-Man bug, in which UP = UP+LEFT
+    if (player.dir == PM_DIR_UP) {
+      offsetPos[1] -= 2 * PM_TILE_SIZE;
+    }
+
+    this.targetPos[0] = offsetPos[0] * 2 - blinky.tilePos[0];
+    this.targetPos[1] = offsetPos[1] * 2 - blinky.tilePos[1];
+    break;
+
+  // Clyde uses Pac-Man's position if further away, scatter position
+  // if close.
+  case pacMan.playerCount + 3:
+    var distance = pacMan.getDistance(player.tilePos, this.tilePos);
+
+    if (distance > (8 * PM_TILE_SIZE)) {
+      this.targetPos = [player.tilePos[0], player.tilePos[1]];
+    } else {
+      this.targetPos = this.scatterPos;
+    }
+    break;
+}
+</pre>
+      </slide>
+      
+      <!-- -------------------------------------------------------------- -->
+
+      <slide class='question' group='ms-pac-man'>
+        What was Ms. Pac-Man’s original name?
+      </slide>
+    
+      <slide class='answer'>
+        <div>
+          <div class='no'>1</div>
+          Pac-Woman
+        </div>
+      </slide>
+    
+      <slide class='answer'>
+        <div>
+          <div class='no'>2</div>
+          Pac-Lady
+        </div>
+      </slide>
+    
+      <slide class='answer'>
+        <div>
+          <div class='no'>3</div>
+          Chicha Chan
+        </div>
+      </slide>
+    
+      <slide class='answer'>
+        <div>
+          <div class='no'>4</div>
+          Crazy Otto
+        </div>
+      </slide>
+    
+      <slide class='answers'>
+        <ol>
+          <li>
+            Pac-Woman
+          <li>
+            Pac-Lady
+          <li>
+            Chicha Chan
+          <li>
+            Crazy Otto
+        </ol>
+      </slide>
+      
+      <slide class='image'>
+        <img class='bordered' src='images/history/crazy-otto.jpg'>
+
+        <credit>Image credit: Namco Bandai Games</credit>
+      </slide>
+
+      <slide class='image'>
+        <img class='bordered' src='images/history/ms-pac-man-playfield.gif'>
+
+        <credit>Image credit: Namco Bandai Games</credit>
+      </slide>
+      
+      <slide class='image'>
+        <div class='vert-grid joint'>
+          <img class='bordered' src='images/history/ms-pac-man-leaflet-1.jpg'>
+          <img class='bordered' src='images/history/ms-pac-man-leaflet-2.jpg'>
+        </div>
+
+        <credit>Image credit: Namco Bandai Games</credit>
+      </slide>
+      
+      <slide class='image'>
+        <img class='bordered' src='images/history/piracy.jpg'>
+
+        <credit>Image credit: Namco Bandai Games</credit>
+      </slide>
+      
+      <slide class='code'>
+        <pre>
+/**
+ * For two-player game (with Pac-Man and Ms. Pac-Man) each ghosts randomly
+ * focuses on one of the players. This changes every time a ghost leaves
+ * a pen to make things more interesting.
+ */
+PacManActor.prototype.updateTargetPlayerId = function() {
+  if (this.id >= pacMan.playerCount) {
+    this.targetPlayerId = Math.floor(pacMan.rand() * pacMan.playerCount);
+  }
+};
+</pre>
+      </slide>
+
+      <slide class='image'>
+        <div class='hor-grid joint'>
+          <img class='bordered' src='images/pacman-doodle.png'>
+          <img class='bordered' src='images/ms-pac-man-greasemonkey.jpg'>
+        </div>
+        <credit>Image credit: buckyboy2009</credit>
+      </slide>
+
+      <!-- -------------------------------------------------------------- -->
+
+      <slide class='question' group='dots'>
+        How many dots are there in the original Pac-Man maze?
+      </slide>
+
+      <slide class='answer'>
+        <div>
+          <div class='no'>1</div>
+          235
+        </div>
+      </slide>
+    
+      <slide class='answer'>
+        <div>
+          <div class='no'>2</div>
+          244
+        </div>
+      </slide>
+    
+      <slide class='answer'>
+        <div>
+          <div class='no'>3</div>
+          256
+        </div>
+      </slide>
+    
+      <slide class='answer'>
+        <div>
+          <div class='no'>4</div>
+          280
+        </div>
+      </slide>
+    
+      <slide class='answers'>
+        <ol>
+          <li>
+            235
+          <li>
+            244
+          <li>
+            256
+          <li>
+            280
+        </ol>
+      </slide>
+      
+
+      <slide class='good-answer'>
+        244 in the original
+        <br>
+        275 in our doodle
+      </slide>  
+
+      <slide class='image'>
+        <div class='vert-grid'>
+          <img class='bordered' src='images/pacman-doodle.png'>
+          <img class='bordered' style='width: 224px' src='images/pac-man-playfield.png'>
+        </div>
+
+        <credit>Image credit: Namco Bandai Games</credit>
+      </slide>  
+
+      <slide class='image'>
+        <div class='vert-grid joint'>
+          <img class='bordered' style='height: 432px' src='images/history/sketch.jpg'>
+          <img class='bordered' style='height: 432px' src='images/pac-man-playfield.png'>
+        </div>
+
+        <credit>Image credit: control-online.nl · Namco Bandai Games</credit>
+      </slide>  
+
+
+      <slide class='white image'>
+        <div class='vert-grid'>
+          <img style='height: 500px' src='images/history/how-to-win-book-1.jpg'>
+          <img style='height: 490px' src='images/history/how-to-win-book-2.jpg'>
+        </div>
+
+        <credit>Image credit: &copy; 1982 Publications International, Ltd.</credit>
+      </slide>  
+
+      <slide class='white image'>
+        <img src='images/pattern.jpg'>
+
+        <credit>Image credit: Steve Garufi</credit>
+      </slide>      
+
+      <slide class='code'>
+        <pre>
+/**
+ * Send a random number from 0 to 1. The reason we're not using Math.random()
+ * is that you can't seed it reliably on all the browsers -- and we need
+ * random numbers to be repeatable between game plays too allow for patterns
+ * etc., and also a consistent kill screen that's procedurally generated.
+ * @return {number} Random number from 0 to 1.
+ */
+pacMan.rand = function() {
+  var t32 = 0x100000000;
+  var constant = 134775813;
+  var x = (constant * pacMan.randSeed + 1);
+  return (pacMan.randSeed = x % t32) / t32;
+};
+</pre>
+      </slide>
+    
+      <!-- -------------------------------------------------------------- -->
+
+      <slide class='question' group='interesting-bug'>
+        Which of those was the most interesting bug to fix?
+      </slide>
+
+      <slide class='answer'>
+        <div>
+          <div class='no'>1</div>
+            The eyes of the ghost should betray next move
+          </div>
+        </div>
+      </slide>
+
+      <slide class='answer'>
+        <div>
+          <div class='no'>2</div>
+            Proper death for Ms. Pac-Man
+          </div>
+        </div>
+      </slide>
+
+      <slide class='answer'>
+        <div>
+          <div class='no'>3</div>
+            Some people can’t change directions
+          </div>
+        </div>
+      </slide>
+      
+      <slide class='answer'>
+        <div>
+          <div class='no'>4</div>
+            Could stop with mouth open
+          </div>
+        </div>
+      </slide>
+      
+      <slide class='answer'>
+        <div>
+          <div class='no'>5</div>
+            Ghosts feel funny
+          </div>
+        </div>
+      </slide>
+      
+      <slide class='answer'>
+        <div>
+          <div class='no'>6</div>
+            Eyes should travel home even during ghost eating pause
+          </div>
+        </div>
+      </slide>
+      
+      <slide class='answers'>
+        <ol>
+          <li>
+            The eyes of the ghost should betray next move
+          <li>
+            Proper death for Ms. Pac-Man
+          <li>
+            Some people can’t change directions
+          <li>
+            Could stop with mouth open
+          <li>
+            Ghosts feel funny
+          <li>
+            Eyes should travel home even during ghost eating pause
+        </ol>
+      </slide>
+      
+      <slide class='code'>
+<pre>
+// We want to be more forgiving with control. If the player presses
+// the arrow one or two pixels *after* the intersection, we still want
+// to allow the turn.
+var tile = pacMan.playfield[this.tilePos[0]][this.tilePos[1]];
+if (tile && (tile.allowedDir & newDir)) {
+  var movement = PM_MOVEMENTS[this.dir];
+  var newPos = [this.pos[0], this.pos[1]];
+  newPos[movement.axis] -= movement.increment;
+
+  ...
+
+  if (backtrackDist) {
+    this.dir = newDir;
+    this.pos[0] = this.tilePos[0];
+    this.pos[1] = this.tilePos[1];
+    var movement = PM_MOVEMENTS[this.dir];
+    this.pos[movement.axis] += movement.increment * backtrackDist;
+    return;
+  }
+}      
+</pre>
+      </slide>
+      
+      
+      <slide class='code'>
+<pre>
+  // If Marcin was a good programmer, the algorithms governing Pac-Man
+  // movements would be rock solid. That is not the case. Ryan found a bug
+  // once that made him go through a wall. If Marcin was a good tester, he
+  // would figure out how to reproduce and fix the bug. That is not the
+  // case. Hence a little protection below. This checks if a new tile is
+  // actually a valid path and if not, go back to the last-known good tile
+  // and stop Pac-Man in its tracks. This is essentially a "treating
+  // symptoms" protection, but hey, it's better than nothing, right?
+  if (!this.ghost && !pacMan.playfield[tilePos[0]][tilePos[1]].path) {
+    this.pos[0] = this.lastGoodTilePos[0];
+    this.pos[1] = this.lastGoodTilePos[1];
+    tilePos[0] = this.lastGoodTilePos[0];
+    tilePos[1] = this.lastGoodTilePos[1];
+    this.dir = PM_DIR_NONE;
+  } else {
+    this.lastGoodTilePos = [tilePos[0], tilePos[1]];
+  }
+</pre>
+      </slide>
+    
+      <!-- -------------------------------------------------------------- -->
+
+      <slide class='question' group='graphic-elements'>
+        How many different graphic elements were used for Pac-Man 
+        doodle?
+      </slide>
+      
+      <slide class='answer'>
+        <div>
+          <div class='no'>1</div>
+            1
+          </div>
+        </div>
+      </slide>
+
+      <slide class='answer'>
+        <div>
+          <div class='no'>2</div>
+            56
+          </div>
+        </div>
+      </slide>
+      
+      <slide class='answer'>
+        <div>
+          <div class='no'>3</div>
+            89
+          </div>
+        </div>
+      </slide>
+      
+      <slide class='answer'>
+        <div>
+          <div class='no'>4</div>
+            123
+          </div>
+        </div>
+      </slide>
+      
+      
+      <slide class='answers'>
+        <ol>
+          <li>
+            1
+          <li>
+            56
+          <li>
+            89
+          <li>
+            123
+        </ol>
+      </slide>
+      
+      <slide class='good-answer'>
+        123 elements <br>in 1 sprite
+      </slide>
+    
+      <slide class='image'>
+        <img src='images/sprite.png'>
+      </slide>
+      
+      <slide class='white image'>
+        <img src='images/google-sprite.png'>
+      </slide>
+      
+      <slide class='iframe white' remote='activate'>
+        <iframe src='pages/goldberg-doodle/index-normal.html'></iframe>
+      </slide>
+
+      <slide class='iframe white' remote='slider'>
+        <iframe src='pages/goldberg-doodle/sprite.html'></iframe>
+      </slide>
+
+      <slide class='iframe white' remote='activate-duo'>
+        <iframe src='pages/goldberg-doodle/index-debug-new.html'></iframe>
+      </slide>  
+      
+      <slide class='code'>
+        <pre>
+var FRAME_COUNT = 81;
+var ANIMATION_POS = [[0,0,0,0],[87,114,34,40],[92,49,82,105],[92,49,82,107],[93,49,81,112],[100,136,40,26], ...
+
+var curFrame = 0;
+var jointWidth = 0;
+
+function nextStep() {
+  var animPos = ANIMATION_POS[curFrame];
+  
+  if (animPos[0]) {
+    var frameEl = document.createElement('div');
+    frameEl.style.left = animPos[0] + 'px';
+    frameEl.style.top = animPos[1] + 'px';
+    frameEl.style.width = animPos[2] + 'px';
+    frameEl.style.height = animPos[3] + 'px';
+    frameEl.style.backgroundPosition = (-jointWidth) + 'px 0';
+    
+    canvasEl.appendChild(frameEl);
+   
+    curFrame++;
+    jointWidth += animPos[2];
+  }
+</pre>
+      </slide>
+
+      <slide class='iframe white'>
+        <iframe src='pages/buckyball-canvas/index.html'></iframe>
+      </slide>  
+      
+      <slide class='image'>
+        <img src='images/buckyball-sprite.png'>
+      </slide>
+            
+      <!-- -------------------------------------------------------------- -->
+
+      <slide class='question' group='cartridges'>
+        How many cartridges of Pac-Man for the Atari 2600 videogame console did 
+        Atari eventually bury in a New Mexico landfill?  
+      </slide>
+
+      <slide class='answer'>
+        <div>
+          <div class='no'>1</div>
+            5 thousand
+          </div>
+        </div>
+      </slide>
+
+      <slide class='answer'>
+        <div>
+          <div class='no'>2</div>
+            50 thousand
+          </div>
+        </div>
+      </slide>
+
+      <slide class='answer'>
+        <div>
+          <div class='no'>3</div>
+            500 thousand
+          </div>
+        </div>
+      </slide>
+
+      <slide class='answer'>
+        <div>
+          <div class='no'>4</div>
+            5 million
+          </div>
+        </div>
+      </slide>
+
+
+      <slide class='answers'>
+        <ol>
+          <li>
+            5,000
+          <li>
+            50,000
+          <li>
+            500,000
+          <li>
+            5,000,000
+        </ol>
+      </slide>
+
+      <slide class='image'>
+        <img class='bordered' src='images/history/et-movie-poster.jpg'>
+
+        <credit>Image credit: &copy; 1982 Amblin Entertainment/Universal Pictures</credit>
+      </slide>
+
+      <slide class='video' remote='video'>
+        
+        <video class='bordered' 
+               style='width: 672px'
+               src='videos/ET.mov'></video>
+        <credit>Video credit: &copy; 1982 Atari</credit>
+      </slide>
+
+      <slide class='image'>
+        <img class='bordered' src='images/history/pacman-2600-box.jpg'>
+
+        <credit>Image credit: &copy; 1982 Atari</credit>
+      </slide>  
+
+      <slide class='video' remote='video'>
+        <video class='bordered' 
+               style='height: 500px'
+               src='videos/Atari Pac-Man ad.mov'></video>
+
+        <credit>Video credit: &copy; 1982 Atari</credit>
+      </slide>
+
+      <slide class='video' remote='video'>
+        <video class='bordered' 
+               style='height: 500px'
+               src='videos/Atari Pac-Man gameplay.mov'></video>
+
+        <credit>Video credit: &copy; 1982 Atari</credit>
+      </slide>
+      
+
+      <slide class='image' nextgroup='scoreboard'>
+        <img class='bordered' style='height: 400px' src='images/history/et-dump.jpg'>
+
+        <credit>Image credit: &copy; 2006 Wintergreen/Keith Schofield</credit>
+      </slide>  
+        
+      <cover></cover>
+    </slides>
+    
+    <header>
+      <section>io-pac-man.appspot.com</section>
+      <section>#io2011 #techtalks</section>
+      <section>@mwichary @ryangermick</section>
+    </header>
+    <div class='score' id='score0' onclick='addToScore(0)'>0</div>
+    <div class='score' id='score1' onclick='addToScore(1)'>0</div>
+    
+    <audio id='sound-death' src='sounds/death.mp3'></audio>
+    <audio id='sound-extra-life' src='sounds/extra-life.mp3'></audio>
+    <audio id='sound-ambient' src='sounds/pac-man-ambient.m4a'></audio>
+    
+  </presentation>
+  </full>
+  <script>
+    initialize();
+  </script>
+</body>

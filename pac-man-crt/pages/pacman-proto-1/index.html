@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+
+<body>
+
+  <style>
+    html {
+      height: 100%;
+    }
+    body {
+      background: #333;
+      overflow: hidden;
+      padding: 0;
+      margin: 0;
+      
+      width: 100%;
+      height: 100%;
+      display: -webkit-box;
+      -webkit-box-pack: center;
+      -webkit-box-align: center;
+    }
+    #playfield {
+      width: 410px;
+      height: 210px;
+      background: #333;
+      position: relative;
+      overflow: hidden;
+    }
+    #playfield .path {
+      position: absolute;
+      background: white;
+      opacity: .2;
+      z-index: 10;
+    }
+    #playfield .junction {
+      position: absolute;
+      width: 5px;
+      margin-left: -2px;
+      height: 5px;
+      margin-top: -2px;
+      background: red;
+      opacity: .2;
+      z-index: 20;
+    }
+    #playfield .character {
+      position: absolute;
+      width: 11px;
+      margin-left: -5px;
+      height: 11px;
+      margin-top: -5px;
+      background: yellow;
+      opacity: .5;
+      z-index: 100;
+    }
+  </style>
+
+  <div id='playfield'>
+    
+  </div>
+
+
+  <script>
+    var DIR_UP = 1;
+    var DIR_DOWN = 2;
+    var DIR_LEFT = 4;
+    var DIR_RIGHT = 8;
+    
+    var DIR_HORIZONTAL = DIR_LEFT + DIR_RIGHT;
+    var DIR_VERTICAL = DIR_LEFT + DIR_RIGHT;
+    
+    var TICK_TIME = 10;
+  
+    var junctions = [];
+    var characters = [];
+
+    var oppositeDirections = [];
+    
+    // data
+  
+    var paths = [
+      { x1: 10, y1: 100, x2: 400, y2: 100 },  
+      { x1: 10, y1: 100, x2: 10, y2: 200 },  
+      { x1: 10, y1: 200, x2: 400, y2: 200 },  
+      { x1: 400, y1: 100, x2: 400, y2: 200 },
+
+      { x1: 200, y1: 10, x2: 200, y2: 150 },  
+      { x1: 150, y1: 10, x2: 150, y2: 150 },  
+      { x1: 250, y1: 10, x2: 250, y2: 150 },  
+    ];
+    
+    var startingPosition = { x: 10, y: 100, direction: DIR_RIGHT };
+    
+    // ----------------
+    
+    function findJunction(x, y) {
+      for (var i in junctions) {
+        if (junctions[i].x == x && junctions[i].y == y) {
+          return junctions[i];
+        }
+      }
+      return false;
+    }
+    
+    function createJunction(x, y, direction) {
+      var junction = findJunction(x, y);
+      
+      if (!junction) {
+        junctions.push({x: x, y: y, directions: direction});
+      } else {
+        junction.directions |= direction;
+      }
+    }
+    
+    function processPaths() {
+      for (var i in paths) {
+        if (paths[i].y1 == paths[i].y2) {
+          paths[i].direction = DIR_HORIZONTAL;
+          createJunction(paths[i].x1, paths[i].y1, DIR_RIGHT);
+          createJunction(paths[i].x2, paths[i].y2, DIR_LEFT);
+        } else {
+          paths[i].direction = DIR_VERTICAL;
+          createJunction(paths[i].x1, paths[i].y1, DIR_DOWN);
+          createJunction(paths[i].x2, paths[i].y2, DIR_UP);
+        }        
+      }
+      
+      for (var i in paths) {
+        for (var j in paths) {
+          if (i != j) {
+            if (paths[i].direction == DIR_HORIZONTAL && 
+                paths[j].direction == DIR_VERTICAL) {
+              if (paths[i].x1 <= paths[j].x1 && paths[i].x2 >= paths[j].x1 && paths[j].y1 <= paths[i].y1 && paths[j].y2 >= paths[i].y1) {
+                
+                var direction = 0;
+                if (paths[i].x1 < paths[j].x1) {
+                  direction += DIR_LEFT;
+                }
+                if (paths[i].x2 > paths[j].x1) {
+                  direction += DIR_RIGHT;
+                }
+                if (paths[j].y1 < paths[i].y1) {
+                  direction += DIR_UP;
+                }
+                if (paths[j].y2 > paths[i].y1) {
+                  direction += DIR_DOWN;
+                }
+                
+                createJunction(paths[j].x1, paths[i].y1, direction);
+              }
+            } 
+          }
+        }
+      }
+    }
+    
+    function createDebugVisualElements() {
+      for (var i in paths) {
+        var path = paths[i];
+        
+        var el = document.createElement('div');
+        el.className = 'path';
+        el.style.left = path.x1 + 'px';
+        el.style.top = path.y1 + 'px';
+        el.style.width = (path.x2 - path.x1 + 1) + 'px';
+        el.style.height = (path.y2 - path.y1 + 1) + 'px';
+        playfieldEl.appendChild(el);
+      }
+    
+      for (var i in junctions) {
+        var junction = junctions[i];
+        
+        var el = document.createElement('div');
+        el.className = 'junction';
+        el.style.left = junction.x + 'px';
+        el.style.top = junction.y + 'px';
+        playfieldEl.appendChild(el);
+      }
+    }
+    
+    function createCharacterElements() {
+      for (var i in characters) {
+        var character = characters[i];
+        
+        var el = document.createElement('div');
+        el.className = 'character';
+        el.id = 'character' + i;
+        playfieldEl.appendChild(el);
+      }
+    }
+    
+    function updateCharacterElements() {
+      for (var i in characters) {
+        var character = characters[i];
+        var el = document.getElementById('character' + i);        
+
+        el.style.left = character.x + 'px';
+        el.style.top = character.y + 'px';
+      }
+      
+    }
+    
+    function tick() {
+      for (var i in characters) {
+        var character = characters[i];
+        
+        if (character.direction) {
+        
+          var junction = findJunction(character.x, character.y);
+          if (junction) {
+            if (character.nextDirection && (character.nextDirection & junction.directions)) {
+              character.direction = character.nextDirection;
+              character.nextDirection = 0;
+            } else if ((character.direction & junction.directions) == 0) {
+              character.direction = 0;
+            } 
+          }
+        
+          switch (character.direction) {
+            case DIR_RIGHT: 
+              character.x++;
+              break;
+            case DIR_LEFT: 
+              character.x--;
+              break;
+            case DIR_UP: 
+              character.y--;
+              break;
+            case DIR_DOWN: 
+              character.y++;
+              break;
+          }
+        }
+      }
+      
+      updateCharacterElements();
+    }
+    
+    function processNewDirection(newDirection) {
+      var character = characters[0];
+      
+      var junction = findJunction(character.x, character.y);
+      
+      if (junction) {
+        if ((newDirection & junction.directions) > 0) {
+          character.direction = newDirection;
+          character.nextDirection = 0;
+        }
+      } else {
+        if (character.direction == oppositeDirections[newDirection]) {
+          character.direction = newDirection;
+          character.nextDirection = 0;
+        } else if (character.direction != newDirection) {
+          character.nextDirection = newDirection;
+        }
+      }
+      
+    }
+    
+    function handleKeyDown(event) {
+      switch (event.keyCode) {
+        case 37: // left
+          processNewDirection(DIR_LEFT);
+          break;
+        case 38: // up
+          processNewDirection(DIR_UP);
+          break;
+        case 39: // right
+          processNewDirection(DIR_RIGHT);
+          break;
+        case 40: // down
+          processNewDirection(DIR_DOWN);
+          break;
+      }
+      
+    } 
+    
+    function activate() {
+      window.setInterval(tick, TICK_TIME);      
+    }
+
+    function initialize() {
+      playfieldEl = document.getElementById('playfield');
+      
+      processPaths();
+      createDebugVisualElements();
+      
+      characters.push({ x: startingPosition.x, y: startingPosition.y, direction: startingPosition.direction, nextDirection: 0 });
+
+      
+      createCharacterElements();
+      updateCharacterElements();
+      
+      oppositeDirections[DIR_UP] = DIR_DOWN;
+      oppositeDirections[DIR_DOWN] = DIR_UP;
+      oppositeDirections[DIR_LEFT] = DIR_RIGHT;
+      oppositeDirections[DIR_RIGHT] = DIR_LEFT;
+      
+      window.addEventListener('keydown', handleKeyDown, false);
+      
+      playfieldEl.addEventListener('click', activate, false);
+    }
+
+    initialize();
+  </script>
+  
+</body>

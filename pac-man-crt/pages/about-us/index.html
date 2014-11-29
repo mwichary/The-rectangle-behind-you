@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+
+<style>
+  body {
+    background: white;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+  }
+
+  #canvas {
+    width: 1200;
+    height: 620px;
+    background: white;
+    
+    -webkit-perspective: 4000;
+    
+    -webkit-transform: scale(.8);
+    -webkit-transition: -webkit-transform 30s ease-out;
+  }
+  #canvas.moving {
+    -webkit-transform: scale(1);
+  }
+  
+  .image-canvas {
+    position: absolute;
+    width: 712px;
+    height: 968px;
+    
+    display: -webkit-box;
+    -webkit-box-align: center;
+    -webkit-box-pack: center;
+    
+    overflow: hidden;
+  }
+  .image-canvas-left {
+    left: -200px;
+    top: -100px;
+    -webkit-transform-origin: 712px 384px; 
+        
+    -webkit-transform: rotateY(90deg);
+    
+    -webkit-transition: -webkit-transform 30s ease-out;
+  }
+  .image-canvas-right {
+    left: 512px;
+    top: -100px;
+    -webkit-transform-origin: 0 384px; 
+
+    -webkit-transform: rotateY(90deg);    
+  }
+
+  img {
+    width: 400px;
+  }
+  
+  .image-canvas-left img {
+    position: relative;
+    left: 130px;
+  }
+  
+  .image-canvas-right img {
+    position: relative;
+    left: -130px;
+  }
+  
+  #image-canvas-left-2 {
+    background: black;
+  }
+  #image-canvas-right-2 {
+    background: black;
+  }
+  
+  
+  @-webkit-keyframes rotate-left-in-top {
+    0% { -webkit-transform: rotateY(90deg) rotateZ(-20deg) translateY(20px); opacity: .75; }
+    60% { -webkit-transform: rotateY(-5deg); }
+    80% { -webkit-transform: rotateY(2.5deg); }
+    90% { -webkit-transform: rotateY(-1.25deg); }
+    95% { -webkit-transform: rotateY(0.625deg); } 
+    100% { -webkit-transform: rotateY(0deg); }
+  }
+  @-webkit-keyframes rotate-left-in-bottom {
+    0% { -webkit-transform: rotateY(90deg) rotateZ(-20deg) translateY(-20px); opacity: .75; }
+    60% { -webkit-transform: rotateY(-5deg); }
+    80% { -webkit-transform: rotateY(2.5deg); }
+    90% { -webkit-transform: rotateY(-1.25deg); }
+    95% { -webkit-transform: rotateY(0.625deg); } 
+    100% { -webkit-transform: rotateY(0deg); }
+  }
+  @-webkit-keyframes rotate-left-out-top {
+    0% { -webkit-transform: rotateY(0deg); }
+    100% { -webkit-transform: rotateY(-90deg) rotateZ(20deg) translateY(-20px); opacity: .75; }
+  }
+  @-webkit-keyframes rotate-left-out-bottom {
+    0% { -webkit-transform: rotateY(0deg); }
+    100% { -webkit-transform: rotateY(-90deg) rotateZ(20deg) translateY(20px); opacity: .75; }
+  }
+
+  .image-canvas-left.rotate-in {
+    -webkit-animation-name: rotate-left-in-top;
+    -webkit-animation-duration: 750ms;
+    -webkit-animation-iteration-count: 1;
+    -webkit-animation-timing-function: ease-in-out;  
+    -webkit-animation-fill-mode: forwards;  
+    
+    -webkit-animation-delay: 300ms;
+  }  
+  .image-canvas-right.rotate-in {
+    -webkit-animation-name: rotate-left-in-bottom;
+    -webkit-animation-duration: 750ms;
+    -webkit-animation-iteration-count: 1;
+    -webkit-animation-timing-function: ease-in-out;  
+    -webkit-animation-fill-mode: forwards;  
+
+    -webkit-animation-delay: 300ms;
+  }  
+
+  .image-canvas-left.rotate-out {
+    -webkit-animation-name: rotate-left-out-top;
+    -webkit-animation-duration: 500ms;
+    -webkit-animation-iteration-count: 1;
+    -webkit-animation-timing-function: ease-in-out;  
+    -webkit-animation-fill-mode: forwards;  
+    
+  }  
+  .image-canvas-right.rotate-out {
+    -webkit-animation-name: rotate-left-out-bottom;
+    -webkit-animation-duration: 500ms;
+    -webkit-animation-iteration-count: 1;
+    -webkit-animation-timing-function: ease-in-out;  
+    -webkit-animation-fill-mode: backwards;  
+  }  
+  
+</style>
+
+<div id='canvas'>
+  <div class='image-canvas image-canvas-left' id='image-canvas-left'>
+    <img src='art_sketch.png'>
+  </div>
+  <div class='image-canvas image-canvas-right' id='image-canvas-right'>
+    <img src='tech_vector.png'>
+  </div>
+
+  <div class='image-canvas image-canvas-left' id='image-canvas-left-2'>
+    <img src='ryan.jpg'>
+  </div>
+  <div class='image-canvas image-canvas-right' id='image-canvas-right-2'>
+    <img src='marcin.jpg'>
+  </div>
+</div>
+
+<script>
+  function start() {
+    document.getElementById('canvas').className = 'moving';
+
+    window.setTimeout(start1, 500);
+    window.setTimeout(start2, 3500);
+  }
+
+  function start1() {
+    document.getElementById('image-canvas-left').className += ' rotate-in';
+    document.getElementById('image-canvas-right').className += ' rotate-in';
+  }
+
+  function start2() {
+    document.getElementById('image-canvas-left').className =
+      document.getElementById('image-canvas-left').className.replace(/rotate-in/, 'rotate-out');
+    document.getElementById('image-canvas-right').className =
+      document.getElementById('image-canvas-right').className.replace(/rotate-in/, 'rotate-out');
+
+    document.getElementById('image-canvas-left-2').className += ' rotate-in';
+    document.getElementById('image-canvas-right-2').className += ' rotate-in';    
+  }
+  
+  start();
+  
+</script>
