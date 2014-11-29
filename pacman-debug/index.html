@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+
+<style>
+  body {
+    background: black;
+  }
+</style>
+<meta charset='utf-8'>
+<link rel='stylesheet' href='files/styles.css'>
+<script src='files/pacman.js'></script>
+
+<script>
+  var ORIG_WIDTH = 554;
+  var ORIG_HEIGHT = 186;
+
+  function handleResize() {
+    screenWidth = window.innerWidth;
+    screenHeight = window.innerHeight;
+    
+    var el = document.getElementsByClassName('logo')[0];
+    
+    var multiplier = screenWidth / ORIG_WIDTH;
+    
+    if (multiplier * ORIG_HEIGHT > screenHeight) {
+      multiplier = screenHeight / ORIG_HEIGHT;
+    }
+    
+    el.style.left = (screenWidth - multiplier * ORIG_WIDTH) / 2 + 'px';
+    el.style.top = (screenHeight - multiplier * ORIG_HEIGHT) / 2 + 'px';
+    
+    el.style.transform = 'scale(' + multiplier + ')';
+  }
+  
+  var gameStarted = false;
+
+  function startGame() {
+    if (gameStarted) {
+      return;
+    }
+    gameStarted = true;
+    
+    var el = document.getElementsByClassName('logo')[0];
+    
+    pacMan.init(el, PM_NORMAL);
+  }
+
+  function initialize() {
+    window.addEventListener('resize', handleResize, false);
+    
+    handleResize();
+  }
+</script>
+
+<body>
+  <div class='explanation'>Google Pac-Man debug slide · <a href='https://medium.com/the-rectangle-behind-you/build-two-awesome-slides-9ba63ecd938d'>Context</a> · Click to play, press 1, 2, 3, 4 to enter debug modes</div> 
+
+  <div class='logo'></div>
+  
+  <div id='interlace' onclick='startGame()'></div>
+  
+  <script>
+    initialize();
+  </script>
+</body>
+  
