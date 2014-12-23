@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+
+<title>​</title>
+
+<html lang='en'>
+
+<meta charset='utf-8'>
+<link rel='stylesheet/less' type='text/css' href='styles/styles.less'>
+<link rel='stylesheet' type='text/css' href='styles/lib/highlight.min.css'>
+<script src='js/lib/less-2.1.1.min.js' type='text/javascript'></script>
+<script src='js/lib/jquery-2.1.1.js' type='text/javascript'></script>
+<script src='js/lib/highlight.min.js' type='text/javascript'></script>
+<script src='js/scripts.js'></script>
+
+<body>
+  <div class='presentation'>
+
+    <div>
+      <img src='images/1.jpg'>
+    </div>
+    
+    <div>
+      <img src='images/2.jpg'>
+    </div>
+
+    <div>
+      <img src='images/3.jpg'>
+    </div>
+
+    <div>
+      <iframe data-src='http://en.wikipedia.org/wiki/Difference_engine'></iframe>
+    </div>
+
+    <div>
+      <img src='images/4.jpg'>
+    </div>
+
+    <!-- Slide with engine animation -->
+
+    <div onslideenter='startEngineAnimation()' onslideleave='stopEngineAnimation()'>
+      <script>
+        var engineAnimationPosition = 0
+        var engineAnimationRunning = false
+
+        function startEngineAnimation() {
+          engineAnimationRunning = true
+          tickEngineAnimation()
+        }
+
+        function stopEngineAnimation() {
+          engineAnimationRunning = false
+        }
+
+        function tickEngineAnimation() {
+          engineAnimationPosition = (engineAnimationPosition + 1) % 12
+          document.querySelector('.engine-video').style.backgroundPositionY = (-engineAnimationPosition * 240) + 'px'
+
+          if (engineAnimationRunning) {
+            window.setTimeout(tickEngineAnimation, 201 - document.querySelector('.engine-slider').value)
+          }
+        }
+      </script>
+
+      <style>
+        .engine-slider {
+          position: absolute;
+          left: 50%;
+          bottom: 0;
+          width: 400px;
+          margin-left: -200px;
+          padding: 50px 0;
+          z-index: 10;
+          opacity: .2;
+          transition: opacity 200ms;
+        }
+        .engine-slider:hover {
+          opacity: 1;
+        }
+        .engine-video {
+          width: 730px;
+          height: 240px;
+
+          background: url(images/engine-keyframes.png);
+          background-size: 730px;
+          margin: 200px auto;
+        }
+      </style>
+
+      <div class='engine-video'></div>
+      <input class='engine-slider' type='range' min='1' max='200' value='100'>
+    </div>
+
+
+
+    <div>
+      <img src='images/5.jpg'>
+    </div>
+
+    <!-- Slide with code -->
+
+    <div style='overflow: scroll'>
+      <script>
+        function onCodeChange(event) {
+          var result = hljs.highlightAuto(event.target.innerText)
+          event.target.innerHTML = result.value
+        }
+      </script>
+
+<pre contenteditable spellcheck='false' onblur='onCodeChange(event)' style='margin: 0; padding: 50px; font-size: 24px'>
+#include "nsXULAppAPI.h"
+#ifdef XP_WIN
+#include <windows.h>
+#include <stdlib.h>
+#endif
+
+#include <stdio.h>
+#include <stdarg.h>
+
+#include "plstr.h"
+#include "prprf.h"
+#include "prenv.h"
+
+#include "nsCOMPtr.h"
+#include "nsILocalFile.h"
+#include "nsStringGlue.h"
+
+#ifdef XP_WIN
+// we want a wmain entry point
+#include "nsWindowsWMain.cpp"
+#endif
+
+static void Output(const char *fmt, ... )
+{
+  va_list ap;
+  va_start(ap, fmt);
+
+#if defined(XP_WIN) && !MOZ_WINCONSOLE
+  char msg[2048];
+
+  _vsnprintf(msg, sizeof(msg), fmt, ap);
+
+  MessageBox(NULL, msg, "XULRunner", MB_OK | MB_ICONERROR);
+#else
+  vfprintf(stderr, fmt, ap);
+#endif
+
+  va_end(ap);
+}
+</pre>
+    </div>
+
+    <div>
+      <img src='images/6.jpg'>
+    </div>
+
+    <!-- Slide with custom transition -->
+    
+    <div style='perspective: 500px'>
+      <style>
+        .box {
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          width: 420px; 
+          height: 375px; 
+          margin-left: -210px;
+          margin-top: -187px;
+          background: url(images/rectangle-behind-you-logo.png);
+          transform: rotateX(90deg) scale(.9);
+          transform-origin: 50% 50%;
+        }
+        .box.animate {
+          -webkit-animation: rotate 1s;
+          -webkit-animation-fill-mode: forwards;
+        }
+
+        @-webkit-keyframes rotate {
+          0%, 50% { transform: rotateX(90deg) scale(.9); }
+          80% { transform: rotateX(-5deg); }
+          90% { transform: rotateX(2.5deg); }
+          95% { transform: rotateX(-1.25deg); }
+          98% { transform: rotateX(0.625deg); } 
+          100% { transform: rotateX(0deg) scale(1); }
+        }
+
+      </style>
+      <div class='box animate-on-enter'></div>
+    </div>
+
+
+    <div class='skip-if-pressed-on-time'>
+      <img src='images/7.jpg'>
+    </div>
+
+    <div>
+      <img src='images/8.jpg'>
+    </div>
+  </div>
+
+  <!-- Little indicator shown for a brief second so that the presenter knows something took effect. -->
+  <div class='indicator'></div>
+
+  <!-- A little rectangle in the bottom right corner used to regain focus from iframes, and also as a resting
+       place for mouse pointer -->
+  <div class='focus-stealer'></div>
+
+  <script>
+    main()
+  </script>
+</body>

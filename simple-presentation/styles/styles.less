@@ -1,0 +1,125 @@
+@SLIDE_WIDTH: 1280px;
+@SLIDE_HEIGHT: 720px;
+
+@IFRAME_FOCUS_STEALER_SIZE: 100px;
+
+@PRESENTATION_BACKGROUND: black;
+@WHITE: white;
+@GRAY: rgb(192, 192, 192);
+@MEDIUM_BLACK: rgb(51, 51, 50);
+@HIGHLIGHT_COLOUR: rgb(160, 20, 40); 
+@DIALOGUE_COLOUR: @MEDIUM_BLACK;
+@HEADING_COLOUR: @HIGHLIGHT_COLOUR;
+
+body {
+  background: @PRESENTATION_BACKGROUND;
+  overflow: hidden;
+
+  color: @MEDIUM_BLACK;
+}
+* {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -webkit-font-feature-settings: "kern";
+}
+
+// Presentation
+
+.presentation {  
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-left: -@SLIDE_WIDTH / 2;
+  margin-top: -@SLIDE_HEIGHT / 2;
+  width: @SLIDE_WIDTH;
+  height: @SLIDE_HEIGHT;
+
+  background: @PRESENTATION_BACKGROUND;
+  overflow: hidden;
+
+  opacity: 0;
+  &.visible {
+    opacity: 1;
+  }
+}
+
+// Slide
+
+.presentation > div {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: @SLIDE_HEIGHT;
+  background: @WHITE;
+  overflow: hidden;
+
+  color: @MEDIUM_BLACK;
+  box-sizing: border-box;
+
+  visibility: hidden;
+  pointer-events: none;
+  &.visible {
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  > img {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: @SLIDE_WIDTH;
+  }
+
+  > iframe {
+    border: none;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: @SLIDE_WIDTH;
+    height: @SLIDE_HEIGHT;
+  }
+}
+
+// Stuff around the presentation
+// --------------------------------------------------------------------------
+
+/**
+ * Little indicator shown for a brief second in the upper left corner 
+ * so that the presenter knows something took effect.
+ */
+.indicator {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-left: -@SLIDE_WIDTH / 2;
+  margin-top: -@SLIDE_HEIGHT / 2 - 5px;
+  width: 40px;
+  height: 5px;
+  z-index: 999999999;
+
+  display: none;
+
+  background: rgb(160, 20, 40);
+
+  &.visible {
+    display: block;
+  }
+}
+
+/**
+ * A little rectangle in the bottom right corner used to regain focus from iframes, and also as a resting
+ * place for mouse pointer.
+ */
+.focus-stealer {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-left: @SLIDE_WIDTH / 2 - @IFRAME_FOCUS_STEALER_SIZE;
+  margin-top: @SLIDE_HEIGHT / 2 - @IFRAME_FOCUS_STEALER_SIZE;
+  width: @IFRAME_FOCUS_STEALER_SIZE;
+  height: @IFRAME_FOCUS_STEALER_SIZE;
+  z-index: 10000000;
+  cursor: none;
+  background: transparent;
+}
