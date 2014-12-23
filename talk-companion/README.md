@@ -134,7 +134,7 @@ Access it without the _?local_ parameter.
 This requires registering a new app at Twitter, and then getting an account at OAuth.Io, which is used
 for authentication.
 
-1. I registered the app at Twitter. I went to _https://apps.twitter.com_, clicked Create New App.
+I. I registered the app at Twitter. I went to _https://apps.twitter.com_, clicked Create New App.
 
 In the Settings tab, I changed the Callback URL to _https://oauth.io/auth_ (not sure if this is 
 actually necessary). 
@@ -145,7 +145,7 @@ In the Permissions tab, I changed Access to Read and Write.
 
 Then, I opened Keys and Access Tokens tab in preparation for the next step.
 
-2. I opened a new tab, went to _https://oauth.io_, created an account.
+II. I opened a new tab, went to _https://oauth.io_, created an account.
 
 I added a new app.
 
