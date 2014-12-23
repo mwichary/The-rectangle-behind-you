@@ -1,7 +1,7 @@
 Good is the enemy of great (Smashing Conference 2014 talk) slide deck
 ========================
 
-A demo accompanying the page: https://medium.com/p/ad55cf86d945/
+A demo accompanying the page: https://medium.com/p/10ed3c2b8050
 
 View the recording of a talk using this slide deck: https://vimeo.com/108328246
 

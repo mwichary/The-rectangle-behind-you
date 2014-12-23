@@ -1,7 +1,7 @@
 Keyboard UI demo
 ========================
 
-A demo accompanying the site: https://medium.com/the-rectangle-behind-you/the-cheapest-invisible-ui-c3b7e2f86ac0
+A demo accompanying the site: https://medium.com/p/4422934468ff/
 
 View the live demo at: http://www.aresluna.org/the-rectangle-behind-you/keyboard-ui
 

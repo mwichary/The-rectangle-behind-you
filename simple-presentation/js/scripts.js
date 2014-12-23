@@ -4,7 +4,7 @@
 var currentSlideNumber = 0
 // Maximum slide number seen so far. Used to communicate with the companion site.
 var maxSlideNumber = 0
-// Whether to skip less important slides or not (https://medium.com/p/63afe6c72e09)
+// Whether to skip less important slides or not (https://medium.com/p/4493ad863f55/)
 var skipLessImportantSlides = false
 // All the slide elements
 var slideEls
