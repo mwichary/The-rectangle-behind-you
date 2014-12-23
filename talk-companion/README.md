@@ -136,28 +136,28 @@ for authentication.
 
 #### Twitter registration
 
-I registered the app at Twitter. I went to _https://apps.twitter.com_, clicked Create New App.
+1. I registered the app at Twitter. I went to _https://apps.twitter.com_, clicked Create New App.
 
-In the Settings tab, I changed the Callback URL to _https://oauth.io/auth_ (not sure if this is 
+2. In the Settings tab, I changed the Callback URL to _https://oauth.io/auth_ (not sure if this is 
 actually necessary). 
 
-I also changed Website to read _http://aresluna.org_, which should match your live companion server above (my companion site lives at _aresluna.org/whistler_).
+3. I also changed Website to read _http://aresluna.org_, which should match your live companion server above (my companion site lives at _aresluna.org/whistler_).
 
-In the Permissions tab, I changed Access to Read and Write.
+4. In the Permissions tab, I changed Access to Read and Write.
 
-Then, I opened Keys and Access Tokens tab in preparation for the next step.
+5. Then, I opened Keys and Access Tokens tab in preparation for the next step.
 
 #### OAuth registration
 
-I opened a new tab, went to _https://oauth.io_, created an account.
+1. I opened a new tab, went to _https://oauth.io_, created an account.
 
-I added a new app.
+2. I added a new app.
 
-I changed “domains & URLs whitelist” to say “localhost, aresluna.org, www.aresluna.org” (my companion site lives at _aresluna.org/whistler_).
+3. I changed “domains & URLs whitelist” to say “localhost, aresluna.org, www.aresluna.org” (my companion site lives at _aresluna.org/whistler_).
 
-I added a Twitter provider. In the client_id, I copied/pasted a key found on the apps.twitter.com page, in my app, in Keys and Access Tokens tab, in Application Settings, under Consumer Key (API Key). In the client_secret, I did the same for Consumer Secret (API Secret).
+4. I added a Twitter provider. In the client_id, I copied/pasted a key found on the apps.twitter.com page, in my app, in Keys and Access Tokens tab, in Application Settings, under Consumer Key (API Key). In the client_secret, I did the same for Consumer Secret (API Secret).
 
-Now, you should be able to tweet from both the local dev companion (localhost:4000), and wherever you put the external one!
+5. Now, you should be able to tweet from both the local dev companion (localhost:4000), and wherever you put the external one!
 
 
 # Updating the slides
