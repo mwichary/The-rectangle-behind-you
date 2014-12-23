@@ -17,7 +17,7 @@ the live syncing functionality since I already gave my talk. :·)
 
 If you clone the repo, you will see three directories: presentation, remote, and server. 
 Let’s take a look at them one by one.
-
+p
 ### The presentation
 
 This is the presentation that I (the presenter) would run from my computer connected to the projector.
@@ -134,7 +134,9 @@ Access it without the _?local_ parameter.
 This requires registering a new app at Twitter, and then getting an account at OAuth.Io, which is used
 for authentication.
 
-I. I registered the app at Twitter. I went to _https://apps.twitter.com_, clicked Create New App.
+#### Twitter registration
+
+I registered the app at Twitter. I went to _https://apps.twitter.com_, clicked Create New App.
 
 In the Settings tab, I changed the Callback URL to _https://oauth.io/auth_ (not sure if this is 
 actually necessary). 
@@ -145,7 +147,9 @@ In the Permissions tab, I changed Access to Read and Write.
 
 Then, I opened Keys and Access Tokens tab in preparation for the next step.
 
-II. I opened a new tab, went to _https://oauth.io_, created an account.
+#### OAuth registration
+
+I opened a new tab, went to _https://oauth.io_, created an account.
 
 I added a new app.
 
