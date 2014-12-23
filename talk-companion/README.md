@@ -8,7 +8,7 @@ The article explaining the whole setup can be found at https://medium.com/p/189f
 
 The recording of the presentation is not yet available, but I will update this space whenever it is.
 
-You can check out the companion site at aresluna.org/whistler, although you won’t be able to experience
+You can check out the companion site at [aresluna.org/whistler](http://aresluna.org/whistler), although you won’t be able to experience
 the live syncing functionality since I already gave my talk. :·)
 
 <img src='https://d262ilb51hltx0.cloudfront.net/max/2000/1*CGvjfqF2fu4_rg9uMtmOVA.png'>
