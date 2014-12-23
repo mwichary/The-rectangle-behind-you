@@ -1,0 +1,343 @@
+@SLIDE_WIDTH: 1024px;
+@SLIDE_HEIGHT: 768px;
+@SLIDE_PANORAMIC_HEIGHT: @SLIDE_WIDTH / 16 * 9;
+
+@IFRAME_FOCUS_STEALER_SIZE: 100px;
+
+@SLIDE_H_PADDING: 80px;
+@SLIDE_V_PADDING: 60px;
+
+@PRESENTATION_BACKGROUND: black;
+@WHITE: white;
+@MEDIUM_BLACK: rgb(51, 51, 50);
+@HIGHLIGHT_COLOUR: rgb(160, 20, 40); 
+@HEADING_COLOUR: @HIGHLIGHT_COLOUR;
+
+body {
+  background: @PRESENTATION_BACKGROUND;
+  overflow: hidden;
+
+  color: @MEDIUM_BLACK;
+}
+* {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -webkit-font-feature-settings: "kern";
+}
+
+// Presentation
+
+.presentation {  
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-left: -@SLIDE_WIDTH / 2;
+  margin-top: -@SLIDE_HEIGHT / 2;
+  width: @SLIDE_WIDTH;
+  height: @SLIDE_HEIGHT;
+
+  background: @PRESENTATION_BACKGROUND;
+  overflow: hidden;
+
+  opacity: 0;
+  &.visible {
+    opacity: 1;
+  }
+}
+
+// Slide
+
+.presentation > div {
+  position: absolute;
+  left: 0;
+  top: (@SLIDE_HEIGHT - @SLIDE_PANORAMIC_HEIGHT) / 2;
+  width: 100%;
+  height: @SLIDE_PANORAMIC_HEIGHT;
+  background: @WHITE;
+  overflow: hidden;
+
+  color: @MEDIUM_BLACK;
+  box-sizing: border-box;
+  padding-left: @SLIDE_H_PADDING;
+  padding-right: @SLIDE_H_PADDING;
+  padding-top: @SLIDE_V_PADDING;
+
+  display: none;
+  &.visible {
+    display: block;
+  }
+
+  &.title {
+    background: @HEADING_COLOUR;
+    color: @WHITE;
+
+    font-family: TorontoSubway;
+    font-size: 100px;
+    font-weight: 700;
+    line-height: .9;
+    letter-spacing: -0.04em;
+    text-transform: uppercase;
+
+    .subtitle {
+      font-size: 60px;
+      margin-top: 5px;
+      line-height: .95;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+
+      margin-left: -@SLIDE_H_PADDING;
+      padding-left: @SLIDE_H_PADDING;
+      margin-right: -@SLIDE_H_PADDING;
+      padding-right: @SLIDE_H_PADDING;
+      padding-bottom: 200px;
+
+      padding-top: @SLIDE_V_PADDING / 2 - 10px;
+
+      background: @WHITE;
+      color: @HEADING_COLOUR;
+    }
+
+    .content {
+      margin-top: 0;
+
+      padding-bottom: @SLIDE_V_PADDING / 2;
+    }
+  }
+
+  &.heading {
+    background: @HEADING_COLOUR;
+    color: @WHITE;
+
+    font-family: TorontoSubway;
+    font-size: 100px;
+    font-weight: 700;
+    line-height: .9;
+    letter-spacing: -0.04em;
+    text-transform: uppercase;
+
+    .content {
+      margin-top: 0;
+    }
+  }
+
+  // Slide modifiers
+  &.uncropped {
+    overflow: visible;
+  }
+  .crop {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
+  }
+  &.unpadded {
+    padding: 0;
+  }
+  &.black {
+    background: @PRESENTATION_BACKGROUND;
+  }
+  &.dark {
+    background: @HIGHLIGHT_COLOUR;
+  }
+  &.centered > div:first-child {
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+  }
+  &.centered.vertically {
+    padding: 0;
+    
+    & > div {
+      align-items: center;
+    }
+  }
+}
+
+// Typography (not wrapped inside .presentation > div, because then some instances of & wouldn’t work…
+// see https://github.com/less/less.js/issues/1075)
+
+.comma {
+  position: relative;
+  top: .55em;
+}
+.full-stop {
+  margin-left: -.03em;
+  font-size: 120%;
+  line-height: 0;
+}
+.ellipsis {
+  margin-left: .03em;
+  margin-right: .03em;
+  font-size: 120%;
+  line-height: 0;
+}
+.red {
+  color: @HIGHLIGHT_COLOUR;
+}
+a {
+  color: inherit;
+}
+
+
+// Animating letters
+// --------------------------------------------------------------------------
+.letter-animate {
+  display: inline-block;
+  vertical-align: baseline;
+  position: relative;
+  opacity: 0;
+  line-height: .9;
+
+  &.animation-in-progress {
+    opacity: 1;
+  }
+}
+.letter-animate-cover {
+  position: absolute;
+}
+
+
+
+// Stuff around the presentation
+// --------------------------------------------------------------------------
+
+/**
+ * Little indicator shown for a brief second in the upper left corner 
+ * so that the presenter knows something took effect.
+ */
+.indicator {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-left: -@SLIDE_WIDTH / 2;
+  margin-top: -@SLIDE_PANORAMIC_HEIGHT / 2 - 5px;
+  width: 40px;
+  height: 5px;
+  z-index: 999999999;
+
+  display: none;
+
+  background: rgb(160, 20, 40);
+
+  &.visible {
+    display: block;
+  }
+}
+
+/** 
+ * A text used to pre-fill a tweet for some slides. It is only used by the debug (Shift-D) function.
+ */
+.companion-copy {
+  display: none;
+}
+
+/**
+ * A URL of the companion site shown in the upper-left corner.
+ */
+.companion-url {
+  left: 50%;
+  top: 50%;
+  position: absolute;
+  margin-left: -@SLIDE_WIDTH / 2;
+  width: @SLIDE_WIDTH;
+  margin-top: -@SLIDE_HEIGHT / 2;
+
+  z-index: 999999999999;
+  color: @WHITE;
+  padding-left: @SLIDE_H_PADDING;
+  line-height: (@SLIDE_HEIGHT - @SLIDE_PANORAMIC_HEIGHT) / 2;
+  font-family: TorontoSubway;
+  font-size: 30px;
+  font-weight: 700;
+
+  .dot {
+    line-height: 0;
+    font-size: 150%;
+  }
+
+  display: none;
+  &.visible {
+    display: block;
+  }
+}
+
+/**
+ * A little debug screen shown when presenter presses Shift-D. Just for debugging.
+ */
+.debug {
+  position: absolute;
+  z-index: 9999;
+  background: white;
+  left: 20px;
+  top: 20px;
+  bottom: 20px;
+  right: 20px;
+
+  display: none;
+
+  textarea {
+    border: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  &.visible {
+    display: block;
+  }
+}
+
+/**
+ * An optional grid (more of a line) the presenter can enable via CSS to make sure everything top aligns.
+ */
+.grid {
+  opacity: 0;
+
+  position: absolute;
+
+  left: 50%;
+  top: 50%;
+  margin-left: -@SLIDE_WIDTH / 2;
+  width: @SLIDE_WIDTH;
+  margin-top: -@SLIDE_PANORAMIC_HEIGHT / 2 + @SLIDE_V_PADDING + 17px;
+  height: 1px;
+  background: green;
+  z-index: 20000000;
+}
+
+/**
+ * A little rectangle in the bottom right corner used to regain focus from iframes, and also as a resting
+ * place for mouse pointer.
+ */
+.focus-stealer {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-left: @SLIDE_WIDTH / 2 - @IFRAME_FOCUS_STEALER_SIZE;
+  margin-top: @SLIDE_PANORAMIC_HEIGHT / 2 - @IFRAME_FOCUS_STEALER_SIZE;
+  width: @IFRAME_FOCUS_STEALER_SIZE;
+  height: @IFRAME_FOCUS_STEALER_SIZE;
+  z-index: 10000000;
+  cursor: none;
+  background: transparent;
+}
+
+// Fonts
+// --------------------------------------------------------------------------
+
+@font-face {
+  font-family: TorontoSubway;
+  src: url("../fonts/toronto-subway.otf");
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: TorontoSubway;
+  src: url("../fonts/toronto-subway-bold.otf");
+  font-weight: 700;
+  font-style: normal;
+}

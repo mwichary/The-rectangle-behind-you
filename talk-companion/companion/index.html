@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+
+<!--
+  // TODO header + URL of the github page
+-->
+
+<title>Good Is The Enemy Of Great talk companion</title>
+<meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=0.5, maximum-scale=0.5, user-scalable=no'>
+<meta name='apple-mobile-web-app-capable' content='yes'>
+<meta name='apple-mobile-web-app-status-bar-style' content='black'>
+
+<link rel='stylesheet/less' type='text/css' href='styles/display.less' />
+
+<!-- Load all the external libraries -->
+<script src='js/lib/oauth.js'></script>
+<script src='js/lib/jquery-2.1.1.js'></script>
+<script src='js/lib/less-2.1.1.min.js'></script>
+<script src='js/lib/socket.io-1.2.1.js'></script>
+
+<!-- Load our JavaScript -->
+<script src='js/scripts.js'></script>
+
+<body>
+
+  <!-- All the modals -->
+
+  <div class='modal-shield'></div>
+  <div class='modal'>
+    <button class='close'>×</button>
+    <div class='modal-inner'>
+      <div class='message'></div>
+      <div class='form'>
+        <div class='tweet-preview'>
+          <textarea class='tweet'></textarea>
+          <img class='tweet-image-preview'>
+        </div>
+        <div class='footer'>
+          <span class='tweet-counter'></span>
+          <button class='post-tweet'>Tweet &gt;</button>
+        </div>
+      </div>
+      <div class='follow-up'>
+        <div class='rendered-tweet'></div>
+        <a target='_blank'></a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slides and navigation -->
+
+  <div class='slides'>
+    <header>
+      <h1>Good Is The Enemy Of Great</h1> 
+      <h2>talk companion</h2>
+    </header>
+
+    <div class='slide'>
+      <div class='current-slide-loading'>Loading…</div>
+      <div class='current-slide'><img src=''></div>
+    </div>
+
+    <!-- Navigation used for desktop/mouse-based devices. -->
+    <nav class='desktop'>
+      <button class='prev'>&lt; Prev</button>
+      <span class='slide-number'>Slide №<span class='slide-number-value'>?</span></span>
+      <nobr>
+        <a target='_blank' class='save-to-desktop-link' href download>Save to desktop</a>
+        <button class='share-on-twitter'>Share on Twitter</button>
+      </nobr>  
+      <nobr>
+        <button class='next'>Next &gt;</button>
+        <button class='current'>Current &gt;&gt;&gt;</button>
+      </nobr>
+    </nav>
+
+    <!-- Slightly different navigation for touch devices -->
+    <nav class='mobile'>
+      <button class='prev'>&lt; Prev</button>
+      <span class='slide-number'>№<span class='slide-number-value'>?</span></span>
+      <button class='next'>Next &gt;</button>
+      <button class='current'>Cur &gt;&gt;&gt;</button>
+      <button class='share-on-twitter'>Share on Twitter</button>
+      <span>Press and hold on slide to save</span>
+    </nav>
+  </div>
+
+  <script>
+    main()
+  </script>
+
+  <!-- Twitter library to decorate a preview of the just-published tweet -->
+  <script>window.twttr = (function (d, s, id) {
+  var t, js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src= "https://platform.twitter.com/widgets.js";
+  fjs.parentNode.insertBefore(js, fjs);
+  return window.twttr || (t = { _e: [], ready: function (f) { t._e.push(f) } });
+}(document, "script", "twitter-wjs"));</script>
+
+</body>

@@ -1,0 +1,16 @@
+{
+  "name": "smashing-presentation-server",
+  "subdomain": "mwichary-smashing-presentation-server",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "version": "0.0.0-39",
+  "engines": {
+    "node": "0.10.x"
+  },
+  "dependencies": {
+    "cors": "2.5.2",
+    "express": "4.10.4",
+    "socket.io": "1.2.1"
+  }
+}

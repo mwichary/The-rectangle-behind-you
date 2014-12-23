@@ -1,0 +1,412 @@
+@BACKGROUND: rgb(50, 50, 50);
+
+// Regular text
+@UI_TEXT: rgb(120, 120, 120);
+@UI_COLOUR: rgb(150, 150, 150);
+@UI_COLOUR_HOVER: rgb(180, 180, 180);
+@UI_COLOUR_PRESS: rgb(220, 220, 220);
+
+// Accent colours
+@UI_HIGHLIGHT: rgb(160, 34, 43);
+@UI_HIGHLIGHT_LIGHT: lighten(rgb(160, 34, 43), 40%);
+@BUTTON_HIGHLIGHT: desaturate(lighten(rgb(160, 20, 40), 7%), 15%); 
+
+@PADDING: 50px;
+@IMAGE_MARGIN: 40px;
+
+body {
+  background: @BACKGROUND;
+
+  margin: 0;
+  padding: 0;
+
+  font-size: 24px;
+}
+* {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body,
+button,
+a {
+  font-family: TorontoSubway, "Helvetica Neue", Arial, sans-serif;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+button,
+a {
+  outline: none;
+  color: @UI_COLOUR;
+  background: transparent;
+  border: none;
+  text-decoration: none;
+  font-size: inherit;
+
+  &:not([disabled]) {
+    cursor: pointer;    
+  }
+  &:not([disabled]):hover {
+    color: @UI_COLOUR_HOVER;
+  }
+  &:not([disabled]):active {
+    color: @UI_COLOUR_PRESS;
+  }
+}
+
+// Modals
+// --------------------------------------------------------------------------
+.modal-shield {
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background: @BACKGROUND;
+
+  display: none;
+
+  z-index: 99999;
+
+  &.visible {
+    display: block;
+    opacity: .93;
+  }
+}
+
+.modal {
+  position: fixed;
+  z-index: 100000;
+  background: white;
+
+  color: @UI_TEXT;
+  font-size: 150%;
+
+  top: 50%;
+  height: 550px;
+  transform: translate(0, -50%);
+  -webkit-transform: translate(0, -50%);
+  -moz-transform: translate(0, -50%);
+  left: 220px;
+  right: 220px;
+  padding: 20px;
+
+  display: none;
+  align-items: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  -webkit-justify-content: center;
+  text-align: center;
+
+  &.error {
+    color: @UI_HIGHLIGHT;
+  }
+
+  &.visible {
+    display: -webkit-flex;
+    display: -moz-flex;
+    display: flex;
+  }
+
+  .follow-up {
+    text-align: center;
+    display: none;
+
+    .rendered-tweet {
+      margin: 20px auto;
+      height: 370px;
+      width: 400px;
+      overflow: hidden;
+
+      > * {
+        opacity: 0;
+      }
+      > iframe {
+        
+        opacity: 1;
+      }
+    }
+
+    &.visible {
+      display: block;      
+    }
+  }
+
+  .form {
+    position: relative;
+    display: none;
+
+    &.visible {
+      display: block;
+    }
+  }
+
+  .tweet-preview {
+    border: 3px solid @UI_HIGHLIGHT_LIGHT;
+    margin: 10px 0;
+  }
+  .tweet {
+    font-size: 24px;
+    padding: 10px 15px;
+    width: 500px;
+    height: 6em;
+    resize: none;
+    outline: none;
+    border: none;
+    margin-top: 10px;
+  }
+  .footer {
+    height: 1.3em;
+  }
+  .tweet-counter {
+    position: absolute;
+    left: 0;
+  }
+  .form.overflow .tweet-counter {
+    color: @UI_HIGHLIGHT;
+  }
+  .post-tweet {
+    position: absolute;
+    right: 0;
+  }
+  .tweet-image-preview {
+    width: 200px;
+    height: 150px;
+    display: block;
+    margin-left: 10px;
+    margin-bottom: 10px;
+    outline: 1px solid @UI_HIGHLIGHT_LIGHT;
+  }
+
+  .close {
+    position: absolute;
+    right: 0;
+    top: 0;
+    padding: 15px 20px;
+    z-index: 200;
+
+    display: none;
+  }
+  &.can-close .close {
+    display: block;
+  }
+}
+
+// Slides
+// --------------------------------------------------------------------------
+.slides {
+  position: absolute;
+  left: 0;
+  top: 0;
+
+  width: 100%;
+  height: 100%;
+
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+  -moz-box-orient: vertical;
+  -moz-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;  
+
+  padding: @PADDING;
+
+  box-sizing: border-box;
+
+  // Header
+  header {
+    width: 100%;
+    margin-bottom: @IMAGE_MARGIN;
+    text-align: center;
+
+    color: @UI_TEXT;
+    text-transform: uppercase;   
+
+    h1,
+    h2 {
+      white-space: nowrap;
+      font-size: inherit;
+      padding: 0;
+      margin: 0;
+      display: inline-block;
+    }   
+    h1 {
+      color: @BUTTON_HIGHLIGHT;
+    }
+  }
+
+  nav {
+    width: 100%;
+    margin-top: @IMAGE_MARGIN;
+    text-align: center;
+
+    color: @UI_TEXT;
+    text-transform: uppercase;   
+
+    z-index: 500;
+
+    & > nobr > *,
+    & > * {
+      padding: 0 20px;
+      display: inline-block;
+      line-height: 2.4;
+    } 
+
+    .slide-number {
+      width: 7em;
+      white-space: nowrap;
+    }
+
+    .share-on-twitter {
+      background: url(../images/twitter.svg);
+      background-size: .9em;
+      background-position: .75em 50%;
+      background-repeat: no-repeat;
+      padding-left: 2em;
+    }
+
+    .current.playing-catch-up {
+      color: @BUTTON_HIGHLIGHT;
+
+      &:hover {
+        color: lighten(@BUTTON_HIGHLIGHT, 10%);
+      }
+      &:active {
+        color: lighten(@BUTTON_HIGHLIGHT, 20%);
+      }
+    }
+
+    .current.presentation-over {
+      display: none;
+    }
+  }
+
+  nav.mobile {
+    display: none;
+  }
+
+  // Slide display
+  .slide {
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    -moz-box-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+    -moz-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+    -moz-box-orient: vertical;
+    -moz-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+
+    height: 100%;
+    width: 100%;
+    position: relative;
+
+    .current-slide-loading {
+      text-align: center;
+      text-transform: uppercase;
+      color: @UI_TEXT;      
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 50%;
+      margin-top: -20px;
+      z-index: -1;
+    }
+
+    .current-slide {
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+
+      &.visible {
+        opacity: 1;
+      }
+
+      text-align: center;
+      vertical-align: block;
+
+      img {
+        position: absolute;
+      }
+    }
+  }
+}
+
+// Responsive design
+// --------------------------------------------------------------------------
+body.touch {
+  font-size: 28px;
+
+  .slides {
+    nav.mobile {
+      display: block;
+    }
+    nav.desktop {
+      display: none;
+    }
+  }
+}
+@media only screen and (max-width: 1000px) {
+  .modal {
+    position: absolute;
+    height: 100%;
+    left: 0;
+    right: 0;
+
+    .modal-inner {
+      width: 100%;
+    }
+
+    .close {
+      position: fixed;
+    }
+
+    .tweet {
+      padding: 15px 30px;
+      font-size: 48px;
+      width: 100%;
+      box-sizing: border-box;
+      height: 5em;
+    }
+    .tweet-image-preview {
+      margin-left: 30px;
+      margin-bottom: 15px;
+    }
+    .post-tweet {
+      padding: 0;
+    }
+  }  
+}
+
+// Typography
+// --------------------------------------------------------------------------
+.slash {
+  padding: 0 .2em;
+}
+@font-face {
+  font-family: TorontoSubway;
+  src: url("../fonts/toronto-subway-bold.otf");
+  font-weight: 700;
+  font-style: normal;
+}

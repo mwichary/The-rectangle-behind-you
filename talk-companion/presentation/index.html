@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+
+<title>​</title>
+
+<html lang='en'>
+
+<meta charset='utf-8'>
+<link rel='stylesheet/less' type='text/css' href='styles/styles.less'>
+<script src='js/lib/less-2.1.1.min.js' type='text/javascript'></script>
+<script src='js/lib/jquery-2.1.1.js' type='text/javascript'></script>
+<script src='js/lib/hyphenator-4.2.0/Hyphenator.js' type='text/javascript'></script>
+<script src='js/lib/fontloader.js'></script>
+<script src='js/scripts.js'></script>
+
+<body>
+  <!-- A (sometimes) visible URL above the slide, pointing people to the companion site. -->
+  <div class='companion-url'>
+    ARESLUNA<span class='dot'>.</span>ORG<span class='slash'>/</span>WHISTLER
+  </div>
+
+  <div class='presentation'>
+    <div class='title'>
+      <div class='subtitle'>
+        This is a demo slide deck
+        <br><br>
+        <a href='https://medium.com/p/189fdbcd244c'>Context</a>
+        <br><br>
+        Press right arrow to continue (might not look great in Firefox)
+      </div>
+    </div>
+
+    <div class='heading'>
+      <div class='companion-copy'>Slide one</div>
+
+      <div class='content animate-letters'>
+        Slide one
+      </div>
+    </div>
+
+    <div class='heading'>
+      <div class='companion-copy'>Slide two</div>
+
+      <div class='content animate-letters'>
+        Slide two
+      </div>
+    </div>
+
+    <div class='heading'>
+      <div class='companion-copy'>Slide three</div>
+
+      <div class='content animate-letters'>
+        Slide three
+      </div>
+    </div>
+
+    <div class='heading skip-in-companion'>
+      <div class='content animate-letters'>
+        Slide three and a half
+      </div>
+    </div>
+
+    <div class='heading'>
+      <div class='companion-copy'>Slide four</div>
+
+      <div class='content animate-letters'>
+        Slide four
+      </div>
+    </div>
+
+    <div class='heading'>
+      <div class='companion-copy'>Slide five</div>
+
+      <div class='content animate-letters'>
+        Slide five
+      </div>
+    </div>
+
+    <div class='heading'>
+      <div class='companion-copy'>Slide six</div>
+
+      <div class='content animate-letters'>
+        Slide six
+      </div>
+    </div>
+
+    <div class='heading skip-if-pressed-on-time'>
+      <div class='companion-copy'>Slide seven</div>
+
+      <div class='content animate-letters'>
+        Slide seven
+      </div>
+    </div>
+
+    <div class='heading skip-if-pressed-on-time'>
+      <div class='companion-copy'>Slide eight</div>
+
+      <div class='content animate-letters'>
+        Slide eight
+      </div>
+    </div>
+
+    <div class='heading'>
+      <div class='companion-copy'>Last slide!</div>
+
+      <div class='content animate-letters'>
+        Last slide!
+      </div>
+    </div>
+  </div>
+
+  <!-- An optional grid (more of a line) the presenter can enable via CSS to make sure everything top aligns. -->
+  <div class='grid'></div>
+
+  <!-- Little indicator shown for a brief second so that the presenter knows something took effect. -->
+  <div class='indicator'></div>
+
+  <!-- A little rectangle in the bottom right corner used to regain focus from iframes, and also as a resting
+       place for mouse pointer -->
+  <div class='focus-stealer'></div>
+
+  <!-- A debug area for when the presenter presses Shift-D (only in talk preparation). -->
+  <div class='debug'><textarea></textarea></div>
+
+  <!-- A hidden div used to measure text. -->
+  <div class='text-measure'></div>
+
+  <script>
+    main()
+  </script>
+</body>
