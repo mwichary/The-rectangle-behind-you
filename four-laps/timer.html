@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<title>Kylie timer</title>
+<meta charset='utf-8'>
+
+<style>
+  body {
+    background: white;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  }
+
+  .time {
+    position: absolute;
+    left: 20px;
+    top: 20px;
+    right: 20px;
+    text-align: center;
+    font-size: 64px;
+    font-feature-settings: "tnum" on; /* The digits are monospaced */
+  }
+
+  .sound-active {
+    background: black;
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    font-size: 64px;
+    padding: 20px 40px;
+    color: white;
+    opacity: 0;
+  }
+  .sound-active.visible {
+    opacity: 100%;
+  }
+
+  .indicator {
+    position: absolute;
+    left: 20px;
+    top: 110px;
+    right: 20px;
+    height: 200px;
+    font-size: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+  }
+</style>
+
+<body>
+  <div class='time'></div>
+  <div class='indicator'></div>
+  <div class='sound-active'>Sound on</div>
+</body>
+
+<script>
+  let lastServerTime // Last timestamp on the server
+  let checkServerTimeoutId
+  let debugMultiplier = 1 // Makes the timer go faster for debugging
+
+  let started = false
+  let startTime
+
+  // This is the pre-announcement delay before the talk starts
+  // This matches the delay in After Effects video
+  const delay = 35
+
+  // SOUND ON warnings (I actually don’t hear the loud music when I present, so I need a visual indicator)
+  const sounds = [
+    { time: 24 - delay + 10, duration: 10 }, 
+    { time: 3 * 60 + 46 - delay + 10, duration: 8 },
+  ]
+
+  // Events
+  const times = [
+    { time: 10 - delay, duration: 4.5, color: 'gray', name: 'Intro #1' },
+    { time: 16 - delay, duration: 4.5, color: 'gray', name: 'Intro #2' },
+    { time: 21 - delay, duration: 4.5, color: 'gray', name: 'Intro #3' },
+    { time: 27 - delay, duration: 5.5, color: 'gray', name: 'Intro #4' },
+
+    { time: -5 + 3 - 3, duration: 1, color: 'red-warning', name: '3 Move in 3' },
+    { time: -5 + 3 - 2, duration: 1, color: 'red-warning', name: '2 Move in 2' },
+    { time: -5 + 3 - 1, duration: 1, color: 'red-warning', name: '1 Move in 1' },
+    { time: -5 + 3, duration: 3, color: 'red', name: '0 Move 0' },
+    { time: 0, duration: 2, color: 'gray', name: 'Hat out' },
+    { time: 2, duration: 2, color: 'gray', name: 'Jacket out' },
+    { time: 5, duration: 3, color: 'green', name: 'Hand' },
+    { time: 10, duration: 2, color: 'black', name: 'Speak' },
+    { time: 25, duration: 3, color: 'purple', name: 'Glasses' },
+    { time: 40 - 3, duration: 1, color: 'yellow-warning', name: 'Card in 3' },
+    { time: 40 - 2, duration: 1, color: 'yellow-warning', name: 'Card in 2' },
+    { time: 40 - 1, duration: 1, color: 'yellow-warning', name: 'Card in 1' },
+    { time: 40, duration: 5, color: 'yellow', name: 'Card' },
+    { time: 50.5, duration: 3, color: 'blue', name: 'Gesture' },
+
+    { time: 65 + 3 - 3, duration: 1, color: 'red-warning', name: 'Move in 3' },
+    { time: 65 + 3 - 2, duration: 1, color: 'red-warning', name: 'Move in 2' },
+    { time: 65 + 3 - 1, duration: 1, color: 'red-warning', name: 'Move in 1' },
+    { time: 65 + 3, duration: 3, color: 'red', name: 'Move 0' },
+    { time: 70, duration: 2, color: 'black', name: 'Speak' },
+    { time: 75, duration: 3, color: 'green', name: 'Hand' },
+    { time: 95, duration: 3, color: 'purple', name: 'Glasses' },
+    { time: 110 - 3, duration: 1, color: 'yellow-warning', name: 'Card in 3' },
+    { time: 110 - 2, duration: 1, color: 'yellow-warning', name: 'Card in 2' },
+    { time: 110 - 1, duration: 1, color: 'yellow-warning', name: 'Card in 1' },
+    { time: 110, duration: 5, color: 'yellow', name: 'Card' },
+    { time: 119.7, duration: 3, color: 'blue', name: 'Reaction' },
+
+    { time: 135 + 3 - 3, duration: 1, color: 'red-warning', name: 'Move in 3' },
+    { time: 135 + 3 - 2, duration: 1, color: 'red-warning', name: 'Move in 2' },
+    { time: 135 + 3 - 1, duration: 1, color: 'red-warning', name: 'Move in 1' },
+    { time: 135 + 3, duration: 3, color: 'red', name: 'Move 0' },
+    { time: 140, duration: 2, color: 'black', name: 'Speak' },
+    { time: 145, duration: 3, color: 'green', name: 'Hand' },
+    { time: 166, duration: 3, color: 'purple', name: 'Glasses' },
+    { time: 180 - 3, duration: 1, color: 'yellow-warning', name: 'Card in 3' },
+    { time: 180 - 2, duration: 1, color: 'yellow-warning', name: 'Card in 2' },
+    { time: 180 - 1, duration: 1, color: 'yellow-warning', name: 'Card in 1' },
+    { time: 180, duration: 5, color: 'yellow', name: 'Card' },
+    { time: 190.8, duration: 3, color: 'blue', name: 'Reaction' },
+    { time: 195, duration: 3, color: 'blue', name: 'Hit myself' },
+
+    { time: 205 + 3 - 3, duration: 1, color: 'red-warning', name: 'Move in 3' },
+    { time: 205 + 3 - 2, duration: 1, color: 'red-warning', name: 'Move in 2' },
+    { time: 205 + 3 - 1, duration: 1, color: 'red-warning', name: 'Move in 1' },
+    { time: 205 + 3, duration: 3, color: 'red', name: 'Move 0' },
+    { time: 210, duration: 2, color: 'black', name: 'Speak' },
+    { time: 215, duration: 3, color: 'green', name: 'Hand' },
+    { time: 236, duration: 3, color: 'purple', name: 'Glasses' },
+    { time: 250 - 3, duration: 1, color: 'yellow-warning', name: 'Card in 3' },
+    { time: 250 - 2, duration: 1, color: 'yellow-warning', name: 'Card in 2' },
+    { time: 250 - 1, duration: 1, color: 'yellow-warning', name: 'Card in 1' },
+    { time: 250, duration: 5, color: 'yellow', name: 'Card' },
+    { time: 265.5, duration: 3, color: 'blue', name: 'Hit reaction' },
+
+    { time: 275 + 3 - 3 - 7, duration: 6, color: 'gray', name: 'Jacket' },
+    { time: 275 + 3 - 3, duration: 2, color: 'gray', name: 'Hat' },
+    { time: 275 + 3 - 1, duration: 1, color: 'red-warning', name: 'Move in 1' },
+    { time: 275 + 3, duration: 5, color: 'red', name: 'Move 0' },
+
+    { time: 285, duration: 5, color: 'green', name: 'High five' },
+  ]
+
+  const colorMatches = {
+    'red': '#ff8f8f',
+    'red-warning': '#ffafaf',
+    'gray': '#d2d2d2',
+    'yellow': '#ffff8f',
+    'yellow-warning': '#ffffcf',
+    'blue': '#7f7fff',
+    'purple': '#ff7fff',
+    'green': '#7fff7f',
+    'black': '#3f3f3f',
+    'white': '#ffffff',
+  }
+
+  function tick() {
+    const time = ((performance.now() - startTime) - delay / debugMultiplier * 1000) * debugMultiplier
+
+    const tenth = Math.floor(time / 100) % 10
+    const second = Math.floor(time / 1000)
+    const preciseSecond = Math.floor(time / 100) / 10
+
+    const absSecond = Math.floor(Math.abs(time) / 1000)
+    const absTenth = Math.floor(Math.abs(time) / 100) % 10
+
+    const timeString = `${Math.floor(Math.abs(time) / 60000) % 100}:${(absSecond % 60 + '').padStart(2, 0)}.${absTenth}`
+    document.querySelector('.time').innerHTML = timeString
+
+    console.warn(tenth)
+    let found = false
+    for (var i in times) {
+      const time = times[i]
+
+      if ((preciseSecond >= time.time) && (preciseSecond <= time.time + time.duration)) {
+        document.querySelector('.indicator').innerHTML = time.name
+        document.querySelector('.indicator').style.background = colorMatches[time.color]
+        found = true
+      }
+    }
+
+    if (!found) {
+      document.querySelector('.indicator').innerHTML = ''
+      document.querySelector('.indicator').style.background = 'white'
+    }
+
+    found = false
+    for (var i in sounds) {
+      const sound = sounds[i]
+
+      if ((preciseSecond >= sound.time) && (preciseSecond <= sound.time + sound.duration)) {
+        document.querySelector('.sound-active').classList.add('visible')
+        found = true
+      }
+    }
+
+    if (!found) {
+      document.querySelector('.sound-active').classList.remove('visible')
+    }
+  }
+
+  // Start the timer!
+  function start() {
+    if (started) {
+      return
+    }
+    started = true
+
+    startTime = performance.now()
+    setInterval(tick, 100) // Check every 100ms   
+  }
+
+  function checkServer() {
+    // Normally, this would ping the server and ask for the new timestamp
+
+    return false
+
+    var oReq = new XMLHttpRequest()
+    oReq.addEventListener("load", function() {
+      let time = parseInt(this.responseText)
+      if (time && (time != lastServerTime)) {
+        clearInterval(checkServerTimeoutId)
+        start()
+      }
+    })
+    oReq.open("GET", "https://aaa.org/bbb?" + Math.random())
+    oReq.send()
+  }
+
+  function onKeyDown(event) {
+    // This allows to press Enter to start the timer, for debugging
+    if (event.key == 'Enter') {
+      start()
+    }
+  }
+
+  function main() {
+    // This would get the initial timestamp
+
+    if (false) {
+      var oReq = new XMLHttpRequest()
+      oReq.addEventListener("load", function() {
+        lastServerTime = parseInt(this.responseText)
+        document.querySelector('.indicator').innerHTML = 'Ready'
+      })
+      oReq.open("GET", "https://aaa.org/bbb?" + Math.random())
+      oReq.send()
+    } else {
+      document.querySelector('.indicator').innerHTML = 'Ready'
+    }
+
+    checkServerTimeoutId = setInterval(checkServer, 500)    
+
+    // Allow to press Enter or click to start testing
+    document.addEventListener('keydown', onKeyDown)
+    document.addEventListener('click', start)
+  }
+
+  main()
+</script>
